@@ -39,6 +39,7 @@ public class GmailParadoxParser {
 	private static final List<String> SCOPES = Collections.singletonList(GmailScopes.MAIL_GOOGLE_COM);
 	private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 	private static Gmail googleService;
+	private static MyLogger logger = MyLogger.getInstance();
 
 	public static void main(String... args) throws IOException, GeneralSecurityException {
 		initializeGoogleService();
@@ -58,7 +59,7 @@ public class GmailParadoxParser {
 		ListMessagesResponse listResponse = googleService.users().messages().list(user).setQ(QUERY_UNREAD).execute();
 		List<Message> messages = listResponse.getMessages();
 		if (messages == null || messages.isEmpty()) {
-			System.out.println("No mails found.");
+			logger.logDebug("No mails found.");
 		} else {
 			List<String> msgIds = new ArrayList<>();
 			System.out.println("Messages:");
@@ -66,9 +67,13 @@ public class GmailParadoxParser {
 				String msgId = message.getId();
 				Message mail = googleService.users().messages().get(user, msgId).setFormat("full").execute();
 				MessagePart payload = mail.getPayload();
+				if (payload == null) {
+					logger.logDebug("Payload is null");
+					return result;
+				}
 				String encodedContent = payload.getParts().get(0).getBody().getData();
 				String content = new String(Base64.decodeBase64(encodedContent.getBytes()), "UTF-8");
-				System.out.printf("Payload - %s\n", content);
+				logger.logDebug("Payload content: " + content);
 
 				msgIds.add(msgId);
 				result.add(content);
