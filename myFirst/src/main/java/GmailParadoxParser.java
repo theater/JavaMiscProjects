@@ -1,13 +1,11 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.mail.BodyPart;
-import javax.mail.MessagingException;
-import javax.swing.JOptionPane;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -17,22 +15,22 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.MultipartContent.Part;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.model.BatchModifyMessagesRequest;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
-import com.google.api.services.gmail.model.MessagePartBody;
 
-public class GmailQuickstart {
+public class GmailParadoxParser {
 	private static final String APPLICATION_NAME = "Gmail API Java Quickstart";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private static final String TOKENS_DIRECTORY_PATH = "tokens";
+	private static final String QUERY_UNREAD = "label:unread ";
 
 	/**
 	 * Global instance of the scopes required by this quickstart. If modifying these
@@ -40,6 +38,55 @@ public class GmailQuickstart {
 	 */
 	private static final List<String> SCOPES = Collections.singletonList(GmailScopes.MAIL_GOOGLE_COM);
 	private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
+	private static Gmail googleService;
+
+	public static void main(String... args) throws IOException, GeneralSecurityException {
+		initializeGoogleService();
+
+		List<String> mailContents = retrieveMailsContents();
+		for (String mail : mailContents) {
+			String[] split = mail.split(System.getProperty("line.separator"));
+			MailParser.getInstance().parseToMap(split);
+		}
+		
+	}
+
+	private static List<String> retrieveMailsContents() throws IOException, UnsupportedEncodingException {
+		// Print the messages in the user's account.
+		ArrayList<String> result = new ArrayList<String>();
+		String user = "me";
+		ListMessagesResponse listResponse = googleService.users().messages().list(user).setQ(QUERY_UNREAD).execute();
+		List<Message> messages = listResponse.getMessages();
+		if (messages == null || messages.isEmpty()) {
+			System.out.println("No mails found.");
+		} else {
+			List<String> msgIds = new ArrayList<>();
+			System.out.println("Messages:");
+			for (Message message : messages) {
+				String msgId = message.getId();
+				Message mail = googleService.users().messages().get(user, msgId).setFormat("full").execute();
+				MessagePart payload = mail.getPayload();
+				String encodedContent = payload.getParts().get(0).getBody().getData();
+				String content = new String(Base64.decodeBase64(encodedContent.getBytes()), "UTF-8");
+				System.out.printf("Payload - %s\n", content);
+
+				msgIds.add(msgId);
+				result.add(content);
+			}
+			BatchModifyMessagesRequest modifyRequest = new BatchModifyMessagesRequest().setIds(msgIds)
+//					.setAddLabelIds();
+			        .setRemoveLabelIds(Collections.singletonList("UNREAD"));
+			googleService.users().messages().batchModify(user, modifyRequest).execute();
+		}
+		return result;
+	}
+	
+	private static void initializeGoogleService() throws GeneralSecurityException, IOException {
+		// Build a new authorized API client service.
+		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+		googleService = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+				.setApplicationName(APPLICATION_NAME).build();
+	}
 
 	/**
 	 * Creates an authorized Credential object.
@@ -50,7 +97,7 @@ public class GmailQuickstart {
 	 */
 	private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
 		// Load client secrets.
-		InputStream in = GmailQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+		InputStream in = GmailParadoxParser.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
 		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
 		// Build flow and trigger user authorization request.
@@ -61,27 +108,4 @@ public class GmailQuickstart {
 		return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 	}
 
-	public static void main(String... args) throws IOException, GeneralSecurityException {
-		// Build a new authorized API client service.
-		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-		Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-				.setApplicationName(APPLICATION_NAME).build();
-
-		// Print the labels in the user's account.
-		String user = "me";
-		ListMessagesResponse listResponse = service.users().messages().list(user).execute();
-		List<Message> messages = listResponse.getMessages();
-		if (messages == null || messages.isEmpty()) {
-			System.out.println("No mails found.");
-		} else {
-			System.out.println("Messages:");
-			for (Message message : messages) {
-				Message mail = service.users().messages().get(user, message.getId()).setFormat("full").execute();
-				MessagePart payload = mail.getPayload();
-				String encodedContent = payload.getParts().get(0).getBody().getData();
-				String content = new String(Base64.decodeBase64(encodedContent.getBytes()), "UTF-8");
-               	System.out.printf("Payload - %s\n", content);
-			}
-		}
-	}
 }
