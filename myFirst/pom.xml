@@ -1,9 +1,0 @@
-<project>
-  <dependencies>
-    <dependency>
-      <groupId>com.google.apis</groupId>
-      <artifactId>google-api-services-gmail</artifactId>
-      <version>v1-rev96-1.25.0</version>
-    </dependency>
-  </dependencies>
-</project>
