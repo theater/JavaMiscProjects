@@ -50,7 +50,7 @@ public class GmailParadoxParser {
 			String[] split = mail.split(System.getProperty("line.separator"));
 			MailParser.getInstance().parseToMap(split);
 		}
-		
+
 	}
 
 	private static List<String> retrieveMailsContents() throws IOException, UnsupportedEncodingException {
@@ -72,12 +72,9 @@ public class GmailParadoxParser {
 					logger.logDebug("Payload is null");
 					continue;
 				}
-				List<MessagePart> parts = payload.getParts();
-				if(parts == null) {
-					continue;
-				}
-				MessagePartBody parts = payload.getBody();
-				String encodedContent = parts.getData();
+
+				MessagePartBody body = payload.getBody();
+				String encodedContent = body.getData();
 				String content = new String(Base64.decodeBase64(encodedContent.getBytes()), "UTF-8");
 				logger.logDebug("Payload content: " + content);
 
@@ -91,7 +88,7 @@ public class GmailParadoxParser {
 		}
 		return result;
 	}
-	
+
 	private static void initializeGoogleService() throws GeneralSecurityException, IOException {
 		// Build a new authorized API client service.
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -101,7 +98,7 @@ public class GmailParadoxParser {
 
 	/**
 	 * Creates an authorized Credential object.
-	 * 
+	 *
 	 * @param HTTP_TRANSPORT The network HTTP Transport.
 	 * @return An authorized Credential object.
 	 * @throws IOException If the credentials.json file cannot be found.
