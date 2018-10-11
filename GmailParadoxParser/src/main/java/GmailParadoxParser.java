@@ -25,6 +25,7 @@ import com.google.api.services.gmail.model.BatchModifyMessagesRequest;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
+import com.google.api.services.gmail.model.MessagePartBody;
 
 public class GmailParadoxParser {
 	private static final String APPLICATION_NAME = "Gmail API Java Quickstart";
@@ -75,7 +76,8 @@ public class GmailParadoxParser {
 				if(parts == null) {
 					continue;
 				}
-				String encodedContent = parts.get(0).getBody().getData();
+				MessagePartBody parts = payload.getBody();
+				String encodedContent = parts.getData();
 				String content = new String(Base64.decodeBase64(encodedContent.getBytes()), "UTF-8");
 				logger.logDebug("Payload content: " + content);
 
