@@ -69,9 +69,13 @@ public class GmailParadoxParser {
 				MessagePart payload = mail.getPayload();
 				if (payload == null) {
 					logger.logDebug("Payload is null");
-					return result;
+					continue;
 				}
-				String encodedContent = payload.getParts().get(0).getBody().getData();
+				List<MessagePart> parts = payload.getParts();
+				if(parts == null) {
+					continue;
+				}
+				String encodedContent = parts.get(0).getBody().getData();
 				String content = new String(Base64.decodeBase64(encodedContent.getBytes()), "UTF-8");
 				logger.logDebug("Payload content: " + content);
 
