@@ -17,50 +17,64 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Main {
-	private static final String PASSWORD = "MyPass";
+	private static final String PASSWORD = "password";
 
 	private static final int PORT = 10000;
 	private static final String IP_ADDRESS = "192.168.254.231";
 
+	private static Socket socket;
+	private static DataOutputStream tx;
+	private static DataInputStream rx;
+
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
-		Socket socket = new Socket(IP_ADDRESS, PORT);
-		DataOutputStream tx = new DataOutputStream(socket.getOutputStream());
-		DataInputStream rx = new DataInputStream(socket.getInputStream());
+		socket = new Socket(IP_ADDRESS, PORT);
+		tx = new DataOutputStream(socket.getOutputStream());
+		rx = new DataInputStream(socket.getInputStream());
 
-		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-		byte[] passwordAsBytes = PASSWORD.getBytes("US-ASCII");
-		printByteArray(passwordAsBytes, "Password:");
+		IpPacket ipPacket = new IpPacket((short) 10, PASSWORD.getBytes("US-ASCII")).setCommand((byte) 0xF0);
+		sendPacket(ipPacket.getBytes());
 
-		byte[] sessionKey = Arrays.copyOf(passwordAsBytes, 16);
-		Key key = new SecretKeySpec(sessionKey, "AES");
-		cipher.init(Cipher.ENCRYPT_MODE, key);
-		byte[] encryptedPassword = cipher.doFinal(passwordAsBytes);
-		log("EncryptedPassword size: " + encryptedPassword.length);
+		IpPacket step2 = new IpPacket((short) 0, null).setCommand((byte) 0xF2);
+		sendPacket(step2.getBytes());
 
-		byte[] packet = concatenateByteArrays(IpMessages.loginHeader, encryptedPassword);
-		printByteArray(packet, "Tx Packet:");
-		tx.write(packet);
-
-		byte[] response = new byte[64];
-		rx.read(response);
-		printByteArray(response, "Response:");
+		IpPacket step3 = new IpPacket((short) 0, null).setCommand((byte) 0xF3);
+		sendPacket(step3.getBytes());
 
 		tx.close();
 		rx.close();
 		socket.close();
 	}
 
-	private static byte[] concatenateByteArrays(byte[] a, byte[] b) throws IOException {
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		outputStream.write(a);
-		outputStream.write(b);
+	private static byte[] sendPacket(byte[] packet) throws IOException {
+		printByteArray("Tx Packet:", packet);
+		log("Packet size = " + packet.length);
+		tx.write(packet);
 
+		byte[] response = new byte[64];
+		int length = rx.read(response);
+
+		if (length > 0) {
+			byte[] realResponse = new byte[length];
+			for (int i = 0; i < length; i++) {
+				realResponse[i] = response[i];
+			}
+			printByteArray("Response:", realResponse);
+			return realResponse;
+		}
+		return new byte[0];
+	}
+
+	private static byte[] concatenateByteArrays(byte[]... arr) throws IOException {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		for (byte[] byteArr : arr) {
+			outputStream.write(byteArr);
+		}
 		return outputStream.toByteArray();
 	}
 
-	private static void printByteArray(byte[] array, String description) {
+	private static void printByteArray(String description, byte[] array) {
 		if (description != null && !description.isEmpty()) {
 			System.out.println(description);
 		}
@@ -80,5 +94,16 @@ public class Main {
 
 	private static void log(String arg) {
 		System.out.println(arg);
+	}
+
+	private static byte[] encryptMessage(byte[] passwordAsBytes) throws NoSuchAlgorithmException,
+			NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		byte[] sessionKey = Arrays.copyOf(passwordAsBytes, 16);
+		Key key = new SecretKeySpec(sessionKey, "AES");
+		cipher.init(Cipher.ENCRYPT_MODE, key);
+		byte[] encryptedPassword = cipher.doFinal(passwordAsBytes);
+		log("EncryptedPassword size: " + encryptedPassword.length);
+		return encryptedPassword;
 	}
 }
