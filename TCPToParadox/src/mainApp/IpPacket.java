@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class IpPacket {
+	public static final byte[] EMPTY_PAYLOAD = new byte[0];
+
 	private byte startOfHeader = (byte) 0xAA;
 	private short payloadLength;
 	private byte messageType = (byte) 0x03;
@@ -16,8 +18,12 @@ public class IpPacket {
 	private long theRest = 0xEEEEEEEEEEEEEEEEl;
 	private byte[] payload;
 
-	public IpPacket(short payloadLength, byte[] payload) throws IOException {
-		this.payloadLength = payloadLength;
+	public IpPacket(String payload) throws IOException {
+		this(payload.getBytes("US-ASCII"));
+	}
+
+	public IpPacket(byte[] payload) throws IOException {
+		this.payloadLength = (short) (payload != null ? payload.length : 0);
 		if(payload == null || payload.length == 0) {
 			this.payload = new byte[0];
 		} else {

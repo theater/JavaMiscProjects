@@ -33,13 +33,13 @@ public class Main {
 		tx = new DataOutputStream(socket.getOutputStream());
 		rx = new DataInputStream(socket.getInputStream());
 
-		IpPacket ipPacket = new IpPacket((short) 10, PASSWORD.getBytes("US-ASCII")).setCommand((byte) 0xF0);
+		IpPacket ipPacket = new IpPacket(PASSWORD).setCommand((byte) 0xF0);
 		sendPacket(ipPacket.getBytes());
 
-		IpPacket step2 = new IpPacket((short) 0, null).setCommand((byte) 0xF2);
+		IpPacket step2 = new IpPacket(IpPacket.EMPTY_PAYLOAD).setCommand((byte) 0xF2);
 		sendPacket(step2.getBytes());
 
-		IpPacket step3 = new IpPacket((short) 0, null).setCommand((byte) 0xF3);
+		IpPacket step3 = new IpPacket(IpPacket.EMPTY_PAYLOAD).setCommand((byte) 0xF3);
 		sendPacket(step3.getBytes());
 
 		tx.close();
