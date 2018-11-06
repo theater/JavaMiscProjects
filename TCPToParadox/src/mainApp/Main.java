@@ -34,17 +34,21 @@ public class Main {
 		rx = new DataInputStream(socket.getInputStream());
 
 		IpPacket ipPacket = new IpPacket(PASSWORD).setCommand((byte) 0xF0);
-		sendPacket(ipPacket.getBytes());
+		sendPacket(ipPacket);
 
 		IpPacket step2 = new IpPacket(IpPacket.EMPTY_PAYLOAD).setCommand((byte) 0xF2);
-		sendPacket(step2.getBytes());
+		sendPacket(step2);
 
 		IpPacket step3 = new IpPacket(IpPacket.EMPTY_PAYLOAD).setCommand((byte) 0xF3);
-		sendPacket(step3.getBytes());
+		sendPacket(step3);
 
 		tx.close();
 		rx.close();
 		socket.close();
+	}
+
+	private static byte[] sendPacket(IpPacket packet) throws IOException {
+		return sendPacket(packet.getBytes());
 	}
 
 	private static byte[] sendPacket(byte[] packet) throws IOException {
