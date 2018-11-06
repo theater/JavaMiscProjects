@@ -23,13 +23,15 @@ public class IpPacket {
 	}
 
 	public IpPacket(byte[] payload) throws IOException {
-		this.payloadLength = (short) (payload != null ? payload.length : 0);
-		if(payload == null || payload.length == 0) {
+		if(payload == null) {
 			this.payload = new byte[0];
+			this.payloadLength = 0;
 		} else {
 			this.payload = payload;
+			this.payloadLength = (short) payload.length;
 		}
 
+		// TODO: Figure out how to fill up to 16, 32, 48, etc sizes with 0xEE
 //		if (payload.length < 16) {
 //			this.payload = extendPayload(16, payload);
 //		} else {
