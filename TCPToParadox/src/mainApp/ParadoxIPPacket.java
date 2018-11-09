@@ -77,30 +77,10 @@ public class ParadoxIPPacket {
 		byte[] byteArray = outputStream.toByteArray();
 
 		if (isChecksumRequired) {
-			byteArray[byteArray.length - 1] = calculateChecksum();
+			byteArray[byteArray.length - 1] = ParadoxUtil.calculateChecksum(payload);
 		}
 
 		return byteArray;
-	}
-
-	private byte calculateChecksum() {
-		int result = 0;
-		for (byte everyByte : payload) {
-			result += everyByte;
-		}
-
-		return (byte) (result % 256);
-	}
-
-	private byte[] extendPayload(int payloadLength, byte[] payload) throws IOException {
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-		stream.write(payload);
-		for (int i = payload.length; i < payloadLength; i++) {
-			stream.write((byte) 0xEE);
-		}
-
-		return stream.toByteArray();
 	}
 
 	public byte getStartOfHeader() {

@@ -151,6 +151,32 @@ public class ParadoxSystem {
 		}
 	}
 
+	public String readPartitionLabel(byte partitionNo) throws Exception
+    {
+        if (partitionNo < 1 || partitionNo > 8)
+            throw new Exception("Invalid partition number. Valid values are 1-8.");
+
+        //region EVO192 specific
+        int address = (int)(0x3A6B + (partitionNo - 1) * 107);
+        byte labelLength = 16;
+
+        byte[] zoneLabelBytes = readEepromMemory((short) address, labelLength);
+
+        return new String(zoneLabelBytes, "US-ASCII");
+    }
+
+	  private byte[] readEepromMemory(short address, byte bytesToRead) throws Exception
+      {
+          if (bytesToRead < 1 || bytesToRead > 64)
+              throw new Exception("Invalid bytes to read. Valid values are 1 to 64.");
+
+          EpromRequestMessage message = new EpromRequestMessage(address, bytesToRead);
+          ParadoxIPPacket readEpromMemoryPacket = new ParadoxIPPacket(message.getBytes(), false).setMessageType((byte) 0x04).setUnknown0((byte) 0x14);
+          byte[] sendPacket = sendPacket(readEpromMemoryPacket);
+
+          return sendPacket;
+      }
+
 	private byte[] sendPacket(ParadoxIPPacket packet) throws IOException {
 		return sendPacket(packet.getBytes());
 	}
