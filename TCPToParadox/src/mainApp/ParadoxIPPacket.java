@@ -5,25 +5,48 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class IpPacket {
+public class ParadoxIPPacket {
 	public static final byte[] EMPTY_PAYLOAD = new byte[0];
 
+	/**
+	 * Start of header - always 0xAA
+	 */
 	private byte startOfHeader = (byte) 0xAA;
-	private short payloadLength;
-	private byte messageType = (byte) 0x03;
-	private byte encryption = (byte) 0x08;
-	private byte command = (byte) 0;
-	private byte subCommand = (byte) 0;
-	private byte unknown0 = (byte) 0x0A;
+
+	/**
+	 * Payload length - 2 bytes (LL HH)
+	 */
+	private short payloadLength = 0;
+
+	/**
+	 * "Message Type: 0x01: IP responses 0x02: Serial/pass through cmd response
+	 * 0x03: IP requests 0x04: Serial/pass through cmd requests"
+	 */
+	private byte messageType = 0x03;
+
+	/**
+	 * "IP Encryption 0x08: Disabled 0x09: Enabled"
+	 */
+	private byte encryption = 0x08;
+	private byte command = 0;
+	private byte subCommand = 0;
+	private byte unknown0 = 0x0A;
+
+	/**
+	 * Padding bytes to fill the header to 16 bytes with 0xEE.
+	 */
 	private long theRest = 0xEEEEEEEEEEEEEEEEl;
 	private byte[] payload;
+	private boolean isChecksumRequired;
 
-	public IpPacket(String payload) throws IOException {
-		this(payload.getBytes("US-ASCII"));
+	public ParadoxIPPacket(String payload, boolean isChecksumRequired) throws IOException {
+		this(payload.getBytes("US-ASCII"), isChecksumRequired);
 	}
 
-	public IpPacket(byte[] payload) throws IOException {
-		if(payload == null) {
+	public ParadoxIPPacket(byte[] payload, boolean isChecksumRequired) throws IOException {
+		this.isChecksumRequired = isChecksumRequired;
+
+		if (payload == null) {
 			this.payload = new byte[0];
 			this.payloadLength = 0;
 		} else {
@@ -51,8 +74,22 @@ public class IpPacket {
 		outputStream.write(unknown0);
 		outputStream.write(ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong(theRest).array());
 		outputStream.write(payload);
+		byte[] byteArray = outputStream.toByteArray();
 
-		return outputStream.toByteArray();
+		if (isChecksumRequired) {
+			byteArray[byteArray.length - 1] = calculateChecksum();
+		}
+
+		return byteArray;
+	}
+
+	private byte calculateChecksum() {
+		int result = 0;
+		for (byte everyByte : payload) {
+			result += everyByte;
+		}
+
+		return (byte) (result % 256);
 	}
 
 	private byte[] extendPayload(int payloadLength, byte[] payload) throws IOException {
@@ -70,7 +107,7 @@ public class IpPacket {
 		return startOfHeader;
 	}
 
-	public IpPacket setStartOfHeader(byte startOfHeader) {
+	public ParadoxIPPacket setStartOfHeader(byte startOfHeader) {
 		this.startOfHeader = startOfHeader;
 		return this;
 	}
@@ -79,7 +116,7 @@ public class IpPacket {
 		return payloadLength;
 	}
 
-	public IpPacket setPayloadLength(short payloadLength) {
+	public ParadoxIPPacket setPayloadLength(short payloadLength) {
 		this.payloadLength = payloadLength;
 		return this;
 	}
@@ -88,7 +125,7 @@ public class IpPacket {
 		return messageType;
 	}
 
-	public IpPacket setMessageType(byte messageType) {
+	public ParadoxIPPacket setMessageType(byte messageType) {
 		this.messageType = messageType;
 		return this;
 	}
@@ -97,7 +134,7 @@ public class IpPacket {
 		return encryption;
 	}
 
-	public IpPacket setEncryption(byte encryption) {
+	public ParadoxIPPacket setEncryption(byte encryption) {
 		this.encryption = encryption;
 		return this;
 	}
@@ -106,7 +143,7 @@ public class IpPacket {
 		return command;
 	}
 
-	public IpPacket setCommand(byte command) {
+	public ParadoxIPPacket setCommand(byte command) {
 		this.command = command;
 		return this;
 	}
@@ -115,7 +152,7 @@ public class IpPacket {
 		return subCommand;
 	}
 
-	public IpPacket setSubCommand(byte subCommand) {
+	public ParadoxIPPacket setSubCommand(byte subCommand) {
 		this.subCommand = subCommand;
 		return this;
 	}
@@ -124,7 +161,7 @@ public class IpPacket {
 		return unknown0;
 	}
 
-	public IpPacket setUnknown0(byte unknown0) {
+	public ParadoxIPPacket setUnknown0(byte unknown0) {
 		this.unknown0 = unknown0;
 		return this;
 	}
@@ -133,7 +170,7 @@ public class IpPacket {
 		return theRest;
 	}
 
-	public IpPacket setTheRest(long theRest) {
+	public ParadoxIPPacket setTheRest(long theRest) {
 		this.theRest = theRest;
 		return this;
 	}
