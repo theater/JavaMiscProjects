@@ -5,7 +5,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class ParadoxSystem {
 
@@ -31,9 +34,10 @@ public class ParadoxSystem {
 
 	public void logoutSequence() throws IOException {
 		log("Logout sequence started");
-        byte[] logoutMessage = new byte[] { 0x00, 0x07, 0x05, 0x00, 0x00, 0x00, 0x00 };
-  		ParadoxIPPacket logoutPacket = new ParadoxIPPacket(logoutMessage, true).setMessageType((byte) 0x04).setUnknown0((byte) 0x14);
-  		sendPacket(logoutPacket);
+		byte[] logoutMessage = new byte[] { 0x00, 0x07, 0x05, 0x00, 0x00, 0x00, 0x00 };
+		ParadoxIPPacket logoutPacket = new ParadoxIPPacket(logoutMessage, true).setMessageType((byte) 0x04)
+				.setUnknown0((byte) 0x14);
+		sendPacket(logoutPacket);
 	}
 
 	public void logonSequence() throws IOException {
@@ -63,9 +67,6 @@ public class ParadoxSystem {
 		message4[0] = 0x72;
 		ParadoxIPPacket step4 = new ParadoxIPPacket(message4, true).setMessageType((byte) 0x04);
 		sendPacket(step4);
-		// TODO probably this two lines are not needed
-//		byte[] initCommOverSoftwareMessage = Arrays.copyOfRange(response4, 16, response4.length - 1);
-//		printByteArray("Init communication sub array: ", initCommOverSoftwareMessage);
 
 		log("Step5");
 		// 5: Unknown request (IP150 only)
@@ -80,7 +81,7 @@ public class ParadoxSystem {
 		ParadoxIPPacket step6 = new ParadoxIPPacket(message6, true).setMessageType((byte) 0x04);
 		byte[] response6 = sendPacket(step6);
 		byte[] initializationMessage = Arrays.copyOfRange(response6, 16, response6.length);
-		printByteArray("Init communication sub array: ", initializationMessage);
+		ParadoxUtil.printByteArray("Init communication sub array: ", initializationMessage);
 
 		log("\nStep7");
 		// 7: Initialization request (in response to the initialization from the panel)
@@ -142,47 +143,98 @@ public class ParadoxSystem {
 
 				// Checksum
 				0x00 };
-		ParadoxIPPacket step7 = new ParadoxIPPacket(message7, true).setMessageType((byte) 0x04).setUnknown0((byte) 0x14);
+		ParadoxIPPacket step7 = new ParadoxIPPacket(message7, true).setMessageType((byte) 0x04)
+				.setUnknown0((byte) 0x14);
 		byte[] finalResponse = sendPacket(step7);
-		if((finalResponse[16] & 0xF0) == 0x10) {
+		if ((finalResponse[16] & 0xF0) == 0x10) {
 			log("SUCCESSFUL LOGON");
 		} else {
 			log("LOGON FAILURE");
 		}
 	}
 
-	public String readPartitionLabel(byte partitionNo) throws Exception
-    {
-        if (partitionNo < 1 || partitionNo > 8)
-            throw new Exception("Invalid partition number. Valid values are 1-8.");
+	public List<String> readPartitions() {
+		List<String> result = new ArrayList<>();
 
-        //region EVO192 specific
-        int address = (int)(0x3A6B + (partitionNo - 1) * 107);
-        byte labelLength = 16;
+		try {
+			for (int i = 1; i <= 4; i++) {
+				result.add(readPartitionLabel(i));
+			}
+		} catch (Exception e) {
+			log("Unable to retrieve partition labels.\nException: " + e.getMessage());
+		}
+		return result;
+	}
 
-        byte[] zoneLabelBytes = readEepromMemory((short) address, labelLength);
+	public String readPartitionLabel(int partitionNo) throws Exception {
+		log("Reading partition label: " + partitionNo);
+		if (partitionNo < 1 || partitionNo > 8)
+			throw new Exception("Invalid partition number. Valid values are 1-8.");
 
-        return new String(zoneLabelBytes, "US-ASCII");
-    }
+		int address = (int) (0x3A6B + (partitionNo - 1) * 107);
+		byte labelLength = 16;
 
-	  private byte[] readEepromMemory(short address, byte bytesToRead) throws Exception
-      {
-          if (bytesToRead < 1 || bytesToRead > 64)
-              throw new Exception("Invalid bytes to read. Valid values are 1 to 64.");
+		byte[] partitionLabelBytes = readEepromMemory(address, labelLength);
+		byte[] payloadResult = Arrays.copyOfRange(partitionLabelBytes, 22, partitionLabelBytes.length - 1);
 
-          EpromRequestMessage message = new EpromRequestMessage(address, bytesToRead);
-          ParadoxIPPacket readEpromMemoryPacket = new ParadoxIPPacket(message.getBytes(), false).setMessageType((byte) 0x04).setUnknown0((byte) 0x14);
-          byte[] sendPacket = sendPacket(readEpromMemoryPacket);
+		String result = new String(payloadResult, "US-ASCII");
+		log("Partition label: " + result);
+		return result;
+	}
 
-          return sendPacket;
-      }
+	public List<String> readZones() {
+		List<String> result = new ArrayList<>();
+
+		try {
+			for (int i = 1; i <= 192; i++) {
+				result.add(readZoneLabel(i));
+			}
+		} catch (Exception e) {
+			log("Unable to retrieve zone labels.\nException: " + e.getMessage());
+		}
+		return result;
+	}
+
+	public String readZoneLabel(int zoneNumber) throws Exception {
+		log("Reading zone label: " + zoneNumber);
+		if (zoneNumber < 1 || zoneNumber > 192)
+			throw new Exception("Invalid zone number. Valid values are 1-192.");
+
+		byte labelLength = 16;
+
+		int address;
+		if (zoneNumber <= 96) {
+			address = (int) (0x430 + (zoneNumber - 1) * 16);
+		} else {
+			address = (int) (0x62F7 + (zoneNumber - 97) * 16);
+		}
+
+		byte[] zoneLabelBytes = readEepromMemory(address, labelLength);
+		byte[] payloadResult = Arrays.copyOfRange(zoneLabelBytes, 22, zoneLabelBytes.length - 1);
+
+		String result = new String(payloadResult, "US-ASCII");
+		log("Zone label: " + result);
+		return result;
+	}
+
+	private byte[] readEepromMemory(int address, byte bytesToRead) throws Exception {
+		if (bytesToRead < 1 || bytesToRead > 64)
+			throw new Exception("Invalid bytes to read. Valid values are 1 to 64.");
+
+		EpromRequestMessage message = new EpromRequestMessage(address, bytesToRead);
+		ParadoxIPPacket readEpromMemoryPacket = new ParadoxIPPacket(message.getBytes(), false)
+				.setMessageType((byte) 0x04).setUnknown0((byte) 0x14);
+		byte[] response = sendPacket(readEpromMemoryPacket);
+
+		return response;
+	}
 
 	private byte[] sendPacket(ParadoxIPPacket packet) throws IOException {
 		return sendPacket(packet.getBytes());
 	}
 
 	private byte[] sendPacket(byte[] packet) throws IOException {
-		printByteArray("Tx Packet:", packet);
+		ParadoxUtil.printByteArray("Tx Packet:", packet);
 		log("Packet size = " + packet.length);
 		tx.write(packet);
 
@@ -194,28 +246,10 @@ public class ParadoxSystem {
 			for (int i = 0; i < length; i++) {
 				realResponse[i] = response[i];
 			}
-			printByteArray("Response:", realResponse);
+			ParadoxUtil.printByteArray("Response:", realResponse);
 			return realResponse;
 		}
 		return new byte[0];
-	}
-
-	private void printByteArray(String description, byte[] array) {
-		if (description != null && !description.isEmpty()) {
-			System.out.println(description);
-		}
-
-		int i = 0;
-		for (byte b : array) {
-			i++;
-			String st = String.format("0x%02X,\t", b);
-			System.out.print(st);
-			if (i > 7) {
-				i = 0;
-				System.out.println();
-			}
-		}
-		System.out.println();
 	}
 
 	private void log(String arg) {
