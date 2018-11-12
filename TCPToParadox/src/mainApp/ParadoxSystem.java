@@ -8,9 +8,13 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ParadoxSystem {
+
+	private static Logger logger = LoggerFactory.getLogger(ParadoxSystem.class);
 
 	private Socket socket;
 	private DataOutputStream tx;
@@ -33,7 +37,7 @@ public class ParadoxSystem {
 	}
 
 	public void logoutSequence() throws IOException {
-		log("Logout sequence started");
+		logger.debug("Logout sequence started");
 		byte[] logoutMessage = new byte[] { 0x00, 0x07, 0x05, 0x00, 0x00, 0x00, 0x00 };
 		ParadoxIPPacket logoutPacket = new ParadoxIPPacket(logoutMessage, true).setMessageType((byte) 0x04)
 				.setUnknown0((byte) 0x14);
@@ -41,39 +45,39 @@ public class ParadoxSystem {
 	}
 
 	public void logonSequence() throws IOException {
-		log("Step1");
+		logger.debug("Step1");
 		// 1: Login to module request (IP150 only)
 		ParadoxIPPacket ipPacket = new ParadoxIPPacket(password, false).setCommand((byte) 0xF0);
 		byte[] sendPacket = sendPacket(ipPacket);
 		if (sendPacket[4] == 0x38) {
-			log("Login OK");
+			logger.debug("Login OK");
 		} else {
-			log("Login failed");
+			logger.debug("Login failed");
 		}
 
-		log("Step2");
+		logger.debug("Step2");
 		// 2: Unknown request (IP150 only)
 		ParadoxIPPacket step2 = new ParadoxIPPacket(ParadoxIPPacket.EMPTY_PAYLOAD, false).setCommand((byte) 0xF2);
 		sendPacket(step2);
 
-		log("Step3");
+		logger.debug("Step3");
 		// 3: Unknown request (IP150 only)
 		ParadoxIPPacket step3 = new ParadoxIPPacket(ParadoxIPPacket.EMPTY_PAYLOAD, false).setCommand((byte) 0xF3);
 		sendPacket(step3);
 
-		log("Step4");
+		logger.debug("Step4");
 		// 4: Init communication over UIP softawre request (IP150 and direct serial)
 		byte[] message4 = new byte[37];
 		message4[0] = 0x72;
 		ParadoxIPPacket step4 = new ParadoxIPPacket(message4, true).setMessageType((byte) 0x04);
 		sendPacket(step4);
 
-		log("Step5");
+		logger.debug("Step5");
 		// 5: Unknown request (IP150 only)
 		ParadoxIPPacket step5 = new ParadoxIPPacket(IpMessages.unknownIP150Message01, false).setCommand((byte) 0xF8);
 		sendPacket(step5);
 
-		log("\nStep6");
+		logger.debug("\nStep6");
 		// 6: Initialize serial communication request (IP150 and direct serial)
 		byte[] message6 = new byte[37];
 		message6[0] = 0x5F;
@@ -83,7 +87,7 @@ public class ParadoxSystem {
 		byte[] initializationMessage = Arrays.copyOfRange(response6, 16, response6.length);
 		ParadoxUtil.printByteArray("Init communication sub array: ", initializationMessage);
 
-		log("\nStep7");
+		logger.debug("\nStep7");
 		// 7: Initialization request (in response to the initialization from the panel)
 		// (IP150 and direct serial)
 		byte[] message7 = new byte[] {
@@ -147,9 +151,9 @@ public class ParadoxSystem {
 				.setUnknown0((byte) 0x14);
 		byte[] finalResponse = sendPacket(step7);
 		if ((finalResponse[16] & 0xF0) == 0x10) {
-			log("SUCCESSFUL LOGON");
+			logger.debug("SUCCESSFUL LOGON");
 		} else {
-			log("LOGON FAILURE");
+			logger.debug("LOGON FAILURE");
 		}
 	}
 
@@ -161,13 +165,13 @@ public class ParadoxSystem {
 				result.add(readPartitionLabel(i));
 			}
 		} catch (Exception e) {
-			log("Unable to retrieve partition labels.\nException: " + e.getMessage());
+			logger.debug("Unable to retrieve partition labels.\nException: " + e.getMessage());
 		}
 		return result;
 	}
 
 	public String readPartitionLabel(int partitionNo) throws Exception {
-		log("Reading partition label: " + partitionNo);
+		logger.debug("Reading partition label: " + partitionNo);
 		if (partitionNo < 1 || partitionNo > 8)
 			throw new Exception("Invalid partition number. Valid values are 1-8.");
 
@@ -178,7 +182,7 @@ public class ParadoxSystem {
 		byte[] payloadResult = Arrays.copyOfRange(partitionLabelBytes, 22, partitionLabelBytes.length - 1);
 
 		String result = new String(payloadResult, "US-ASCII");
-		log("Partition label: " + result);
+		logger.debug("Partition label: {}", result);
 		return result;
 	}
 
@@ -190,13 +194,13 @@ public class ParadoxSystem {
 				result.add(readZoneLabel(i));
 			}
 		} catch (Exception e) {
-			log("Unable to retrieve zone labels.\nException: " + e.getMessage());
+			logger.debug("Unable to retrieve zone labels.\nException: " + e.getMessage());
 		}
 		return result;
 	}
 
 	public String readZoneLabel(int zoneNumber) throws Exception {
-		log("Reading zone label: " + zoneNumber);
+		logger.debug("Reading zone label: " + zoneNumber);
 		if (zoneNumber < 1 || zoneNumber > 192)
 			throw new Exception("Invalid zone number. Valid values are 1-192.");
 
@@ -213,7 +217,7 @@ public class ParadoxSystem {
 		byte[] payloadResult = Arrays.copyOfRange(zoneLabelBytes, 22, zoneLabelBytes.length - 1);
 
 		String result = new String(payloadResult, "US-ASCII");
-		log("Zone label: " + result);
+		logger.debug("Zone label: " + result);
 		return result;
 	}
 
@@ -235,7 +239,7 @@ public class ParadoxSystem {
 
 	private byte[] sendPacket(byte[] packet) throws IOException {
 		ParadoxUtil.printByteArray("Tx Packet:", packet);
-		log("Packet size = " + packet.length);
+		logger.debug("Packet size = " + packet.length);
 		tx.write(packet);
 
 		byte[] response = new byte[64];
@@ -250,9 +254,5 @@ public class ParadoxSystem {
 			return realResponse;
 		}
 		return new byte[0];
-	}
-
-	private void log(String arg) {
-		System.out.println(arg);
 	}
 }

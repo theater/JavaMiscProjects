@@ -5,7 +5,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class EpromRequestMessage {
+
+	private static Logger logger = LoggerFactory.getLogger(EpromRequestMessage.class);
 
 	private short messageStart = (short) ((0x50 << 8) | 0x08);
 	private byte controlByte;
@@ -16,11 +21,11 @@ public class EpromRequestMessage {
 		this.address = address;
 		this.bytesToRead = bytesToRead;
 		this.controlByte = calculateControlByte(address);
-		System.out.printf("MessageStart: 0x%02X\n", messageStart);
+		logger.debug("MessageStart: {}", String.format("0x%02X,\t", messageStart));
 	}
 
 	private byte calculateControlByte(int address) {
-		System.out.printf("Address: 0x%02X\n", address);
+		logger.debug("Address: {}", String.format("0x%02X,\t", address));
 		byte controlByte = 0x00;
 		controlByte |= 7 << 1;
 		byte[] shortToByteArray = intToByteArray(address);
@@ -30,7 +35,7 @@ public class EpromRequestMessage {
 			byte bit17 = ParadoxUtil.getBit(address, 17);
 			controlByte |= bit17 << 1;
 		}
-		System.out.println("ControlByte value: " + controlByte);
+		logger.debug("ControlByte value: " + controlByte);
 		return controlByte;
 	}
 

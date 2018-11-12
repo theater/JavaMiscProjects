@@ -5,7 +5,14 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ParadoxIPPacket {
+
+	@SuppressWarnings("unused")
+	private static Logger logger = LoggerFactory.getLogger(ParadoxIPPacket.class);
+
 	public static final byte[] EMPTY_PAYLOAD = new byte[0];
 
 	/**
