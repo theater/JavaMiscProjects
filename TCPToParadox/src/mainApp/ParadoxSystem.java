@@ -243,6 +243,10 @@ public class ParadoxSystem {
 		tx.write(packet);
 
 		byte[] response = new byte[64];
+		return receiveResponse(response);
+	}
+
+	private byte[] receiveResponse(byte[] response) throws IOException {
 		int length = rx.read(response);
 
 		if (length > 0) {
@@ -254,5 +258,6 @@ public class ParadoxSystem {
 			return realResponse;
 		}
 		return new byte[0];
+
 	}
 }
