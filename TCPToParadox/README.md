@@ -9,3 +9,6 @@ https://github.com/jpbarraca
 https://github.com/Tertiush
 
 
+To make the code work, make sure to create a folder called /resources on the level of /src folder.
+Create inside a file called password.txt and fill in the password to IP150.
+Change the constants in Main class to your specifics (IP address, port, etc)
