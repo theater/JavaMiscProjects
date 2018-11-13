@@ -3,6 +3,7 @@ package mainApp;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class ParadoxSystem {
 
 	public ParadoxSystem(String ipAddress, int tcpPort, String ip150Password) throws UnknownHostException, IOException {
 		socket = new Socket(ipAddress, tcpPort);
-		socket.setSoTimeout(3000);
+		socket.setSoTimeout(2000);
 		tx = new DataOutputStream(socket.getOutputStream());
 		rx = new DataInputStream(socket.getInputStream());
 		password = ip150Password;
@@ -44,11 +45,12 @@ public class ParadoxSystem {
 		sendPacket(logoutPacket);
 	}
 
-	public void logonSequence() throws IOException {
+	public void logonSequence() throws IOException, InterruptedException {
 		logger.debug("Step1");
 		// 1: Login to module request (IP150 only)
 		ParadoxIPPacket ipPacket = new ParadoxIPPacket(password, false).setCommand((byte) 0xF0);
-		byte[] sendPacket = sendPacket(ipPacket);
+		sendPacket(ipPacket);
+		byte[] sendPacket = receivePacket();
 		if (sendPacket[4] == 0x38) {
 			logger.debug("Login OK");
 		} else {
@@ -59,11 +61,13 @@ public class ParadoxSystem {
 		// 2: Unknown request (IP150 only)
 		ParadoxIPPacket step2 = new ParadoxIPPacket(ParadoxIPPacket.EMPTY_PAYLOAD, false).setCommand((byte) 0xF2);
 		sendPacket(step2);
+		receivePacket();
 
 		logger.debug("Step3");
 		// 3: Unknown request (IP150 only)
 		ParadoxIPPacket step3 = new ParadoxIPPacket(ParadoxIPPacket.EMPTY_PAYLOAD, false).setCommand((byte) 0xF3);
 		sendPacket(step3);
+		receivePacket();
 
 		logger.debug("Step4");
 		// 4: Init communication over UIP softawre request (IP150 and direct serial)
@@ -71,23 +75,26 @@ public class ParadoxSystem {
 		message4[0] = 0x72;
 		ParadoxIPPacket step4 = new ParadoxIPPacket(message4, true).setMessageType((byte) 0x04);
 		sendPacket(step4);
+		receivePacket();
 
 		logger.debug("Step5");
 		// 5: Unknown request (IP150 only)
 		ParadoxIPPacket step5 = new ParadoxIPPacket(IpMessages.unknownIP150Message01, false).setCommand((byte) 0xF8);
 		sendPacket(step5);
+		receivePacket();
 
-		logger.debug("\nStep6");
+		logger.debug("Step6");
 		// 6: Initialize serial communication request (IP150 and direct serial)
 		byte[] message6 = new byte[37];
 		message6[0] = 0x5F;
 		message6[1] = 0x20;
 		ParadoxIPPacket step6 = new ParadoxIPPacket(message6, true).setMessageType((byte) 0x04);
-		byte[] response6 = sendPacket(step6);
+		sendPacket(step6);
+		byte[] response6 = receivePacket();
 		byte[] initializationMessage = Arrays.copyOfRange(response6, 16, response6.length);
 		ParadoxUtil.printByteArray("Init communication sub array: ", initializationMessage);
 
-		logger.debug("\nStep7");
+		logger.debug("Step7");
 		// 7: Initialization request (in response to the initialization from the panel)
 		// (IP150 and direct serial)
 		byte[] message7 = new byte[] {
@@ -149,12 +156,16 @@ public class ParadoxSystem {
 				0x00 };
 		ParadoxIPPacket step7 = new ParadoxIPPacket(message7, true).setMessageType((byte) 0x04)
 				.setUnknown0((byte) 0x14);
-		byte[] finalResponse = sendPacket(step7);
+		sendPacket(step7);
+		byte[] finalResponse = receivePacket();
 		if ((finalResponse[16] & 0xF0) == 0x10) {
 			logger.debug("SUCCESSFUL LOGON");
 		} else {
 			logger.debug("LOGON FAILURE");
 		}
+		Thread.sleep(300);
+		// TODO check why after a short sleep a 37 bytes packet is received after logon ! ! !
+		receivePacket();
 	}
 
 	public List<String> readPartitions() {
@@ -178,19 +189,22 @@ public class ParadoxSystem {
 		int address = (int) (0x3A6B + (partitionNo - 1) * 107);
 		byte labelLength = 16;
 
-		byte[] partitionLabelBytes = readEepromMemory(address, labelLength);
-		byte[] payloadResult = Arrays.copyOfRange(partitionLabelBytes, 22, partitionLabelBytes.length - 1);
+		byte[] payloadResult = readEepromMemory(address, labelLength);
 
-		String result = new String(payloadResult, "US-ASCII");
+		String result = createString(payloadResult);
 		logger.debug("Partition label: {}", result);
 		return result;
+	}
+
+	private String createString(byte[] payloadResult) throws UnsupportedEncodingException {
+		return new String(payloadResult, "US-ASCII");
 	}
 
 	public List<String> readZones() {
 		List<String> result = new ArrayList<>();
 
 		try {
-			for (int i = 1; i <= 192; i++) {
+			for (int i = 1; i <= 60; i++) {
 				result.add(readZoneLabel(i));
 			}
 		} catch (Exception e) {
@@ -213,10 +227,9 @@ public class ParadoxSystem {
 			address = (int) (0x62F7 + (zoneNumber - 97) * 16);
 		}
 
-		byte[] zoneLabelBytes = readEepromMemory(address, labelLength);
-		byte[] payloadResult = Arrays.copyOfRange(zoneLabelBytes, 22, zoneLabelBytes.length - 1);
+		byte[] payloadResult = readEepromMemory(address, labelLength);
 
-		String result = new String(payloadResult, "US-ASCII");
+		String result = createString(payloadResult);
 		logger.debug("Zone label: " + result);
 		return result;
 	}
@@ -228,36 +241,122 @@ public class ParadoxSystem {
 		EpromRequestMessage message = new EpromRequestMessage(address, bytesToRead);
 		ParadoxIPPacket readEpromMemoryPacket = new ParadoxIPPacket(message.getBytes(), false)
 				.setMessageType((byte) 0x04).setUnknown0((byte) 0x14);
-		byte[] response = sendPacket(readEpromMemoryPacket);
-
+		sendPacket(readEpromMemoryPacket);
+		byte[] response = receivePacket((byte) 0x5);
 		return response;
 	}
 
-	private byte[] sendPacket(ParadoxIPPacket packet) throws IOException {
-		return sendPacket(packet.getBytes());
+	private void sendPacket(ParadoxIPPacket packet) throws IOException {
+		sendPacket(packet.getBytes());
 	}
 
-	private byte[] sendPacket(byte[] packet) throws IOException {
+	private void sendPacket(byte[] packet) throws IOException {
 		ParadoxUtil.printByteArray("Tx Packet:", packet);
-		logger.debug("Packet size = " + packet.length);
 		tx.write(packet);
-
-		byte[] response = new byte[64];
-		return receiveResponse(response);
 	}
 
-	private byte[] receiveResponse(byte[] response) throws IOException {
-		int length = rx.read(response);
-
-		if (length > 0) {
-			byte[] realResponse = new byte[length];
-			for (int i = 0; i < length; i++) {
-				realResponse[i] = response[i];
+	private byte[] receivePacket() throws InterruptedException {
+		for(int retryCounter = 0 ; retryCounter < 3 ; retryCounter++) {
+			try {
+				byte[] result = new byte[256];
+				rx.read(result);
+				ParadoxUtil.printByteArray("RX:", result);
+				return Arrays.copyOfRange(result, 0, result[1] + 16);
+			} catch (IOException e) {
+				logger.debug("Unable to retrieve data from RX. {}", e.getMessage());
+				Thread.sleep(100);
+				if(retryCounter < 2) {
+					logger.debug("Attempting one more time");
+				}
 			}
-			ParadoxUtil.printByteArray("Response:", realResponse);
-			return realResponse;
 		}
 		return new byte[0];
+	}
+
+	/// <summary>
+	/// This method reads data from the IP150 module. It can return multiple
+	/// responses
+	/// e.g. a live event is combined with another response.
+	/// </summary>
+	/// <param name="networkStream">The open active TCP/IP stream.</param>
+	/// <param name="command">A panel command, e.g. 0x5 (read memory)</param>
+	/// <returns>An array of an array of the raw bytes received from the TCP/IP
+	/// stream.</returns>
+	private byte[] receivePacket(byte command) throws IOException, InterruptedException {
+		if (command > 0xF)
+			command = ParadoxUtil.getHighNibble(command);
+
+		byte retryCounter = 0;
+
+		// We might enter this too early, meaning the panel has not yet had time to
+		// respond
+		// to our command. We add a retry counter that will wait and retry.
+		while (retryCounter < 3) {
+			byte[] response = receivePacket();
+			List<byte[]> responses = splitResponsePackets(response);
+			for (byte[] bs : responses) {
+				// Message too short
+				if (response.length < 17)
+					continue;
+
+				// Response command (after header) is not related to reading memory
+				if (ParadoxUtil.getHighNibble(response[16]) != command)
+					continue;
+
+				return Arrays.copyOfRange(response, 22, response.length-1);
+			}
+
+			// Give the panel time to send us a response
+			Thread.sleep(100);
+
+			retryCounter++;
+		}
+
+		logger.error("Failed to receive data for command 0x{0:X}", command);
+		return null;
+	}
+
+	private List<byte[]> splitResponsePackets(byte[] response) {
+		List<byte[]> packets = new ArrayList<byte[]>();
+		try {
+			int totalLength = response.length;
+			while (response.length > 0) {
+				if (response.length < 16 || (byte)response[0] != (byte)0xAA) {
+//					throw new Exception("No 16 byte header found");
+					logger.debug("No 16 byte header found");
+				}
+
+				byte[] header = Arrays.copyOfRange(response, 0, 16);
+				byte messageLength = header[1];
+
+				// Remove the header
+				response = Arrays.copyOfRange(response, 16, totalLength);
+
+				if (response.length < messageLength) {
+					throw new Exception("Unexpected end of data");
+				}
+
+				// Check if there's padding bytes (0xEE)
+				if (response.length > messageLength) {
+					for (int i = messageLength; i < response.length; i++) {
+						if (response[i] == 0xEE)
+							messageLength++;
+						else
+							break;
+					}
+				}
+
+				byte[] message = Arrays.copyOfRange(response, 0, messageLength);
+
+				response = Arrays.copyOfRange(response, messageLength, response.length);
+
+				packets.add(ParadoxUtil.mergeByteArrays(header, message));
+			}
+		} catch (Exception ex) {
+			logger.error("Exception occurred: {}", ex.getMessage());
+		}
+
+		return packets;
 
 	}
 }

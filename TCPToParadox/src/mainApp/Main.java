@@ -22,15 +22,16 @@ public class Main {
         try {
             ParadoxSystem paradoxSystem = new ParadoxSystem(IP_ADDRESS, PORT, PASSWORD);
             paradoxSystem.logonSequence();
+            Thread.sleep(3000);
             List<String> partitionLabels = paradoxSystem.readPartitions();
-            // List<String> zoneLabels = paradoxSystem.readZones();
+            List<String> zoneLabels = paradoxSystem.readZones();
 
             paradoxSystem.logoutSequence();
             paradoxSystem.close();
 
-            partitionLabels.stream().forEach(a -> logger.debug("Partition label: " + a));
+            partitionLabels.stream().forEach(a -> logger.debug("Partition label: {}", a));
             logger.debug("############################################################################");
-            // zoneLabels.stream().forEach(a -> System.out.println("Zone label: " + a));
+             zoneLabels.stream().forEach(a -> logger.debug("Zone label: {}", a));
         } catch (Exception e) {
             logger.error("Exception: {}", e.getMessage(), e);
         }
