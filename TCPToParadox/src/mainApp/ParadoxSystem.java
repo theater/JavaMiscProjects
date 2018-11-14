@@ -310,9 +310,9 @@ public class ParadoxSystem {
         // respond
         // to our command. We add a retry counter that will wait and retry.
         while (retryCounter < 3) {
-            byte[] response = receivePacket();
-            List<byte[]> responses = splitResponsePackets(response);
-            for (byte[] bs : responses) {
+            byte[] packetResponse = receivePacket();
+            List<byte[]> responses = splitResponsePackets(packetResponse);
+            for (byte[] response : responses) {
                 // Message too short
                 if (response.length < 17) {
                     continue;
@@ -338,28 +338,29 @@ public class ParadoxSystem {
 
     private List<byte[]> splitResponsePackets(byte[] response) {
         List<byte[]> packets = new ArrayList<byte[]>();
+        byte[] responseCopy = Arrays.copyOf(response, response.length);
         try {
-            int totalLength = response.length;
-            while (response.length > 0) {
-                if (response.length < 16 || response[0] != (byte) 0xAA) {
+            int totalLength = responseCopy.length;
+            while (responseCopy.length > 0) {
+                if (responseCopy.length < 16 || responseCopy[0] != (byte) 0xAA) {
                     // throw new Exception("No 16 byte header found");
                     logger.debug("No 16 byte header found");
                 }
 
-                byte[] header = Arrays.copyOfRange(response, 0, 16);
+                byte[] header = Arrays.copyOfRange(responseCopy, 0, 16);
                 byte messageLength = header[1];
 
                 // Remove the header
-                response = Arrays.copyOfRange(response, 16, totalLength);
+                responseCopy = Arrays.copyOfRange(responseCopy, 16, totalLength);
 
-                if (response.length < messageLength) {
+                if (responseCopy.length < messageLength) {
                     throw new Exception("Unexpected end of data");
                 }
 
                 // Check if there's padding bytes (0xEE)
-                if (response.length > messageLength) {
-                    for (int i = messageLength; i < response.length; i++) {
-                        if (response[i] == 0xEE) {
+                if (responseCopy.length > messageLength) {
+                    for (int i = messageLength; i < responseCopy.length; i++) {
+                        if (responseCopy[i] == 0xEE) {
                             messageLength++;
                         } else {
                             break;
@@ -367,9 +368,9 @@ public class ParadoxSystem {
                     }
                 }
 
-                byte[] message = Arrays.copyOfRange(response, 0, messageLength);
+                byte[] message = Arrays.copyOfRange(responseCopy, 0, messageLength);
 
-                response = Arrays.copyOfRange(response, messageLength, response.length);
+                responseCopy = Arrays.copyOfRange(responseCopy, messageLength, responseCopy.length);
 
                 packets.add(ParadoxUtil.mergeByteArrays(header, message));
             }
