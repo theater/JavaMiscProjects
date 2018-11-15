@@ -20,11 +20,11 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            ParadoxSystem paradoxSystem = new ParadoxSystem(IP_ADDRESS, PORT, PASSWORD);
-            paradoxSystem.logonSequence();
+            ParadoxCommunicator paradoxSystem = new Evo192Communicator(IP_ADDRESS, PORT, PASSWORD);
+            paradoxSystem.loginSequence();
             Thread.sleep(3000);
-            List<String> partitionLabels = paradoxSystem.readPartitions();
-            List<String> zoneLabels = paradoxSystem.readZones();
+            List<String> partitionLabels = paradoxSystem.readPartitionLabels();
+            List<String> zoneLabels = paradoxSystem.readZoneLabels();
 
             paradoxSystem.logoutSequence();
             paradoxSystem.close();
