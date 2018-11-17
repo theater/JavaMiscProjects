@@ -276,7 +276,7 @@ public class Evo192Communicator implements IParadoxCommunicator {
 
 	public void refreshMemoryMap() throws Exception {
 		for (int i = 1, j=0; i <= 16; i++, j++) {
-			logger.debug("Reading memory page number: {}", i);
+			logger.trace("Reading memory page number: {}", i);
 			memoryMap.updateElement(j, readRAMBlock(i));
 		}
 	}

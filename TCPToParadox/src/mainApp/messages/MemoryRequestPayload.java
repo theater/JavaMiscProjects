@@ -26,7 +26,7 @@ public class MemoryRequestPayload implements IPPacketPayload {
 
         this.address = address;
         this.bytesToRead = bytesToRead;
-        logger.debug("MessageStart: {}", String.format("0x%02X,\t", messageStart));
+        logger.trace("MessageStart: {}", String.format("0x%02X,\t", messageStart));
     }
 
     @Override
