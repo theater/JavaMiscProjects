@@ -20,11 +20,16 @@ public class Main {
 
 	private static final String IP_ADDRESS = "192.168.254.231";
 	private static final int PORT = 10000;
+
+	// PASSWORD is your IP150 password
 	private static final String PASSWORD = retrievePassword(PASSWORD_FILE);
+
+	// PC Password is the value of section 3012, i.e. if value is 0987, PC Password is two bytes 0x09, 0x87
+	private static final byte[] PC_PASSWORD = { (byte) 0x09, (byte) 0x87 };
 
 	public static void main(String[] args) {
 		try {
-			IParadoxCommunicator paradoxSystem = new Evo192Communicator(IP_ADDRESS, PORT, PASSWORD);
+			IParadoxCommunicator paradoxSystem = new Evo192Communicator(IP_ADDRESS, PORT, PASSWORD, PC_PASSWORD);
 
 			List<String> partitionLabels = paradoxSystem.readPartitionLabels();
 			List<Partition> partitions = new ArrayList<Partition>();

@@ -22,22 +22,25 @@ import mainApp.messages.RamRequestPayload;
 
 public class Evo192Communicator implements IParadoxCommunicator {
 
+
 	private static Logger logger = LoggerFactory.getLogger(Evo192Communicator.class);
 
 	private Socket socket;
 	private DataOutputStream tx;
 	private DataInputStream rx;
+	private final byte[] PC_PASSWORD;
 
 	private String password;
 
 	MemoryMap memoryMap;
 
-	public Evo192Communicator(String ipAddress, int tcpPort, String ip150Password) throws Exception {
+	public Evo192Communicator(String ipAddress, int tcpPort, String ip150Password, byte[] pcPassword) throws Exception {
 		socket = new Socket(ipAddress, tcpPort);
 		socket.setSoTimeout(2000);
 		tx = new DataOutputStream(socket.getOutputStream());
 		rx = new DataInputStream(socket.getInputStream());
 		password = ip150Password;
+		PC_PASSWORD = pcPassword;
 
 		loginSequence();
 		initializeMemoryMap();
@@ -132,7 +135,7 @@ public class Evo192Communicator implements IParadoxCommunicator {
 		logger.debug("Step7");
 		// 7: Initialization request (in response to the initialization from the panel)
 		// (IP150 and direct serial)
-		byte[] message7 = generateInitializationRequest(initializationMessage);
+		byte[] message7 = generateInitializationRequest(initializationMessage, PC_PASSWORD);
 		ParadoxIPPacket step7 = new ParadoxIPPacket(message7, true)
 				.setMessageType(HeaderMessageType.SERIAL_PASSTHRU_REQUEST).setUnknown0((byte) 0x14);
 		sendPacket(step7);
@@ -426,7 +429,7 @@ public class Evo192Communicator implements IParadoxCommunicator {
 
 	}
 
-	private byte[] generateInitializationRequest(byte[] initializationMessage) {
+	private byte[] generateInitializationRequest(byte[] initializationMessage, byte[] pcPassword) {
 		byte[] message7 = new byte[] {
 				// Initialization command
 				0x00,
@@ -453,7 +456,7 @@ public class Evo192Communicator implements IParadoxCommunicator {
 				initializationMessage[8], initializationMessage[9],
 
 				// PC Password
-				0x09, (byte) 0x87,
+				pcPassword[0], pcPassword[1],
 
 				// Modem speed
 				0x0A,
