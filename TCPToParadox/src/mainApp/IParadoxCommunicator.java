@@ -3,7 +3,7 @@ package mainApp;
 import java.io.IOException;
 import java.util.List;
 
-public interface ParadoxCommunicator {
+public interface IParadoxCommunicator {
 
 	void close() throws IOException;
 
@@ -12,10 +12,10 @@ public interface ParadoxCommunicator {
 	void loginSequence() throws IOException, InterruptedException;
 
 	List<String> readPartitionLabels();
-
 	List<String> readZoneLabels();
 
-    byte[] readRAMBlock(int blockNo) throws Exception;
-    byte[] readRAM(int blockNo, byte bytes) throws Exception;
+	public void refreshMemoryMap() throws Exception;
 
+	public List<byte[]> readPartitionFlags() throws Exception;
+	public ZoneStateFlags readZoneStateFlags() throws Exception;
 }

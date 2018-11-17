@@ -20,7 +20,7 @@ import mainApp.messages.IpMessagesConstants;
 import mainApp.messages.ParadoxIPPacket;
 import mainApp.messages.RamRequestPayload;
 
-public class Evo192Communicator implements ParadoxCommunicator {
+public class Evo192Communicator implements IParadoxCommunicator {
 
 	private static Logger logger = LoggerFactory.getLogger(Evo192Communicator.class);
 

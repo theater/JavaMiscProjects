@@ -24,24 +24,20 @@ public class Main {
 
 	public static void main(String[] args) {
 		try {
-			Evo192Communicator paradoxSystem = new Evo192Communicator(IP_ADDRESS, PORT, PASSWORD);
+			IParadoxCommunicator paradoxSystem = new Evo192Communicator(IP_ADDRESS, PORT, PASSWORD);
 
 			List<String> partitionLabels = paradoxSystem.readPartitionLabels();
-            List<byte[]> partitionFlags = paradoxSystem.readPartitionFlags();
 			List<Partition> partitions = new ArrayList<Partition>();
 			for (int i = 0; i < partitionLabels.size(); i++) {
 				Partition partition = new Partition(i + 1, partitionLabels.get(i));
-				partition.setState(partitionFlags.get(i));
 				partitions.add(partition);
 				logger.debug("Partition {}:\t{}", i + 1, partition.getState().calculatedState());
 			}
 
 			List<String> zoneLabels = paradoxSystem.readZoneLabels();
-			ZoneStateFlags zoneStateFlags = paradoxSystem.readZoneStateFlags();
 			List<Zone> zones = new ArrayList<Zone>();
 			for (int i = 0; i < 40 ; i++) {
 				Zone zone = new Zone(i + 1, zoneLabels.get(i));
-				zone.setFlags(zoneStateFlags);
 
 				zones.add(zone);
 			}
@@ -57,7 +53,7 @@ public class Main {
 	}
 
 
-	private static void infiniteLoop(Evo192Communicator paradoxSystem, List<Partition> partitions, List<Zone> zones)
+	private static void infiniteLoop(IParadoxCommunicator paradoxSystem, List<Partition> partitions, List<Zone> zones)
 			throws Exception, InterruptedException {
 		paradoxSystem.refreshMemoryMap();
 		List<byte[]> currentPartitionFlags = paradoxSystem.readPartitionFlags();
