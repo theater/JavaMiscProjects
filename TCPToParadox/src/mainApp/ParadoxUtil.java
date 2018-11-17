@@ -21,39 +21,43 @@ public class ParadoxUtil {
         return (byte) (result % 256);
     }
 
-    public static byte getBit(int address, int bitNumber) {
-        return (byte) ((address >> bitNumber) & 1);
+    public static byte getBit(int value, int bitNumber) {
+        return (byte) ((value >> bitNumber) & 1);
     }
 
-    public static void printByteArray(String description, byte[] array) {
-        if (description != null && !description.isEmpty()) {
-            logger.debug(description);
-        }
+    public static void printPacket(String description, byte[] array) {
         logger.debug("Packet payload size: {}", array[1]);
-
-        int countBytes = 0;
-        String result = new String();
-        for (int index = 0; index < array[1] + 16; index++) {
-            countBytes++;
-            String st = String.format("0x%02X,\t", array[index]);
-            result += st;
-            if (countBytes > 7) {
-                logger.debug(result);
-                countBytes = 0;
-                result = new String();
-                continue;
-            }
-        }
-        if (!result.isEmpty()) {
-            logger.debug(result);
-        }
+    	printByteArray(description, array, array[1] + 16);
     }
 
-    public static byte setBit(byte byteValue, byte position, byte setValue) {
-        if (setValue == 1) {
-            return (byte) (byteValue | (1 << position));
+    public static void printByteArray(String description, byte[] array, int length) {
+    	   if (description != null && !description.isEmpty()) {
+               logger.debug(description);
+           }
+    	   int countBytes = 0;
+           String result = new String();
+           for (int index = 0; index < length; index++) {
+               countBytes++;
+               String st = String.format("0x%02X,\t", array[index]);
+               result += st;
+               if (countBytes > 7) {
+                   logger.debug(result);
+                   countBytes = 0;
+                   result = new String();
+                   continue;
+               }
+           }
+           if (!result.isEmpty()) {
+               logger.debug(result);
+           }
+
+    }
+
+    public static byte setBit(byte byteValue, int i, int j) {
+        if (j == 1) {
+            return (byte) (byteValue | (1 << i));
         } else {
-            return (byte) (byteValue & ~(1 << position));
+            return (byte) (byteValue & ~(1 << i));
         }
     }
 

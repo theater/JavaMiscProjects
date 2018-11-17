@@ -1,10 +1,20 @@
 package mainApp.Model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Zone {
 	private String label;
 	private boolean isOpened;
 	private boolean isTampered;
 	private boolean hasLowBattery;
+
+	private static Logger logger = LoggerFactory.getLogger(Partition.class);
+
+	public Zone(String label) {
+		this.label = label;
+		logger.debug("Creating zone with label: {}", label);
+	}
 
 	public String getLabel() {
 		return label;

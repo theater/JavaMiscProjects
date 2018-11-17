@@ -15,4 +15,7 @@ public interface ParadoxCommunicator {
 
 	List<String> readZoneLabels();
 
+    byte[] readRAMBlock(int blockNo) throws Exception;
+    byte[] readRAM(int blockNo, byte bytes) throws Exception;
+
 }
