@@ -3,25 +3,33 @@ package mainApp.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Zone {
-	private String label;
+import mainApp.ParadoxUtil;
+import mainApp.ZoneStateFlags;
+
+public class Zone extends Entity {
 	private boolean isOpened;
 	private boolean isTampered;
 	private boolean hasLowBattery;
 
 	private static Logger logger = LoggerFactory.getLogger(Partition.class);
 
-	public Zone(String label) {
-		this.label = label;
-		logger.debug("Creating zone with label: {}", label);
+	public Zone(int id, String label) {
+		super(id, label);
 	}
 
-	public String getLabel() {
-		return label;
-	}
+	public void setFlags(ZoneStateFlags zoneStateFlags) {
+		int id = getId();
+		int index = id / 8;
+		int bitNumber = id % 8 - 1;
 
-	public void setLabel(String label) {
-		this.label = label;
+		byte[] zonesOpened = zoneStateFlags.getZonesOpened();
+		isOpened = ParadoxUtil.isBitSet(zonesOpened[index], bitNumber);
+
+		byte[] zonesTampered = zoneStateFlags.getZonesTampered();
+		isTampered = ParadoxUtil.isBitSet(zonesTampered[index], bitNumber);
+
+		byte[] zonesLowBattery = zoneStateFlags.getZonesLowBattery();
+		hasLowBattery = ParadoxUtil.isBitSet(zonesLowBattery[index], bitNumber);
 	}
 
 	public boolean isOpened() {
@@ -40,11 +48,12 @@ public class Zone {
 		this.isTampered = isTampered;
 	}
 
-	public boolean isHasLowBattery() {
+	public boolean hasLowBattery() {
 		return hasLowBattery;
 	}
 
 	public void setHasLowBattery(boolean hasLowBattery) {
 		this.hasLowBattery = hasLowBattery;
 	}
+
 }

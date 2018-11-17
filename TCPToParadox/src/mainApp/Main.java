@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mainApp.Model.Partition;
+import mainApp.Model.Zone;
 
 public class Main {
 
@@ -26,41 +27,54 @@ public class Main {
 			Evo192Communicator paradoxSystem = new Evo192Communicator(IP_ADDRESS, PORT, PASSWORD);
 
 			List<String> partitionLabels = paradoxSystem.readPartitionLabels();
-//            List<String> zoneLabels = paradoxSystem.readZoneLabels();
-
-			List<byte[]> partitionFlags = paradoxSystem.readPartitionFlags();
-//            for (int i = 0; i < partitionFlags.size() ; i++) {
-//            	ParadoxUtil.printByteArray("Partition " + (i+1) + ": ", partitionFlags.get(i), 6);
-//            }
-
+            List<byte[]> partitionFlags = paradoxSystem.readPartitionFlags();
 			List<Partition> partitions = new ArrayList<Partition>();
 			for (int i = 0; i < partitionLabels.size(); i++) {
-				Partition partition = new Partition(partitionLabels.get(i));
+				Partition partition = new Partition(i + 1, partitionLabels.get(i));
 				partition.setState(partitionFlags.get(i));
 				partitions.add(partition);
 				logger.debug("Partition {}:\t{}", i + 1, partition.getState().calculatedState());
 			}
 
-			while (true) {
-				paradoxSystem.refreshMemoryMap();
-				List<byte[]> currentPartitionFlags = paradoxSystem.readPartitionFlags();
-				for (int i = 0; i < partitions.size(); i++) {
-					Partition partition = partitions.get(i);
-					partition.setState(currentPartitionFlags.get(i));
-					logger.debug("Partition {}:\t{}", partition.getLabel(), partition.getState().calculatedState());
-				}
-//            	updatePartitionStates(partitions);
-				Thread.sleep(5000);
-				logger.debug("############################################################################");
+			List<String> zoneLabels = paradoxSystem.readZoneLabels();
+			ZoneStateFlags zoneStateFlags = paradoxSystem.readZoneStateFlags();
+			List<Zone> zones = new ArrayList<Zone>();
+			for (int i = 0; i < 40 ; i++) {
+				Zone zone = new Zone(i + 1, zoneLabels.get(i));
+				zone.setFlags(zoneStateFlags);
+
+				zones.add(zone);
 			}
 
-//             zoneLabels.stream().forEach(a -> logger.debug("Zone label: {}", a));
-
+			while (true) {
+				infiniteLoop(paradoxSystem, partitions, zones);
+			}
 //			paradoxSystem.logoutSequence();
 //			paradoxSystem.close();
 		} catch (Exception e) {
 			logger.error("Exception: {}", e.getMessage(), e);
 		}
+	}
+
+
+	private static void infiniteLoop(Evo192Communicator paradoxSystem, List<Partition> partitions, List<Zone> zones)
+			throws Exception, InterruptedException {
+		paradoxSystem.refreshMemoryMap();
+		List<byte[]> currentPartitionFlags = paradoxSystem.readPartitionFlags();
+		for (int i = 0; i < partitions.size(); i++) {
+			Partition partition = partitions.get(i);
+			partition.setState(currentPartitionFlags.get(i));
+			logger.debug("Partition {}:\t{}", partition.getLabel(), partition.getState().calculatedState());
+		}
+
+		ZoneStateFlags zoneStateFlags = paradoxSystem.readZoneStateFlags();
+		for (int i = 0; i < zones.size(); i++) {
+			Zone zone = zones.get(i);
+			zone.setFlags(zoneStateFlags);
+			logger.debug("Zone {}:\tOpened: {}, Tampered: {}, LowBattery: {}", new Object[] { zone.getLabel(), zone.isOpened(), zone.isTampered(), zone.hasLowBattery()});
+		}
+		logger.debug("############################################################################");
+		Thread.sleep(5000);
 	}
 
 	private static String retrievePassword(String file) {

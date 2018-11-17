@@ -158,7 +158,7 @@ public class Evo192Communicator implements ParadoxCommunicator {
 		List<String> result = new ArrayList<>();
 
 		try {
-			for (int i = 1; i <= 4; i++) {
+			for (int i = 1; i <= 8; i++) {
 				result.add(readPartitionLabel(i));
 			}
 		} catch (Exception e) {
@@ -227,10 +227,10 @@ public class Evo192Communicator implements ParadoxCommunicator {
 	public List<byte[]> readPartitionFlags() throws Exception {
 		List<byte[]> result = new ArrayList<byte[]>();
 
-		byte[] element = memoryMap.getElement(0);
+		byte[] element = memoryMap.getElement(2);
 		byte[] firstBlock = Arrays.copyOfRange(element, 32, 64);
 
-		element = memoryMap.getElement(1);
+		element = memoryMap.getElement(3);
 		byte[] secondBlock = Arrays.copyOfRange(element, 0, 16);
 		byte[] mergeByteArrays = ParadoxUtil.mergeByteArrays(firstBlock, secondBlock);
 		for (int i = 0; i < mergeByteArrays.length; i += 6) {
@@ -240,9 +240,33 @@ public class Evo192Communicator implements ParadoxCommunicator {
 		return result;
 	}
 
+	public ZoneStateFlags readZoneStateFlags() throws Exception {
+		ZoneStateFlags result = new ZoneStateFlags();
+
+		byte[] firstPage = memoryMap.getElement(0);
+		byte[] secondPage = memoryMap.getElement(8);
+
+		byte[] firstBlock = Arrays.copyOfRange(firstPage, 28, 40);
+		byte[] secondBlock = Arrays.copyOfRange(secondPage, 0, 22);
+		byte[] zonesOpened = ParadoxUtil.mergeByteArrays(firstBlock, secondBlock);
+		result.setZonesOpened(zonesOpened);
+
+		firstBlock = Arrays.copyOfRange(firstPage, 40, 52);
+		secondBlock = Arrays.copyOfRange(secondPage, 22, 34);
+		byte[] zonesTampered = ParadoxUtil.mergeByteArrays(firstBlock, secondBlock);
+		result.setZonesTampered(zonesTampered);
+
+		firstBlock = Arrays.copyOfRange(firstPage, 52, 52);
+		secondBlock = Arrays.copyOfRange(secondPage, 34, 64);
+		byte[] zonesLowBattery = ParadoxUtil.mergeByteArrays(firstBlock, secondBlock);
+		result.setZonesLowBattery(zonesLowBattery);
+
+		return result;
+	}
+
 	public void initializeMemoryMap() throws Exception {
 		List<byte[]> ramCache = new ArrayList<>();
-		for (int i = 3; i < 5; i++) {
+		for (int i = 1; i <= 16; i++) {
 			logger.debug("Reading memory page number: {}", i);
 			ramCache.add(readRAMBlock(i));
 		}
@@ -251,7 +275,7 @@ public class Evo192Communicator implements ParadoxCommunicator {
 	}
 
 	public void refreshMemoryMap() throws Exception {
-		for (int i = 3, j=0; i < 5; i++, j++) {
+		for (int i = 1, j=0; i <= 16; i++, j++) {
 			logger.debug("Reading memory page number: {}", i);
 			memoryMap.updateElement(j, readRAMBlock(i));
 		}

@@ -25,6 +25,10 @@ public class ParadoxUtil {
         return (byte) ((value >> bitNumber) & 1);
     }
 
+    public static boolean isBitSet(int value, int bitNumber) {
+        return ((value >> bitNumber) & 1) == 1;
+    }
+
     public static void printPacket(String description, byte[] array) {
         logger.debug("Packet payload size: {}", array[1]);
     	printByteArray(description, array, array[1] + 16);

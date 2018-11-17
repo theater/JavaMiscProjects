@@ -33,36 +33,36 @@ public class PartitionState {
 
 	public void updateStates(byte[] partitionFlags) {
 		byte firstByte = partitionFlags[0];
-		this.isArmed = ParadoxUtil.getBit(firstByte, 0) == 1 ?  true : false;
-		this.isArmedInAway = ParadoxUtil.getBit(firstByte, 1) == 1 ?  true : false;
-		this.isArmedInStay = ParadoxUtil.getBit(firstByte, 2) == 1 ?  true : false;
-		this.isArmedInNoEntry = ParadoxUtil.getBit(firstByte, 3) == 1 ?  true : false;
+		this.isArmed = ParadoxUtil.isBitSet(firstByte, 0) ?  true : false;
+		this.isArmedInAway = ParadoxUtil.isBitSet(firstByte, 1) ?  true : false;
+		this.isArmedInStay = ParadoxUtil.isBitSet(firstByte, 2) ?  true : false;
+		this.isArmedInNoEntry = ParadoxUtil.isBitSet(firstByte, 3) ?  true : false;
 
-		this.isInAlarm = ParadoxUtil.getBit(firstByte, 4) == 1 ?  true : false;
-		this.isInSilentAlarm = ParadoxUtil.getBit(firstByte, 5) == 1 ?  true : false;
-		this.isInAudibleAlarm = ParadoxUtil.getBit(firstByte, 6) == 1 ?  true : false;
-		this.isInFireAlarm = ParadoxUtil.getBit(firstByte, 7) == 1 ?  true : false;
+		this.isInAlarm = ParadoxUtil.isBitSet(firstByte, 4) ?  true : false;
+		this.isInSilentAlarm = ParadoxUtil.isBitSet(firstByte, 5) ?  true : false;
+		this.isInAudibleAlarm = ParadoxUtil.isBitSet(firstByte, 6) ?  true : false;
+		this.isInFireAlarm = ParadoxUtil.isBitSet(firstByte, 7) ?  true : false;
 
 		byte secondByte = partitionFlags[1];
-		this.isReadyToArm = ParadoxUtil.getBit(secondByte, 0) == 1 ?  true : false;
-		this.isInExitDelay = ParadoxUtil.getBit(secondByte, 1) == 1 ?  true : false;
-		this.isInEntryDelay = ParadoxUtil.getBit(secondByte, 2) == 1 ?  true : false;
-		this.isInTrouble = ParadoxUtil.getBit(secondByte, 3) == 1 ?  true : false;
-		this.hasAlarmInMemory = ParadoxUtil.getBit(secondByte, 4) == 1 ?  true : false;
-		this.isInZoneBypass = ParadoxUtil.getBit(secondByte, 5) == 1 ?  true : false;
+		this.isReadyToArm = ParadoxUtil.isBitSet(secondByte, 0) ?  true : false;
+		this.isInExitDelay = ParadoxUtil.isBitSet(secondByte, 1) ?  true : false;
+		this.isInEntryDelay = ParadoxUtil.isBitSet(secondByte, 2) ?  true : false;
+		this.isInTrouble = ParadoxUtil.isBitSet(secondByte, 3) ?  true : false;
+		this.hasAlarmInMemory = ParadoxUtil.isBitSet(secondByte, 4) ?  true : false;
+		this.isInZoneBypass = ParadoxUtil.isBitSet(secondByte, 5) ?  true : false;
 
 		byte thirdByte = partitionFlags[2];
-		this.hasZoneInTamperTrouble = ParadoxUtil.getBit(thirdByte, 5) == 1 ?  true : false;
-		this.hasZoneInLowBatteryTrouble = ParadoxUtil.getBit(thirdByte, 5) == 1 ?  true : false;
-		this.hasZoneInFireLoopTrouble = ParadoxUtil.getBit(thirdByte, 5) == 1 ?  true : false;
-		this.hasZoneInSupervisionTrouble = ParadoxUtil.getBit(thirdByte, 5) == 1 ?  true : false;
+		this.hasZoneInTamperTrouble = ParadoxUtil.isBitSet(thirdByte, 4) ?  true : false;
+		this.hasZoneInLowBatteryTrouble = ParadoxUtil.isBitSet(thirdByte, 5) ?  true : false;
+		this.hasZoneInFireLoopTrouble = ParadoxUtil.isBitSet(thirdByte, 6) ?  true : false;
+		this.hasZoneInSupervisionTrouble = ParadoxUtil.isBitSet(thirdByte, 7) ?  true : false;
 
 		byte sixthByte = partitionFlags[5];
-		this.isStayInstantReady = ParadoxUtil.getBit(sixthByte, 0) == 1 ?  true : false;
-		this.isForceReady = ParadoxUtil.getBit(sixthByte, 1) == 1 ?  true : false;
-		this.isBypassReady = ParadoxUtil.getBit(sixthByte, 2) == 1 ?  true : false;
-		this.isInhibitReady = ParadoxUtil.getBit(sixthByte, 3) == 1 ?  true : false;
-		this.areAllZoneclosed = ParadoxUtil.getBit(sixthByte, 4) == 1 ?  true : false;
+		this.isStayInstantReady = ParadoxUtil.isBitSet(sixthByte, 0) ?  true : false;
+		this.isForceReady = ParadoxUtil.isBitSet(sixthByte, 1) ?  true : false;
+		this.isBypassReady = ParadoxUtil.isBitSet(sixthByte, 2) ?  true : false;
+		this.isInhibitReady = ParadoxUtil.isBitSet(sixthByte, 3) ?  true : false;
+		this.areAllZoneclosed = ParadoxUtil.isBitSet(sixthByte, 4) ?  true : false;
 	}
 
 	public String calculatedState() {
