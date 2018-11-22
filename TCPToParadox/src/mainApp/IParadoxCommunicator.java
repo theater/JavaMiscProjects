@@ -11,11 +11,12 @@ public interface IParadoxCommunicator {
 
 	void loginSequence() throws IOException, InterruptedException;
 
-	List<String> readPartitionLabels();
-	List<String> readZoneLabels();
-
 	public void refreshMemoryMap() throws Exception;
 
 	public List<byte[]> readPartitionFlags() throws Exception;
 	public ZoneStateFlags readZoneStateFlags() throws Exception;
+
+	List<String> readPartitionLabels();
+
+	List<String> readZoneLabels();
 }

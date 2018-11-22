@@ -9,86 +9,97 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mainApp.Model.ParadoxSecuritySystem;
 import mainApp.Model.Partition;
 import mainApp.Model.Zone;
 
+/**
+ * The {@link Main} - used for testing purposes only.
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
 public class Main {
 
-	private static final String PASSWORD_FILE = "resources/password.txt";
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
 
-	private static Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final String IP_ADDRESS = "192.168.254.231";
+    private static final int PORT = 10000;
 
-	private static final String IP_ADDRESS = "192.168.254.231";
-	private static final int PORT = 10000;
+    // PC Password is the value of section 3012, i.e. if value is 0987, PC Password is two bytes 0x09, 0x87
+    private static final String PC_PASSWORD = "0987";
 
-	// PASSWORD is your IP150 password
-	private static final String PASSWORD = retrievePassword(PASSWORD_FILE);
+    public static void main(String[] args) {
+        String ip150Password = handleArguments(args);
 
-	// PC Password is the value of section 3012, i.e. if value is 0987, PC Password is two bytes 0x09, 0x87
-	private static final byte[] PC_PASSWORD = { (byte) 0x09, (byte) 0x87 };
+        try {
+            IParadoxCommunicator communicator = new Evo192Communicator(IP_ADDRESS, PORT, ip150Password, PC_PASSWORD);
+            ParadoxSecuritySystem paradoxSystem = new ParadoxSecuritySystem(communicator);
 
-	public static void main(String[] args) {
-		try {
-			IParadoxCommunicator paradoxSystem = new Evo192Communicator(IP_ADDRESS, PORT, PASSWORD, PC_PASSWORD);
+            while (true) {
+                infiniteLoop(paradoxSystem);
+            }
+            // paradoxSystem.logoutSequence();
+            // paradoxSystem.close();
+        } catch (Exception e) {
+            logger.error("Exception: {}", e.getMessage(), e);
+            System.exit(0);
+        }
+    }
 
-			List<String> partitionLabels = paradoxSystem.readPartitionLabels();
-			List<Partition> partitions = new ArrayList<Partition>();
-			for (int i = 0; i < partitionLabels.size(); i++) {
-				Partition partition = new Partition(i + 1, partitionLabels.get(i));
-				partitions.add(partition);
-				logger.debug("Partition {}:\t{}", i + 1, partition.getState().calculatedState());
-			}
+    private static void infiniteLoop(ParadoxSecuritySystem paradoxSystem) {
+        try {
+            Thread.sleep(5000);
+            paradoxSystem.updateEntities();
+        } catch (InterruptedException e1) {
+            logger.error(e1.getMessage(), e1);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
 
-			List<String> zoneLabels = paradoxSystem.readZoneLabels();
-			List<Zone> zones = new ArrayList<Zone>();
-			for (int i = 0; i < 40 ; i++) {
-				Zone zone = new Zone(i + 1, zoneLabels.get(i));
+    private static List<Zone> initializeZones(IParadoxCommunicator paradoxSystem) {
+        List<String> zoneLabels = paradoxSystem.readZoneLabels();
+        List<Zone> zones = new ArrayList<Zone>();
+        for (int i = 0; i < 40; i++) {
+            Zone zone = new Zone(i + 1, zoneLabels.get(i));
 
-				zones.add(zone);
-			}
+            zones.add(zone);
+        }
+        return zones;
+    }
 
-			while (true) {
-				infiniteLoop(paradoxSystem, partitions, zones);
-			}
-//			paradoxSystem.logoutSequence();
-//			paradoxSystem.close();
-		} catch (Exception e) {
-			logger.error("Exception: {}", e.getMessage(), e);
-		}
-	}
+    private static List<Partition> initializePartitions(IParadoxCommunicator paradoxSystem) {
+        List<String> partitionLabels = paradoxSystem.readPartitionLabels();
+        List<Partition> partitions = new ArrayList<Partition>();
+        for (int i = 0; i < partitionLabels.size(); i++) {
+            Partition partition = new Partition(i + 1, partitionLabels.get(i));
+            partitions.add(partition);
+            logger.debug("Partition {}:\t{}", i + 1, partition.getState().getMainState());
+        }
+        return partitions;
+    }
 
+    private static String handleArguments(String[] args) {
+        if (args == null || args.length < 2 || !"--password".equals(args[0]) || args[1] == null || args[1].isEmpty()) {
+            logger.error("Usage: application --password <YOUR_PASSWORD_FOR_IP150>");
+            System.exit(0);
+        } else {
+            logger.info("Password retrieved successfully from CLI.");
+        }
+        return args[1];
+    }
 
-	private static void infiniteLoop(IParadoxCommunicator paradoxSystem, List<Partition> partitions, List<Zone> zones)
-			throws Exception, InterruptedException {
-		paradoxSystem.refreshMemoryMap();
-		List<byte[]> currentPartitionFlags = paradoxSystem.readPartitionFlags();
-		for (int i = 0; i < partitions.size(); i++) {
-			Partition partition = partitions.get(i);
-			partition.setState(currentPartitionFlags.get(i));
-			logger.debug("Partition {}:\t{}", partition.getLabel(), partition.getState().calculatedState());
-		}
-
-		ZoneStateFlags zoneStateFlags = paradoxSystem.readZoneStateFlags();
-		for (int i = 0; i < zones.size(); i++) {
-			Zone zone = zones.get(i);
-			zone.setFlags(zoneStateFlags);
-			logger.debug("Zone {}:\tOpened: {}, Tampered: {}, LowBattery: {}", new Object[] { zone.getLabel(), zone.isOpened(), zone.isTampered(), zone.hasLowBattery()});
-		}
-		logger.debug("############################################################################");
-		Thread.sleep(5000);
-	}
-
-	private static String retrievePassword(String file) {
-		try {
-			byte[] bytes = Files.readAllBytes(Paths.get(file));
-			if (bytes != null && bytes.length > 0) {
-				String result = new String(bytes);
-				logger.debug("Password: {}", result);
-				return result;
-			}
-		} catch (IOException e) {
-			logger.debug("Exception during reading password from file", e);
-		}
-		return "";
-	}
+    private static String retrievePassword(String file) {
+        try {
+            byte[] bytes = Files.readAllBytes(Paths.get(file));
+            if (bytes != null && bytes.length > 0) {
+                String result = new String(bytes);
+                logger.debug("Password: {}", result);
+                return result;
+            }
+        } catch (IOException e) {
+            logger.debug("Exception during reading password from file", e);
+        }
+        return "";
+    }
 }

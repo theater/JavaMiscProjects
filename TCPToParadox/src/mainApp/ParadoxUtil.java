@@ -36,7 +36,7 @@ public class ParadoxUtil {
 
     public static void printByteArray(String description, byte[] array, int length) {
     	   if (description != null && !description.isEmpty()) {
-               logger.trace(description);
+               logger.debug(description);
            }
     	   int countBytes = 0;
            String result = new String();
@@ -45,14 +45,14 @@ public class ParadoxUtil {
                String st = String.format("0x%02X,\t", array[index]);
                result += st;
                if (countBytes > 7) {
-                   logger.trace(result);
+                   logger.debug(result);
                    countBytes = 0;
                    result = new String();
                    continue;
                }
            }
            if (!result.isEmpty()) {
-               logger.trace(result);
+               logger.debug(result);
            }
 
     }
@@ -93,6 +93,24 @@ public class ParadoxUtil {
 
     public static byte[] shortToByteArray(short value) {
         return ByteBuffer.allocate(Short.SIZE / Byte.SIZE).order(ByteOrder.BIG_ENDIAN).putShort(value).array();
+    }
+
+    public static byte[] stringToBCD(String pcPassword) {
+        return stringToBCD(pcPassword, 4);
+    }
+
+    public static byte[] stringToBCD(String pcPassword, int numberOfDigits) {
+        byte[] result = new byte[numberOfDigits / 2];
+        for (int i = 0, j = 0; i < 2; i++, j += 2) {
+            String substring = pcPassword.substring(j, j + 1);
+            int parseInt = Integer.parseInt(substring);
+            result[i] = (byte) ((parseInt & 0x0F) << 4);
+
+            substring = pcPassword.substring(j + 1, j + 2);
+            parseInt = Integer.parseInt(substring);
+            result[i] |= (byte) (parseInt & 0x0F);
+        }
+        return result;
     }
 
 }

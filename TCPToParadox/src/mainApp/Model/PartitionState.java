@@ -4,284 +4,261 @@ import mainApp.ParadoxUtil;
 
 public class PartitionState {
 
-	private boolean isArmed;
-	private boolean isArmedInAway;
-	private boolean isArmedInStay;
-	private boolean isArmedInNoEntry;
-	private boolean isInAlarm;
-	private boolean isInSilentAlarm;
-	private boolean isInAudibleAlarm;
-	private boolean isInFireAlarm;
+    private boolean isArmed;
+    private boolean isArmedInAway;
+    private boolean isArmedInStay;
+    private boolean isArmedInNoEntry;
+    private boolean isInAlarm;
+    private boolean isInSilentAlarm;
+    private boolean isInAudibleAlarm;
+    private boolean isInFireAlarm;
 
-	private boolean isReadyToArm;
-	private boolean isInExitDelay;
-	private boolean isInEntryDelay;
-	private boolean isInTrouble;
-	private boolean hasAlarmInMemory;
-	private boolean isInZoneBypass;
+    private boolean isReadyToArm;
+    private boolean isInExitDelay;
+    private boolean isInEntryDelay;
+    private boolean isInTrouble;
+    private boolean hasAlarmInMemory;
+    private boolean isInZoneBypass;
 
-	private boolean hasZoneInTamperTrouble;
-	private boolean hasZoneInLowBatteryTrouble;
-	private boolean hasZoneInFireLoopTrouble;
-	private boolean hasZoneInSupervisionTrouble;
+    private boolean hasZoneInTamperTrouble;
+    private boolean hasZoneInLowBatteryTrouble;
+    private boolean hasZoneInFireLoopTrouble;
+    private boolean hasZoneInSupervisionTrouble;
 
-	private boolean isStayInstantReady;
-	private boolean isForceReady;
-	private boolean isBypassReady;
-	private boolean isInhibitReady;
-	private boolean areAllZoneclosed;
+    private boolean isStayInstantReady;
+    private boolean isForceReady;
+    private boolean isBypassReady;
+    private boolean isInhibitReady;
+    private boolean areAllZoneclosed;
 
-	public void updateStates(byte[] partitionFlags) {
-		byte firstByte = partitionFlags[0];
-		this.isArmed = ParadoxUtil.isBitSet(firstByte, 0) ?  true : false;
-		this.isArmedInAway = ParadoxUtil.isBitSet(firstByte, 1) ?  true : false;
-		this.isArmedInStay = ParadoxUtil.isBitSet(firstByte, 2) ?  true : false;
-		this.isArmedInNoEntry = ParadoxUtil.isBitSet(firstByte, 3) ?  true : false;
+    public String getMainState() {
+        return isArmed | isArmedInAway | isArmedInNoEntry | isArmedInStay ? "Armed" : "Disarmed";
+    }
 
-		this.isInAlarm = ParadoxUtil.isBitSet(firstByte, 4) ?  true : false;
-		this.isInSilentAlarm = ParadoxUtil.isBitSet(firstByte, 5) ?  true : false;
-		this.isInAudibleAlarm = ParadoxUtil.isBitSet(firstByte, 6) ?  true : false;
-		this.isInFireAlarm = ParadoxUtil.isBitSet(firstByte, 7) ?  true : false;
+    public String getAdditionalState() {
+        String additionalState = "";
+        // TODO check if isInAlarm also includes the other three if yes -> check only the other three
+        if (isInAlarm) {
+            additionalState += "\tIn alarm";
+        } else if (isInSilentAlarm) {
+            additionalState += "\tIn Silent alarm";
+        } else if (isInAudibleAlarm) {
+            additionalState += "\tIn Audible alarm";
+        } else if (isInFireAlarm) {
+            additionalState += "\tIn Fire alarm";
+        }
 
-		byte secondByte = partitionFlags[1];
-		this.isReadyToArm = ParadoxUtil.isBitSet(secondByte, 0) ?  true : false;
-		this.isInExitDelay = ParadoxUtil.isBitSet(secondByte, 1) ?  true : false;
-		this.isInEntryDelay = ParadoxUtil.isBitSet(secondByte, 2) ?  true : false;
-		this.isInTrouble = ParadoxUtil.isBitSet(secondByte, 3) ?  true : false;
-		this.hasAlarmInMemory = ParadoxUtil.isBitSet(secondByte, 4) ?  true : false;
-		this.isInZoneBypass = ParadoxUtil.isBitSet(secondByte, 5) ?  true : false;
+        if (areAllZoneclosed) {
+            additionalState += "\tAll zones closed";
+        }
 
-		byte thirdByte = partitionFlags[2];
-		this.hasZoneInTamperTrouble = ParadoxUtil.isBitSet(thirdByte, 4) ?  true : false;
-		this.hasZoneInLowBatteryTrouble = ParadoxUtil.isBitSet(thirdByte, 5) ?  true : false;
-		this.hasZoneInFireLoopTrouble = ParadoxUtil.isBitSet(thirdByte, 6) ?  true : false;
-		this.hasZoneInSupervisionTrouble = ParadoxUtil.isBitSet(thirdByte, 7) ?  true : false;
+        return additionalState;
+    }
 
-		byte sixthByte = partitionFlags[5];
-		this.isStayInstantReady = ParadoxUtil.isBitSet(sixthByte, 0) ?  true : false;
-		this.isForceReady = ParadoxUtil.isBitSet(sixthByte, 1) ?  true : false;
-		this.isBypassReady = ParadoxUtil.isBitSet(sixthByte, 2) ?  true : false;
-		this.isInhibitReady = ParadoxUtil.isBitSet(sixthByte, 3) ?  true : false;
-		this.areAllZoneclosed = ParadoxUtil.isBitSet(sixthByte, 4) ?  true : false;
-	}
+    @Override
+    public String toString() {
+        return "PartitionState [isArmed=" + isArmed + ", isArmedInAway=" + isArmedInAway + ", isArmedInStay="
+                + isArmedInStay + ", isArmedInNoEntry=" + isArmedInNoEntry + ", isInAlarm=" + isInAlarm
+                + ", isInSilentAlarm=" + isInSilentAlarm + ", isInAudibleAlarm=" + isInAudibleAlarm + ", isInFireAlarm="
+                + isInFireAlarm + ", isReadyToArm=" + isReadyToArm + ", isInExitDelay=" + isInExitDelay
+                + ", isInEntryDelay=" + isInEntryDelay + ", isInTrouble=" + isInTrouble + ", hasAlarmInMemory="
+                + hasAlarmInMemory + ", isInZoneBypass=" + isInZoneBypass + ", hasZoneInTamperTrouble="
+                + hasZoneInTamperTrouble + ", hasZoneInLowBatteryTrouble=" + hasZoneInLowBatteryTrouble
+                + ", hasZoneInFireLoopTrouble=" + hasZoneInFireLoopTrouble + ", hasZoneInSupervisionTrouble="
+                + hasZoneInSupervisionTrouble + ", isStayInstantReady=" + isStayInstantReady + ", isForceReady="
+                + isForceReady + ", isBypassReady=" + isBypassReady + ", isInhibitReady=" + isInhibitReady
+                + ", areAllZoneclosed=" + areAllZoneclosed + "]";
+    }
 
-	public String calculatedState() {
-		String state = isArmed | isArmedInAway | isArmedInNoEntry | isArmedInStay ? "Armed" : "Disarmed";
-		//TODO check if isInAlarm also includes the other three if yes -> check only the other three
-		if(isInAlarm) {
-			state+= "\tIn alarm";
-		} else if(isInSilentAlarm) {
-			state+= "\tIn Silent alarm";
-		} else if(isInAudibleAlarm) {
-			state+="\tIn Audible alarm";
-		} else if(isInFireAlarm) {
-			state+="\tIn Fire alarm";
-		}
+    public boolean isArmed() {
+        return isArmed;
+    }
 
-		if (areAllZoneclosed) {
-			state+= "\tAll zones closed";
-		}
-		return state;
-	}
+    public void setArmed(boolean isArmed) {
+        this.isArmed = isArmed;
+    }
 
-	@Override
-	public String toString() {
-		return "PartitionState [isArmed=" + isArmed + ", isArmedInAway=" + isArmedInAway + ", isArmedInStay="
-				+ isArmedInStay + ", isArmedInNoEntry=" + isArmedInNoEntry + ", isInAlarm=" + isInAlarm
-				+ ", isInSilentAlarm=" + isInSilentAlarm + ", isInAudibleAlarm=" + isInAudibleAlarm + ", isInFireAlarm="
-				+ isInFireAlarm + ", isReadyToArm=" + isReadyToArm + ", isInExitDelay=" + isInExitDelay
-				+ ", isInEntryDelay=" + isInEntryDelay + ", isInTrouble=" + isInTrouble + ", hasAlarmInMemory="
-				+ hasAlarmInMemory + ", isInZoneBypass=" + isInZoneBypass + ", hasZoneInTamperTrouble="
-				+ hasZoneInTamperTrouble + ", hasZoneInLowBatteryTrouble=" + hasZoneInLowBatteryTrouble
-				+ ", hasZoneInFireLoopTrouble=" + hasZoneInFireLoopTrouble + ", hasZoneInSupervisionTrouble="
-				+ hasZoneInSupervisionTrouble + ", isStayInstantReady=" + isStayInstantReady + ", isForceReady="
-				+ isForceReady + ", isBypassReady=" + isBypassReady + ", isInhibitReady=" + isInhibitReady
-				+ ", areAllZoneclosed=" + areAllZoneclosed + "]";
-	}
+    public boolean isArmedInAway() {
+        return isArmedInAway;
+    }
 
+    public void setArmedInAway(boolean isArmedInAway) {
+        this.isArmedInAway = isArmedInAway;
+    }
 
+    public boolean isArmedInStay() {
+        return isArmedInStay;
+    }
 
-	public boolean isArmed() {
-		return isArmed;
-	}
+    public void setArmedInStay(boolean isArmedInStay) {
+        this.isArmedInStay = isArmedInStay;
+    }
 
-	public void setArmed(boolean isArmed) {
-		this.isArmed = isArmed;
-	}
+    public boolean isArmedInNoEntry() {
+        return isArmedInNoEntry;
+    }
 
-	public boolean isArmedInAway() {
-		return isArmedInAway;
-	}
+    public void setArmedInNoEntry(boolean isArmedInNoEntry) {
+        this.isArmedInNoEntry = isArmedInNoEntry;
+    }
 
-	public void setArmedInAway(boolean isArmedInAway) {
-		this.isArmedInAway = isArmedInAway;
-	}
+    public boolean isInAlarm() {
+        return isInAlarm;
+    }
 
-	public boolean isArmedInStay() {
-		return isArmedInStay;
-	}
+    public void setInAlarm(boolean isInAlarm) {
+        this.isInAlarm = isInAlarm;
+    }
 
-	public void setArmedInStay(boolean isArmedInStay) {
-		this.isArmedInStay = isArmedInStay;
-	}
+    public boolean isInSilentAlarm() {
+        return isInSilentAlarm;
+    }
 
-	public boolean isArmedInNoEntry() {
-		return isArmedInNoEntry;
-	}
+    public void setInSilentAlarm(boolean isInSilentAlarm) {
+        this.isInSilentAlarm = isInSilentAlarm;
+    }
 
-	public void setArmedInNoEntry(boolean isArmedInNoEntry) {
-		this.isArmedInNoEntry = isArmedInNoEntry;
-	}
+    public boolean isInAudibleAlarm() {
+        return isInAudibleAlarm;
+    }
 
-	public boolean isInAlarm() {
-		return isInAlarm;
-	}
+    public void setInAudibleAlarm(boolean isInAudibleAlarm) {
+        this.isInAudibleAlarm = isInAudibleAlarm;
+    }
 
-	public void setInAlarm(boolean isInAlarm) {
-		this.isInAlarm = isInAlarm;
-	}
+    public boolean isInFireAlarm() {
+        return isInFireAlarm;
+    }
 
-	public boolean isInSilentAlarm() {
-		return isInSilentAlarm;
-	}
+    public void setInFireAlarm(boolean isInFireAlarm) {
+        this.isInFireAlarm = isInFireAlarm;
+    }
 
-	public void setInSilentAlarm(boolean isInSilentAlarm) {
-		this.isInSilentAlarm = isInSilentAlarm;
-	}
+    public boolean isReadyToArm() {
+        return isReadyToArm;
+    }
 
-	public boolean isInAudibleAlarm() {
-		return isInAudibleAlarm;
-	}
+    public void setReadyToArm(boolean isReadyToArm) {
+        this.isReadyToArm = isReadyToArm;
+    }
 
-	public void setInAudibleAlarm(boolean isInAudibleAlarm) {
-		this.isInAudibleAlarm = isInAudibleAlarm;
-	}
+    public boolean isInExitDelay() {
+        return isInExitDelay;
+    }
 
-	public boolean isInFireAlarm() {
-		return isInFireAlarm;
-	}
+    public void setInExitDelay(boolean isInExitDelay) {
+        this.isInExitDelay = isInExitDelay;
+    }
 
-	public void setInFireAlarm(boolean isInFireAlarm) {
-		this.isInFireAlarm = isInFireAlarm;
-	}
+    public boolean isInEntryDelay() {
+        return isInEntryDelay;
+    }
 
-	public boolean isReadyToArm() {
-		return isReadyToArm;
-	}
+    public void setInEntryDelay(boolean isInEntryDelay) {
+        this.isInEntryDelay = isInEntryDelay;
+    }
 
-	public void setReadyToArm(boolean isReadyToArm) {
-		this.isReadyToArm = isReadyToArm;
-	}
+    public boolean isInTrouble() {
+        return isInTrouble;
+    }
 
-	public boolean isInExitDelay() {
-		return isInExitDelay;
-	}
+    public void setInTrouble(boolean isInTrouble) {
+        this.isInTrouble = isInTrouble;
+    }
 
-	public void setInExitDelay(boolean isInExitDelay) {
-		this.isInExitDelay = isInExitDelay;
-	}
+    public boolean isHasAarmInMemory() {
+        return hasAlarmInMemory;
+    }
 
-	public boolean isInEntryDelay() {
-		return isInEntryDelay;
-	}
+    public void setHasAarmInMemory(boolean hasAarmInMemory) {
+        this.hasAlarmInMemory = hasAarmInMemory;
+    }
 
-	public void setInEntryDelay(boolean isInEntryDelay) {
-		this.isInEntryDelay = isInEntryDelay;
-	}
+    public boolean isInZoneBypass() {
+        return isInZoneBypass;
+    }
 
-	public boolean isInTrouble() {
-		return isInTrouble;
-	}
+    public void setInZoneBypass(boolean isInZoneBypass) {
+        this.isInZoneBypass = isInZoneBypass;
+    }
 
-	public void setInTrouble(boolean isInTrouble) {
-		this.isInTrouble = isInTrouble;
-	}
+    public boolean isHasZoneInTamperTrouble() {
+        return hasZoneInTamperTrouble;
+    }
 
-	public boolean isHasAarmInMemory() {
-		return hasAlarmInMemory;
-	}
+    public void setHasZoneInTamperTrouble(boolean hasZoneInTamperTrouble) {
+        this.hasZoneInTamperTrouble = hasZoneInTamperTrouble;
+    }
 
-	public void setHasAarmInMemory(boolean hasAarmInMemory) {
-		this.hasAlarmInMemory = hasAarmInMemory;
-	}
+    public boolean isHasZoneInLowBatteryTrouble() {
+        return hasZoneInLowBatteryTrouble;
+    }
 
-	public boolean isInZoneBypass() {
-		return isInZoneBypass;
-	}
+    public void setHasZoneInLowBatteryTrouble(boolean hasZoneInLowBatteryTrouble) {
+        this.hasZoneInLowBatteryTrouble = hasZoneInLowBatteryTrouble;
+    }
 
-	public void setInZoneBypass(boolean isInZoneBypass) {
-		this.isInZoneBypass = isInZoneBypass;
-	}
+    public boolean isHasZoneInFireLoopTrouble() {
+        return hasZoneInFireLoopTrouble;
+    }
 
-	public boolean isHasZoneInTamperTrouble() {
-		return hasZoneInTamperTrouble;
-	}
+    public void setHasZoneInFireLoopTrouble(boolean hasZoneInFireLoopTrouble) {
+        this.hasZoneInFireLoopTrouble = hasZoneInFireLoopTrouble;
+    }
 
-	public void setHasZoneInTamperTrouble(boolean hasZoneInTamperTrouble) {
-		this.hasZoneInTamperTrouble = hasZoneInTamperTrouble;
-	}
+    public boolean isHasZoneInSupervisionTrouble() {
+        return hasZoneInSupervisionTrouble;
+    }
 
-	public boolean isHasZoneInLowBatteryTrouble() {
-		return hasZoneInLowBatteryTrouble;
-	}
+    public void setHasZoneInSupervisionTrouble(boolean hasZoneInSupervisionTrouble) {
+        this.hasZoneInSupervisionTrouble = hasZoneInSupervisionTrouble;
+    }
 
-	public void setHasZoneInLowBatteryTrouble(boolean hasZoneInLowBatteryTrouble) {
-		this.hasZoneInLowBatteryTrouble = hasZoneInLowBatteryTrouble;
-	}
+    public boolean isStayInstantReady() {
+        return isStayInstantReady;
+    }
 
-	public boolean isHasZoneInFireLoopTrouble() {
-		return hasZoneInFireLoopTrouble;
-	}
+    public void setStayInstantReady(boolean isStayInstantReady) {
+        this.isStayInstantReady = isStayInstantReady;
+    }
 
-	public void setHasZoneInFireLoopTrouble(boolean hasZoneInFireLoopTrouble) {
-		this.hasZoneInFireLoopTrouble = hasZoneInFireLoopTrouble;
-	}
+    public boolean isForceReady() {
+        return isForceReady;
+    }
 
-	public boolean isHasZoneInSupervisionTrouble() {
-		return hasZoneInSupervisionTrouble;
-	}
+    public void setForceReady(boolean isForceReady) {
+        this.isForceReady = isForceReady;
+    }
 
-	public void setHasZoneInSupervisionTrouble(boolean hasZoneInSupervisionTrouble) {
-		this.hasZoneInSupervisionTrouble = hasZoneInSupervisionTrouble;
-	}
+    public boolean isBypassReady() {
+        return isBypassReady;
+    }
 
-	public boolean isStayInstantReady() {
-		return isStayInstantReady;
-	}
+    public void setBypassReady(boolean isBypassReady) {
+        this.isBypassReady = isBypassReady;
+    }
 
-	public void setStayInstantReady(boolean isStayInstantReady) {
-		this.isStayInstantReady = isStayInstantReady;
-	}
+    public boolean isInhibitReady() {
+        return isInhibitReady;
+    }
 
-	public boolean isForceReady() {
-		return isForceReady;
-	}
+    public void setInhibitReady(boolean isInhibitReady) {
+        this.isInhibitReady = isInhibitReady;
+    }
 
-	public void setForceReady(boolean isForceReady) {
-		this.isForceReady = isForceReady;
-	}
+    public boolean isAreAllZoneclosed() {
+        return areAllZoneclosed;
+    }
 
-	public boolean isBypassReady() {
-		return isBypassReady;
-	}
+    public void setAllZoneClosed(boolean areAllZoneclosed) {
+        this.areAllZoneclosed = areAllZoneclosed;
+    }
 
-	public void setBypassReady(boolean isBypassReady) {
-		this.isBypassReady = isBypassReady;
-	}
+    public boolean isHasAlarmInMemory() {
+        return hasAlarmInMemory;
+    }
 
-	public boolean isInhibitReady() {
-		return isInhibitReady;
-	}
-
-	public void setInhibitReady(boolean isInhibitReady) {
-		this.isInhibitReady = isInhibitReady;
-	}
-
-	public boolean isAreAllZoneclosed() {
-		return areAllZoneclosed;
-	}
-
-	public void setAreAllZoneclosed(boolean areAllZoneclosed) {
-		this.areAllZoneclosed = areAllZoneclosed;
-	}
+    public void setHasAlarmInMemory(boolean hasAlarmInMemory) {
+        this.hasAlarmInMemory = hasAlarmInMemory;
+    }
 }

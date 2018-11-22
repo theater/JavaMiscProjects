@@ -3,57 +3,45 @@ package mainApp.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mainApp.ParadoxUtil;
-import mainApp.ZoneStateFlags;
-
+/**
+ * The {@link Zone} Paradox zone.
+ * ID is always numeric (1-8 for Evo192)
+ * States are taken from cached RAM memory map and parsed.
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
 public class Zone extends Entity {
-	private boolean isOpened;
-	private boolean isTampered;
-	private boolean hasLowBattery;
+    private boolean isOpened;
+    private boolean isTampered;
+    private boolean hasLowBattery;
 
-	private static Logger logger = LoggerFactory.getLogger(Partition.class);
+    private static Logger logger = LoggerFactory.getLogger(Zone.class);
 
-	public Zone(int id, String label) {
-		super(id, label);
-	}
+    public Zone(int id, String label) {
+        super(id, label);
+    }
 
-	public void setFlags(ZoneStateFlags zoneStateFlags) {
-		int id = getId();
-		int index = id / 8;
-		int bitNumber = id % 8 - 1;
+    public boolean isOpened() {
+        return isOpened;
+    }
 
-		byte[] zonesOpened = zoneStateFlags.getZonesOpened();
-		isOpened = ParadoxUtil.isBitSet(zonesOpened[index], bitNumber);
+    public void setOpened(boolean isOpened) {
+        this.isOpened = isOpened;
+    }
 
-		byte[] zonesTampered = zoneStateFlags.getZonesTampered();
-		isTampered = ParadoxUtil.isBitSet(zonesTampered[index], bitNumber);
+    public boolean isTampered() {
+        return isTampered;
+    }
 
-		byte[] zonesLowBattery = zoneStateFlags.getZonesLowBattery();
-		hasLowBattery = ParadoxUtil.isBitSet(zonesLowBattery[index], bitNumber);
-	}
+    public void setTampered(boolean isTampered) {
+        this.isTampered = isTampered;
+    }
 
-	public boolean isOpened() {
-		return isOpened;
-	}
+    public boolean hasLowBattery() {
+        return hasLowBattery;
+    }
 
-	public void setOpened(boolean isOpened) {
-		this.isOpened = isOpened;
-	}
-
-	public boolean isTampered() {
-		return isTampered;
-	}
-
-	public void setTampered(boolean isTampered) {
-		this.isTampered = isTampered;
-	}
-
-	public boolean hasLowBattery() {
-		return hasLowBattery;
-	}
-
-	public void setHasLowBattery(boolean hasLowBattery) {
-		this.hasLowBattery = hasLowBattery;
-	}
-
+    public void setHasLowBattery(boolean hasLowBattery) {
+        this.hasLowBattery = hasLowBattery;
+    }
 }
