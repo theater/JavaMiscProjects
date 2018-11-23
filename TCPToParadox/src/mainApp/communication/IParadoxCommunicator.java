@@ -1,7 +1,9 @@
-package mainApp;
+package mainApp.communication;
 
 import java.io.IOException;
 import java.util.List;
+
+import mainApp.ZoneStateFlags;
 
 public interface IParadoxCommunicator {
 

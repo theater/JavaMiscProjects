@@ -7,8 +7,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mainApp.IParadoxCommunicator;
 import mainApp.ZoneStateFlags;
+import mainApp.communication.IParadoxCommunicator;
 import mainApp.parser.EvoParser;
 import mainApp.parser.IParadoxParser;
 

@@ -1,4 +1,4 @@
-package mainApp;
+package mainApp.communication;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,6 +12,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mainApp.ParadoxUtil;
+import mainApp.ZoneStateFlags;
 import mainApp.messages.EpromRequestPayload;
 import mainApp.messages.HeaderCommand;
 import mainApp.messages.HeaderMessageType;
@@ -33,6 +35,8 @@ public class EvoCommunicator implements IParadoxCommunicator {
     private DataOutputStream tx;
     private DataInputStream rx;
     private final byte[] pcPassword;
+
+    private ParadoxInformation panelInfo;
 
     private String password;
 
@@ -115,7 +119,11 @@ public class EvoCommunicator implements IParadoxCommunicator {
         ParadoxIPPacket step4 = new ParadoxIPPacket(message4, true)
                 .setMessageType(HeaderMessageType.SERIAL_PASSTHRU_REQUEST);
         sendPacket(step4);
-        receivePacket();
+        byte[] receivedPacket = receivePacket();
+        if(receivedPacket != null && receivedPacket.length >= 53) {
+        	byte[] payload = Arrays.copyOfRange(receivedPacket, 16, 53);
+        	panelInfo = new ParadoxInformation(payload);
+        }
 
         logger.debug("Step5");
         // 5: Unknown request (IP150 only)

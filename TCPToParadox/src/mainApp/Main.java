@@ -9,6 +9,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mainApp.communication.EvoCommunicator;
+import mainApp.communication.IParadoxCommunicator;
 import mainApp.model.ParadoxSecuritySystem;
 import mainApp.model.Partition;
 import mainApp.model.Zone;
@@ -33,13 +35,14 @@ public class Main {
 
         try {
             IParadoxCommunicator communicator = new EvoCommunicator(IP_ADDRESS, PORT, ip150Password, PC_PASSWORD);
-            ParadoxSecuritySystem paradoxSystem = new ParadoxSecuritySystem(communicator);
+//            ParadoxSecuritySystem paradoxSystem = new ParadoxSecuritySystem(communicator);
 
-            while (true) {
-                infiniteLoop(paradoxSystem);
-            }
-            // paradoxSystem.logoutSequence();
-            // paradoxSystem.close();
+//            while (true) {
+//                infiniteLoop(paradoxSystem);
+//            }
+            communicator.loginSequence();
+             communicator.logoutSequence();
+             communicator.close();
         } catch (Exception e) {
             logger.error("Exception: {}", e.getMessage(), e);
             System.exit(0);
