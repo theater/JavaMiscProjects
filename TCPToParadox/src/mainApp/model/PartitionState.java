@@ -1,4 +1,4 @@
-package mainApp.Model;
+package mainApp.model;
 
 import mainApp.ParadoxUtil;
 

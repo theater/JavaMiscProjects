@@ -1,7 +1,7 @@
 package mainApp.messages;
 
 import mainApp.ParadoxUtil;
-import mainApp.Exceptions.ParadoxBindingException;
+import mainApp.exceptions.ParadoxBindingException;
 
 public class RamRequestPayload extends MemoryRequestPayload implements IPPacketPayload {
 

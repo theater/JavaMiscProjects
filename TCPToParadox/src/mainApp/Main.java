@@ -9,9 +9,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mainApp.Model.ParadoxSecuritySystem;
-import mainApp.Model.Partition;
-import mainApp.Model.Zone;
+import mainApp.model.ParadoxSecuritySystem;
+import mainApp.model.Partition;
+import mainApp.model.Zone;
 
 /**
  * The {@link Main} - used for testing purposes only.
@@ -32,7 +32,7 @@ public class Main {
         String ip150Password = handleArguments(args);
 
         try {
-            IParadoxCommunicator communicator = new Evo192Communicator(IP_ADDRESS, PORT, ip150Password, PC_PASSWORD);
+            IParadoxCommunicator communicator = new EvoCommunicator(IP_ADDRESS, PORT, ip150Password, PC_PASSWORD);
             ParadoxSecuritySystem paradoxSystem = new ParadoxSecuritySystem(communicator);
 
             while (true) {
@@ -48,6 +48,7 @@ public class Main {
 
     private static void infiniteLoop(ParadoxSecuritySystem paradoxSystem) {
         try {
+            paradoxSystem.getCommunicator().refreshMemoryMap();
             Thread.sleep(5000);
             paradoxSystem.updateEntities();
         } catch (InterruptedException e1) {

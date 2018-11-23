@@ -21,13 +21,13 @@ import mainApp.messages.ParadoxIPPacket;
 import mainApp.messages.RamRequestPayload;
 
 /**
- * The {@link Evo192Communicator} is responsible for handling communication to Evo192 alarm system via IP150 interface.
+ * The {@link EvoCommunicator} is responsible for handling communication to Evo192 alarm system via IP150 interface.
  *
  * @author Konstantin_Polihronov - Initial contribution
  */
-public class Evo192Communicator implements IParadoxCommunicator {
+public class EvoCommunicator implements IParadoxCommunicator {
 
-    private static Logger logger = LoggerFactory.getLogger(Evo192Communicator.class);
+    private static Logger logger = LoggerFactory.getLogger(EvoCommunicator.class);
 
     private Socket socket;
     private DataOutputStream tx;
@@ -38,7 +38,7 @@ public class Evo192Communicator implements IParadoxCommunicator {
 
     MemoryMap memoryMap;
 
-    public Evo192Communicator(String ipAddress, int tcpPort, String ip150Password, String pcPassword) throws Exception {
+    public EvoCommunicator(String ipAddress, int tcpPort, String ip150Password, String pcPassword) throws Exception {
         socket = new Socket(ipAddress, tcpPort);
         socket.setSoTimeout(2000);
         tx = new DataOutputStream(socket.getOutputStream());
@@ -334,10 +334,10 @@ public class Evo192Communicator implements IParadoxCommunicator {
                 ParadoxUtil.printPacket("RX:", result);
                 return Arrays.copyOfRange(result, 0, result[1] + 16);
             } catch (IOException e) {
-                logger.debug("Unable to retrieve data from RX. {}", e.getMessage());
+                logger.error("Unable to retrieve data from RX. {}", e.getMessage());
                 Thread.sleep(100);
                 if (retryCounter < 2) {
-                    logger.debug("Attempting one more time");
+                    logger.info("Attempting one more time");
                 }
             }
         }

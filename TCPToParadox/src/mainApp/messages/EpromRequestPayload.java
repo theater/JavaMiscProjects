@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mainApp.ParadoxUtil;
-import mainApp.Exceptions.ParadoxBindingException;
+import mainApp.exceptions.ParadoxBindingException;
 
 public class EpromRequestPayload extends MemoryRequestPayload implements IPPacketPayload {
 

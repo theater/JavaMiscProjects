@@ -1,4 +1,4 @@
-package mainApp.Exceptions;
+package mainApp.exceptions;
 
 
 public class ParadoxBindingException extends Exception {
