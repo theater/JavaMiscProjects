@@ -36,7 +36,7 @@ public class EvoCommunicator implements IParadoxCommunicator {
     private DataInputStream rx;
     private final byte[] pcPassword;
 
-    private ParadoxInformation panelInfo;
+    private byte[] panelInfoBytes;
 
     private String password;
 
@@ -121,8 +121,7 @@ public class EvoCommunicator implements IParadoxCommunicator {
         sendPacket(step4);
         byte[] receivedPacket = receivePacket();
         if(receivedPacket != null && receivedPacket.length >= 53) {
-        	byte[] payload = Arrays.copyOfRange(receivedPacket, 16, 53);
-        	panelInfo = new ParadoxInformation(payload);
+        	panelInfoBytes = Arrays.copyOfRange(receivedPacket, 16, 53);
         }
 
         logger.debug("Step5");
@@ -163,7 +162,7 @@ public class EvoCommunicator implements IParadoxCommunicator {
         receivePacket();
     }
 
-    /*
+	/*
      * (non-Javadoc)
      *
      * @see mainApp.ParadoxAdapter#readPartitions()
@@ -507,4 +506,8 @@ public class EvoCommunicator implements IParadoxCommunicator {
     private String createString(byte[] payloadResult) throws UnsupportedEncodingException {
         return new String(payloadResult, "US-ASCII");
     }
+
+    public byte[] getPanelInfoBytes() {
+  		return panelInfoBytes;
+  	}
 }

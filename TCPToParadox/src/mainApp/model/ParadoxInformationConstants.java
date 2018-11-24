@@ -1,9 +1,7 @@
-package mainApp.communication;
+package mainApp.model;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import mainApp.messages.PanelType;
 
 public class ParadoxInformationConstants {
 	public static Map<String, PanelType> panelTypes = new HashMap<String, PanelType>();

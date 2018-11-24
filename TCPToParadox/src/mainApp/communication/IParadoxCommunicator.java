@@ -21,4 +21,6 @@ public interface IParadoxCommunicator {
 	List<String> readPartitionLabels();
 
 	List<String> readZoneLabels();
+
+	public byte[] getPanelInfoBytes();
 }

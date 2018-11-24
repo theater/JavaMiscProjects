@@ -3,9 +3,10 @@ package mainApp.parser;
 import mainApp.ParadoxUtil;
 import mainApp.ZoneStateFlags;
 import mainApp.model.PartitionState;
+import mainApp.model.Version;
 import mainApp.model.ZoneState;
 
-public class EvoParser implements IParadoxParser {
+public class EvoParser extends AbstractParser  {
     public PartitionState calculatePartitionState(byte[] partitionFlags) {
         byte firstByte = partitionFlags[0];
         PartitionState state = new PartitionState();

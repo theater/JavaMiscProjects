@@ -35,14 +35,13 @@ public class Main {
 
         try {
             IParadoxCommunicator communicator = new EvoCommunicator(IP_ADDRESS, PORT, ip150Password, PC_PASSWORD);
-//            ParadoxSecuritySystem paradoxSystem = new ParadoxSecuritySystem(communicator);
+            ParadoxSecuritySystem paradoxSystem = new ParadoxSecuritySystem(communicator);
 
 //            while (true) {
 //                infiniteLoop(paradoxSystem);
 //            }
-            communicator.loginSequence();
-             communicator.logoutSequence();
-             communicator.close();
+			communicator.logoutSequence();
+			communicator.close();
         } catch (Exception e) {
             logger.error("Exception: {}", e.getMessage(), e);
             System.exit(0);

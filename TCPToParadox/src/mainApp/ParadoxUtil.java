@@ -119,7 +119,7 @@ public class ParadoxUtil {
 		if (array == null) {
 			return new String();
 		}
-		String result = "0x" + DatatypeConverter.printHexBinary(array);
+		String result = DatatypeConverter.printHexBinary(array);
 		return result;
 	}
 
