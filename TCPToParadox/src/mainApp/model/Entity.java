@@ -2,7 +2,11 @@ package mainApp.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+/**
+ * The {@link Entity} Base class for all entities.
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
 public class Entity {
 	private static Logger logger = LoggerFactory.getLogger(Entity.class);
 

@@ -1,5 +1,11 @@
-package mainApp;
+package mainApp.model;
 
+/**
+ * The {@link ZoneState} Holds the real values of byte arrays from RAM for the
+ * different zone states
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
 public class ZoneStateFlags {
 	private byte[] zonesOpened;
 	private byte[] zonesTampered;

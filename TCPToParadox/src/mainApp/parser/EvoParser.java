@@ -1,10 +1,10 @@
 package mainApp.parser;
 
-import mainApp.ParadoxUtil;
-import mainApp.ZoneStateFlags;
 import mainApp.model.PartitionState;
 import mainApp.model.Version;
 import mainApp.model.ZoneState;
+import mainApp.model.ZoneStateFlags;
+import mainApp.util.ParadoxUtil;
 
 public class EvoParser extends AbstractParser  {
     public PartitionState calculatePartitionState(byte[] partitionFlags) {

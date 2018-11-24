@@ -5,11 +5,13 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mainApp.communication.EvoCommunicator;
-
+/**
+ * The {@link Version} This class holds version information
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
 public class Version {
-	 private static Logger logger = LoggerFactory.getLogger(Version.class);
-
+	private static Logger logger = LoggerFactory.getLogger(Version.class);
 
 	private Byte version;
 	private Byte revision;
@@ -71,11 +73,11 @@ public class Version {
 		sb.append(version);
 		sb.append(".");
 		sb.append(revision);
-		if(build != null) {
+		if (build != null) {
 			sb.append(".");
 			sb.append(build);
 		}
-		if(buildTime != null) {
+		if (buildTime != null) {
 			sb.append("/");
 			sb.append(buildTime);
 		}

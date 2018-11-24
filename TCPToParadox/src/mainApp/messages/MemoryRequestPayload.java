@@ -6,8 +6,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mainApp.ParadoxUtil;
 import mainApp.exceptions.ParadoxBindingException;
+import mainApp.util.ParadoxUtil;
 
 public class MemoryRequestPayload implements IPPacketPayload {
 

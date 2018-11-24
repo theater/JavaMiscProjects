@@ -1,9 +1,9 @@
 package mainApp.parser;
 
-import mainApp.ZoneStateFlags;
 import mainApp.model.PartitionState;
 import mainApp.model.Version;
 import mainApp.model.ZoneState;
+import mainApp.model.ZoneStateFlags;
 
 public interface IParadoxParser {
 	public PartitionState calculatePartitionState(byte[] partitionFlags);

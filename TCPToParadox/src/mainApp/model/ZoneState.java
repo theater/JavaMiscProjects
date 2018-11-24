@@ -1,5 +1,9 @@
 package mainApp.model;
-
+/**
+ * The {@link ZoneState} Class representation of bytes values of zone states from RAM
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
 public class ZoneState {
 	private boolean isOpened;
 	private boolean isTampered;

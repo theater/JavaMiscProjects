@@ -12,8 +12,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mainApp.ParadoxUtil;
-import mainApp.ZoneStateFlags;
 import mainApp.messages.EpromRequestPayload;
 import mainApp.messages.HeaderCommand;
 import mainApp.messages.HeaderMessageType;
@@ -21,6 +19,8 @@ import mainApp.messages.IPPacketPayload;
 import mainApp.messages.IpMessagesConstants;
 import mainApp.messages.ParadoxIPPacket;
 import mainApp.messages.RamRequestPayload;
+import mainApp.model.ZoneStateFlags;
+import mainApp.util.ParadoxUtil;
 
 /**
  * The {@link EvoCommunicator} is responsible for handling communication to Evo192 alarm system via IP150 interface.

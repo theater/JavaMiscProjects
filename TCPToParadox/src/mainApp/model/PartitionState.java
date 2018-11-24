@@ -1,7 +1,9 @@
 package mainApp.model;
-
-import mainApp.ParadoxUtil;
-
+/**
+ * The {@link PartitionState} Class representation of bytes values of partition states from RAM
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
 public class PartitionState {
 
     private boolean isArmed;

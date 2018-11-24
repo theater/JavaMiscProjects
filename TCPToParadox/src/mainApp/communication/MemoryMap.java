@@ -2,7 +2,12 @@ package mainApp.communication;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * The {@link MemoryMap} this keeps Paradox RAM map as cached object.
+ * Every record in the list is byte array which contains 64 byte RAM page.
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
 public class MemoryMap {
 	private List<byte[]> ramCache = new ArrayList<byte[]>();
 

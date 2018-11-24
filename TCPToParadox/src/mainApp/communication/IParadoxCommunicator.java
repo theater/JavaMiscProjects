@@ -3,24 +3,25 @@ package mainApp.communication;
 import java.io.IOException;
 import java.util.List;
 
-import mainApp.ZoneStateFlags;
+import mainApp.model.ZoneStateFlags;
 
 public interface IParadoxCommunicator {
 
-	void close() throws IOException;
+    void close() throws IOException;
 
-	void logoutSequence() throws IOException;
+    void logoutSequence() throws IOException;
 
-	void loginSequence() throws IOException, InterruptedException;
+    void loginSequence() throws IOException, InterruptedException;
 
-	public void refreshMemoryMap() throws Exception;
+    public void refreshMemoryMap() throws Exception;
 
-	public List<byte[]> readPartitionFlags() throws Exception;
-	public ZoneStateFlags readZoneStateFlags() throws Exception;
+    public List<byte[]> readPartitionFlags() throws Exception;
 
-	List<String> readPartitionLabels();
+    public ZoneStateFlags readZoneStateFlags() throws Exception;
 
-	List<String> readZoneLabels();
+    public List<String> readPartitionLabels();
 
-	public byte[] getPanelInfoBytes();
+    public List<String> readZoneLabels();
+
+    public byte[] getPanelInfoBytes();
 }

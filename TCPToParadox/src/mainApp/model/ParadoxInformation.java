@@ -5,10 +5,17 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mainApp.ParadoxUtil;
 import mainApp.communication.EvoCommunicator;
 import mainApp.parser.IParadoxParser;
+import mainApp.util.ParadoxUtil;
 
+/**
+ * The {@link ParadoxInformation} Class that provides the basic panel
+ * information (serial number, panel type, application, hardware and bootloader
+ * versions. It's the object representation of 37 bytes 0x72 serial response.
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
 public class ParadoxInformation {
 
 	private static Logger logger = LoggerFactory.getLogger(EvoCommunicator.class);
@@ -57,7 +64,7 @@ public class ParadoxInformation {
 		byte[] panelTypeBytes = Arrays.copyOfRange(infoPacket, 6, 8);
 		String key = "0x" + ParadoxUtil.byteArrayAsString(panelTypeBytes);
 
-		return ParadoxInformationConstants.panelTypes.getOrDefault(key, PanelType.UNKNOWN);
+		return ParadoxInformationConstants.panelTypesMapping.getOrDefault(key, PanelType.UNKNOWN);
 	}
 
 	@Override

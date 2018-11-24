@@ -8,18 +8,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mainApp.ParadoxUtil;
-import mainApp.ZoneStateFlags;
 import mainApp.communication.IParadoxCommunicator;
 import mainApp.exceptions.ParadoxBindingException;
 import mainApp.parser.EvoParser;
 import mainApp.parser.IParadoxParser;
+import mainApp.util.ParadoxUtil;
 
-/**
- * The {@link ParadoxSecuritySystem} Composition class which contains all Paradox entities.
- *
- * @author Konstantin_Polihronov - Initial contribution
- */
 /**
  * The {@link ParadoxSecuritySystem} Composition class which contains all
  * Paradox entities.
@@ -37,8 +31,9 @@ public class ParadoxSecuritySystem {
 	private ParadoxInformation panelInformation;
 
 	public ParadoxSecuritySystem(IParadoxCommunicator communicator) throws ParadoxBindingException {
-		this.communicator = communicator;
 		// TODO Maybe factory for creating parsers if more than EVO will be implemented?
+		// Maybe need to extract the logon sequence and initial parsing of security type and use factory to create the proper communicator/parsers?
+		this.communicator = communicator;
 		this.parser = new EvoParser();
 
 		panelInformation = new ParadoxInformation(communicator.getPanelInfoBytes(), parser);
