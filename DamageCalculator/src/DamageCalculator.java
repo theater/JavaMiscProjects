@@ -25,17 +25,21 @@ public class DamageCalculator {
     }
 
     private int retrieveBestIndex() {
-        double maxDamage = 0;
+        double maxDelta = 0;
         int bestTierIndex = MAX_TIER_INDEX;
         for (int tierIndex = MAX_TIER_INDEX; tierIndex >= 0; tierIndex--) {
-            double calculatedDamage = factors[tierIndex] * Math.sqrt(distribution[tierIndex]);
-            if (maxDamage < calculatedDamage) {
-                maxDamage = calculatedDamage;
+            double calculatedDelta = calculateDamageDelta(tierIndex);
+            if (maxDelta < calculatedDelta) {
+                maxDelta = calculatedDelta;
                 bestTierIndex = tierIndex;
             }
         }
         return bestTierIndex;
     }
+
+	private double calculateDamageDelta(int tierIndex) {
+		return (factors[tierIndex] * Math.sqrt(distribution[tierIndex] +1) - factors[tierIndex] * Math.sqrt(distribution[tierIndex]));
+	}
 
 
     public int[] getDistribution() {
