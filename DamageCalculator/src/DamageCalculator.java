@@ -17,10 +17,13 @@ public class DamageCalculator {
     private int[] distribution = new int[MAX_TIER];
 
     public DamageCalculator calculate() {
+    	long startTime = System.currentTimeMillis();
         for (int counter = 1; counter <= TROOPS_AMOUNT; counter++) {
             int tier = retrieveBestIndex();
             distribution[tier]++;
         }
+        long timeElapsed = System.currentTimeMillis() - startTime;
+        System.out.println("Time elapsed: " + timeElapsed + "ms.");
         return this;
     }
 
