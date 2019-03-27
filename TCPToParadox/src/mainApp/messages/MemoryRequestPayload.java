@@ -6,8 +6,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mainApp.ParadoxUtil;
-import mainApp.Exceptions.ParadoxBindingException;
+import mainApp.exceptions.ParadoxBindingException;
+import mainApp.util.ParadoxUtil;
 
 public class MemoryRequestPayload implements IPPacketPayload {
 
@@ -26,7 +26,7 @@ public class MemoryRequestPayload implements IPPacketPayload {
 
         this.address = address;
         this.bytesToRead = bytesToRead;
-        logger.debug("MessageStart: {}", String.format("0x%02X,\t", messageStart));
+        logger.trace("MessageStart: {}", String.format("0x%02X,\t", messageStart));
     }
 
     @Override

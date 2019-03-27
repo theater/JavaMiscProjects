@@ -1,11 +1,10 @@
-package mainApp;
+package mainApp.communication;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,46 +13,83 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mainApp.messages.EpromRequestPayload;
+import mainApp.messages.HeaderCommand;
+import mainApp.messages.HeaderMessageType;
 import mainApp.messages.IPPacketPayload;
+import mainApp.messages.IpMessagesConstants;
 import mainApp.messages.ParadoxIPPacket;
 import mainApp.messages.RamRequestPayload;
+import mainApp.model.ZoneStateFlags;
+import mainApp.util.ParadoxUtil;
 
-public class ParadoxSystem {
+/**
+ * The {@link EvoCommunicator} is responsible for handling communication to Evo192 alarm system via IP150 interface.
+ *
+ * @author Konstantin_Polihronov - Initial contribution
+ */
+public class EvoCommunicator implements IParadoxCommunicator {
 
-    private static Logger logger = LoggerFactory.getLogger(ParadoxSystem.class);
+    private static Logger logger = LoggerFactory.getLogger(EvoCommunicator.class);
 
     private Socket socket;
     private DataOutputStream tx;
     private DataInputStream rx;
+    private final byte[] pcPassword;
+
+    private byte[] panelInfoBytes;
 
     private String password;
 
-    public ParadoxSystem(String ipAddress, int tcpPort, String ip150Password) throws UnknownHostException, IOException {
+    MemoryMap memoryMap;
+
+    public EvoCommunicator(String ipAddress, int tcpPort, String ip150Password, String pcPassword) throws Exception {
         socket = new Socket(ipAddress, tcpPort);
         socket.setSoTimeout(2000);
         tx = new DataOutputStream(socket.getOutputStream());
         rx = new DataInputStream(socket.getInputStream());
         password = ip150Password;
+        this.pcPassword = ParadoxUtil.stringToBCD(pcPassword);
+
+        loginSequence();
+        initializeMemoryMap();
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see mainApp.ParadoxAdapter#close()
+     */
+    @Override
     public void close() throws IOException {
         tx.close();
         rx.close();
         socket.close();
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see mainApp.ParadoxAdapter#logoutSequence()
+     */
+    @Override
     public void logoutSequence() throws IOException {
         logger.debug("Logout sequence started");
         byte[] logoutMessage = new byte[] { 0x00, 0x07, 0x05, 0x00, 0x00, 0x00, 0x00 };
-        ParadoxIPPacket logoutPacket = new ParadoxIPPacket(logoutMessage, true).setMessageType((byte) 0x04)
-            .setUnknown0((byte) 0x14);
+        ParadoxIPPacket logoutPacket = new ParadoxIPPacket(logoutMessage, true)
+                .setMessageType(HeaderMessageType.SERIAL_PASSTHRU_REQUEST).setUnknown0((byte) 0x14);
         sendPacket(logoutPacket);
     }
 
-    public void logonSequence() throws IOException, InterruptedException {
+    /*
+     * (non-Javadoc)
+     *
+     * @see mainApp.ParadoxAdapter#loginSequence()
+     */
+    @Override
+    public void loginSequence() throws IOException, InterruptedException {
         logger.debug("Step1");
         // 1: Login to module request (IP150 only)
-        ParadoxIPPacket ipPacket = new ParadoxIPPacket(password, false).setCommand((byte) 0xF0);
+        ParadoxIPPacket ipPacket = new ParadoxIPPacket(password, false).setCommand(HeaderCommand.CONNECT_TO_IP_MODULE);
         sendPacket(ipPacket);
         byte[] sendPacket = receivePacket();
         if (sendPacket[4] == 0x38) {
@@ -64,13 +100,15 @@ public class ParadoxSystem {
 
         logger.debug("Step2");
         // 2: Unknown request (IP150 only)
-        ParadoxIPPacket step2 = new ParadoxIPPacket(ParadoxIPPacket.EMPTY_PAYLOAD, false).setCommand((byte) 0xF2);
+        ParadoxIPPacket step2 = new ParadoxIPPacket(ParadoxIPPacket.EMPTY_PAYLOAD, false)
+                .setCommand(HeaderCommand.LOGIN_COMMAND1);
         sendPacket(step2);
         receivePacket();
 
         logger.debug("Step3");
         // 3: Unknown request (IP150 only)
-        ParadoxIPPacket step3 = new ParadoxIPPacket(ParadoxIPPacket.EMPTY_PAYLOAD, false).setCommand((byte) 0xF3);
+        ParadoxIPPacket step3 = new ParadoxIPPacket(ParadoxIPPacket.EMPTY_PAYLOAD, false)
+                .setCommand(HeaderCommand.LOGIN_COMMAND2);
         sendPacket(step3);
         receivePacket();
 
@@ -78,13 +116,18 @@ public class ParadoxSystem {
         // 4: Init communication over UIP softawre request (IP150 and direct serial)
         byte[] message4 = new byte[37];
         message4[0] = 0x72;
-        ParadoxIPPacket step4 = new ParadoxIPPacket(message4, true).setMessageType((byte) 0x04);
+        ParadoxIPPacket step4 = new ParadoxIPPacket(message4, true)
+                .setMessageType(HeaderMessageType.SERIAL_PASSTHRU_REQUEST);
         sendPacket(step4);
-        receivePacket();
+        byte[] receivedPacket = receivePacket();
+        if(receivedPacket != null && receivedPacket.length >= 53) {
+        	panelInfoBytes = Arrays.copyOfRange(receivedPacket, 16, 53);
+        }
 
         logger.debug("Step5");
         // 5: Unknown request (IP150 only)
-        ParadoxIPPacket step5 = new ParadoxIPPacket(IpMessages.unknownIP150Message01, false).setCommand((byte) 0xF8);
+        ParadoxIPPacket step5 = new ParadoxIPPacket(IpMessagesConstants.UNKNOWN_IP150_REQUEST_MESSAGE01, false)
+                .setCommand(HeaderCommand.SERIAL_CONNECTION_INITIATED);
         sendPacket(step5);
         receivePacket();
 
@@ -93,74 +136,19 @@ public class ParadoxSystem {
         byte[] message6 = new byte[37];
         message6[0] = 0x5F;
         message6[1] = 0x20;
-        ParadoxIPPacket step6 = new ParadoxIPPacket(message6, true).setMessageType((byte) 0x04);
+        ParadoxIPPacket step6 = new ParadoxIPPacket(message6, true)
+                .setMessageType(HeaderMessageType.SERIAL_PASSTHRU_REQUEST);
         sendPacket(step6);
         byte[] response6 = receivePacket();
         byte[] initializationMessage = Arrays.copyOfRange(response6, 16, response6.length);
-        ParadoxUtil.printByteArray("Init communication sub array: ", initializationMessage);
+        ParadoxUtil.printPacket("Init communication sub array: ", initializationMessage);
 
         logger.debug("Step7");
         // 7: Initialization request (in response to the initialization from the panel)
         // (IP150 and direct serial)
-        byte[] message7 = new byte[] {
-                // Initialization command
-                0x00,
-
-                // Module address
-                initializationMessage[1],
-
-                // Not used
-                0x00, 0x00,
-
-                // Product ID
-                initializationMessage[4],
-
-                // Software version
-                initializationMessage[5],
-
-                // Software revision
-                initializationMessage[6],
-
-                // Software ID
-                initializationMessage[7],
-
-                // Module ID
-                initializationMessage[8], initializationMessage[9],
-
-                // PC Password
-                0x09, (byte) 0x87,
-
-                // Modem speed
-                0x0A,
-
-                // Winload type ID
-                0x30,
-
-                // User code (for some reason Winload sends user code 021000)
-                0x02, 0x10, 0x00,
-
-                // Module serial number
-                initializationMessage[17], initializationMessage[18], initializationMessage[19],
-                initializationMessage[20],
-
-                // EVO section 3030-3038 data
-                initializationMessage[21], initializationMessage[22], initializationMessage[23],
-                initializationMessage[24], initializationMessage[25], initializationMessage[26],
-                initializationMessage[27], initializationMessage[28], initializationMessage[29],
-
-                // Not used
-                0x00, 0x00, 0x00, 0x00,
-
-                // Source ID (0x02 = Winload through IP)
-                0x02,
-
-                // Carrier length
-                0x00,
-
-                // Checksum
-                0x00 };
-        ParadoxIPPacket step7 = new ParadoxIPPacket(message7, true).setMessageType((byte) 0x04)
-            .setUnknown0((byte) 0x14);
+        byte[] message7 = generateInitializationRequest(initializationMessage, pcPassword);
+        ParadoxIPPacket step7 = new ParadoxIPPacket(message7, true)
+                .setMessageType(HeaderMessageType.SERIAL_PASSTHRU_REQUEST).setUnknown0((byte) 0x14);
         sendPacket(step7);
         byte[] finalResponse = receivePacket();
         if ((finalResponse[16] & 0xF0) == 0x10) {
@@ -169,15 +157,22 @@ public class ParadoxSystem {
             logger.debug("LOGON FAILURE");
         }
         Thread.sleep(300);
-        // TODO check why after a short sleep a 37 bytes packet is received after logon ! ! !
+        // TODO check why after a short sleep a 37 bytes packet is received after logon
+        // ! ! !
         receivePacket();
     }
 
-    public List<String> readPartitions() {
+	/*
+     * (non-Javadoc)
+     *
+     * @see mainApp.ParadoxAdapter#readPartitions()
+     */
+    @Override
+    public List<String> readPartitionLabels() {
         List<String> result = new ArrayList<>();
 
         try {
-            for (int i = 1; i <= 4; i++) {
+            for (int i = 1; i <= 8; i++) {
                 result.add(readPartitionLabel(i));
             }
         } catch (Exception e) {
@@ -202,11 +197,13 @@ public class ParadoxSystem {
         return result;
     }
 
-    private String createString(byte[] payloadResult) throws UnsupportedEncodingException {
-        return new String(payloadResult, "US-ASCII");
-    }
-
-    public List<String> readZones() {
+    /*
+     * (non-Javadoc)
+     *
+     * @see mainApp.ParadoxAdapter#readZones()
+     */
+    @Override
+    public List<String> readZoneLabels() {
         List<String> result = new ArrayList<>();
 
         try {
@@ -241,6 +238,75 @@ public class ParadoxSystem {
         return result;
     }
 
+    @Override
+    public List<byte[]> readPartitionFlags() throws Exception {
+        List<byte[]> result = new ArrayList<byte[]>();
+
+        byte[] element = memoryMap.getElement(2);
+        byte[] firstBlock = Arrays.copyOfRange(element, 32, 64);
+
+        element = memoryMap.getElement(3);
+        byte[] secondBlock = Arrays.copyOfRange(element, 0, 16);
+        byte[] mergeByteArrays = ParadoxUtil.mergeByteArrays(firstBlock, secondBlock);
+        for (int i = 0; i < mergeByteArrays.length; i += 6) {
+            result.add(Arrays.copyOfRange(mergeByteArrays, i, i + 6));
+        }
+
+        return result;
+    }
+
+    @Override
+    public ZoneStateFlags readZoneStateFlags() throws Exception {
+        ZoneStateFlags result = new ZoneStateFlags();
+
+        byte[] firstPage = memoryMap.getElement(0);
+        byte[] secondPage = memoryMap.getElement(8);
+
+        byte[] firstBlock = Arrays.copyOfRange(firstPage, 28, 40);
+        byte[] secondBlock = Arrays.copyOfRange(secondPage, 0, 22);
+        byte[] zonesOpened = ParadoxUtil.mergeByteArrays(firstBlock, secondBlock);
+        result.setZonesOpened(zonesOpened);
+
+        firstBlock = Arrays.copyOfRange(firstPage, 40, 52);
+        secondBlock = Arrays.copyOfRange(secondPage, 22, 34);
+        byte[] zonesTampered = ParadoxUtil.mergeByteArrays(firstBlock, secondBlock);
+        result.setZonesTampered(zonesTampered);
+
+        firstBlock = Arrays.copyOfRange(firstPage, 52, 52);
+        secondBlock = Arrays.copyOfRange(secondPage, 34, 64);
+        byte[] zonesLowBattery = ParadoxUtil.mergeByteArrays(firstBlock, secondBlock);
+        result.setZonesLowBattery(zonesLowBattery);
+
+        return result;
+    }
+
+    public void initializeMemoryMap() throws Exception {
+        List<byte[]> ramCache = new ArrayList<>();
+        for (int i = 1; i <= 16; i++) {
+            logger.debug("Reading memory page number: {}", i);
+            ramCache.add(readRAMBlock(i));
+        }
+        ramCache.add(readRAMBlock(0x10));
+        memoryMap = new MemoryMap(ramCache);
+    }
+
+    @Override
+    public void refreshMemoryMap() throws Exception {
+        for (int i = 1, j = 0; i <= 16; i++, j++) {
+            logger.trace("Reading memory page number: {}", i);
+            memoryMap.updateElement(j, readRAMBlock(i));
+        }
+    }
+
+    public byte[] readRAMBlock(int blockNo) throws Exception {
+        return readRAM(blockNo, (byte) 64);
+    }
+
+    public byte[] readRAM(int blockNo, byte bytesToRead) throws Exception {
+        IPPacketPayload payload = new RamRequestPayload(blockNo, bytesToRead);
+        return readMemory(payload);
+    }
+
     private byte[] readEepromMemory(int address, byte bytesToRead) throws Exception {
         if (bytesToRead < 1 || bytesToRead > 64) {
             throw new Exception("Invalid bytes to read. Valid values are 1 to 64.");
@@ -250,14 +316,9 @@ public class ParadoxSystem {
         return readMemory(payload);
     }
 
-    private byte[] readRAM(int blockNo, byte bytesToRead) throws Exception {
-        IPPacketPayload payload = new RamRequestPayload(blockNo, bytesToRead);
-        return readMemory(payload);
-    }
-
     private byte[] readMemory(IPPacketPayload payload) throws Exception {
         ParadoxIPPacket readEpromIPPacket = new ParadoxIPPacket(payload)
-            .setMessageType((byte) 0x04).setUnknown0((byte) 0x14);
+                .setMessageType(HeaderMessageType.SERIAL_PASSTHRU_REQUEST).setUnknown0((byte) 0x14);
 
         sendPacket(readEpromIPPacket);
         return receivePacket((byte) 0x5);
@@ -268,7 +329,7 @@ public class ParadoxSystem {
     }
 
     private void sendPacket(byte[] packet) throws IOException {
-        ParadoxUtil.printByteArray("Tx Packet:", packet);
+        ParadoxUtil.printPacket("Tx Packet:", packet);
         tx.write(packet);
     }
 
@@ -277,13 +338,13 @@ public class ParadoxSystem {
             try {
                 byte[] result = new byte[256];
                 rx.read(result);
-                ParadoxUtil.printByteArray("RX:", result);
+                ParadoxUtil.printPacket("RX:", result);
                 return Arrays.copyOfRange(result, 0, result[1] + 16);
             } catch (IOException e) {
-                logger.debug("Unable to retrieve data from RX. {}", e.getMessage());
+                logger.error("Unable to retrieve data from RX. {}", e.getMessage());
                 Thread.sleep(100);
                 if (retryCounter < 2) {
-                    logger.debug("Attempting one more time");
+                    logger.info("Attempting one more time");
                 }
             }
         }
@@ -379,6 +440,74 @@ public class ParadoxSystem {
         }
 
         return packets;
-
     }
+
+    private byte[] generateInitializationRequest(byte[] initializationMessage, byte[] pcPassword) {
+        byte[] message7 = new byte[] {
+                // Initialization command
+                0x00,
+
+                // Module address
+                initializationMessage[1],
+
+                // Not used
+                0x00, 0x00,
+
+                // Product ID
+                initializationMessage[4],
+
+                // Software version
+                initializationMessage[5],
+
+                // Software revision
+                initializationMessage[6],
+
+                // Software ID
+                initializationMessage[7],
+
+                // Module ID
+                initializationMessage[8], initializationMessage[9],
+
+                // PC Password
+                pcPassword[0], pcPassword[1],
+
+                // Modem speed
+                0x0A,
+
+                // Winload type ID
+                0x30,
+
+                // User code (for some reason Winload sends user code 021000)
+                0x02, 0x10, 0x00,
+
+                // Module serial number
+                initializationMessage[17], initializationMessage[18], initializationMessage[19],
+                initializationMessage[20],
+
+                // EVO section 3030-3038 data
+                initializationMessage[21], initializationMessage[22], initializationMessage[23],
+                initializationMessage[24], initializationMessage[25], initializationMessage[26],
+                initializationMessage[27], initializationMessage[28], initializationMessage[29],
+
+                // Not used
+                0x00, 0x00, 0x00, 0x00,
+
+                // Source ID (0x02 = Winload through IP)
+                0x02,
+
+                // Carrier length
+                0x00,
+
+                // Checksum
+                0x00 };
+        return message7;
+    }
+
+    private String createString(byte[] payloadResult) throws UnsupportedEncodingException {
+        return new String(payloadResult, "US-ASCII");
+    }
+
+    public byte[] getPanelInfoBytes() {
+  		return panelInfoBytes;
+  	}
 }
