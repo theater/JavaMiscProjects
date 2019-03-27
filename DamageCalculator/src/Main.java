@@ -1,10 +1,11 @@
-
-
 class Main {
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
+        DamageCalculator calculator = new DamageCalculator();
+        int[] distribution = calculator.calculate().getDistribution();
+        for (int counter = 1; counter < distribution.length; counter++) {
+            System.out.println("Tier " + counter + " amount: " + distribution[counter]);
+        }
     }
 
 }
