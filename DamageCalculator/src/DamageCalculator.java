@@ -6,6 +6,7 @@ import java.util.Set;
 
 public class DamageCalculator {
 
+    private static final int STEP_UNITS = 1;
     private static final int TROOPS_AMOUNT = 220000;
     private static final int MAX_TIER = 8;
     private static final int MAX_TIER_INDEX = MAX_TIER - 1;
@@ -20,10 +21,10 @@ public class DamageCalculator {
     private Map<ArmyType, int[]> distribution = new HashMap<>();
 
     DamageCalculator() {
-        initializeDistributionWithZeroes();
+        initializeDistribution();
     }
 
-    private void initializeDistributionWithZeroes() {
+    private void initializeDistribution() {
         ArmyType[] armyTypes = ArmyType.values();
         for (ArmyType armyType : armyTypes) {
             int[] amount = new int[MAX_TIER];
@@ -34,11 +35,11 @@ public class DamageCalculator {
 
     public DamageCalculator calculate() {
         long startTime = System.currentTimeMillis();
-        for (int counter = 1; counter <= TROOPS_AMOUNT; counter++) {
+        for (int counter = 1; counter <= TROOPS_AMOUNT; counter += STEP_UNITS) {
             BestArmyIndex index = retrieveBestIndex();
             ArmyType bestType = index.getType();
             int tierIndex = index.getIndex();
-            distribution.get(bestType)[tierIndex]++;
+            distribution.get(bestType)[tierIndex] += STEP_UNITS;
         }
         long timeElapsed = System.currentTimeMillis() - startTime;
         System.out.println("Time elapsed: " + timeElapsed + "ms.");
@@ -66,10 +67,25 @@ public class DamageCalculator {
     }
 
     private double calculateDamageDelta(ArmyType armyType, int tierIndex) {
-        return (baseFactors.get(armyType)[tierIndex] * Math.sqrt(distribution.get(armyType)[tierIndex] + 1) - baseFactors.get(armyType)[tierIndex] * Math.sqrt(distribution.get(armyType)[tierIndex]));
+        return (baseFactors.get(armyType)[tierIndex] * Math.sqrt(distribution.get(armyType)[tierIndex] + STEP_UNITS) -
+                baseFactors.get(armyType)[tierIndex] * Math.sqrt(distribution.get(armyType)[tierIndex]));
     }
 
     public Map<ArmyType, int[]> getDistribution() {
         return distribution;
+    }
+
+    public DamageCalculator printResults() {
+        Set<Entry<ArmyType, int[]>> entrySet = distribution.entrySet();
+        for (Entry<ArmyType, int[]> entry : entrySet) {
+            ArmyType key = entry.getKey();
+            System.out.println("Army type:\t" + key);
+            int[] tiersAmount = entry.getValue();
+            for (int counter = 0; counter < tiersAmount.length; counter++) {
+                int tier = counter + 1;
+                System.out.println("Tier " + tier + " amount: " + tiersAmount[counter]);
+            }
+        }
+        return this;
     }
 }
