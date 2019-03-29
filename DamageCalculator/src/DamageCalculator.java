@@ -5,7 +5,6 @@ import java.util.Set;
 
 public class DamageCalculator {
 
-    private static final int TROOPS_AMOUNT = 220000;
     private static final int MAX_TIER = StaticData.MAX_TIER;
     private static final int STEP_UNITS = 1;
 
@@ -28,7 +27,7 @@ public class DamageCalculator {
     public DamageCalculator calculate() {
         long startTime = System.currentTimeMillis();
         Set<Army> allArmies = distribution.keySet();
-        for (int counter = 1; counter <= TROOPS_AMOUNT; counter += STEP_UNITS) {
+        for (int counter = 1; counter <= StaticData.TROOPS_AMOUNT; counter += STEP_UNITS) {
             Army bestArmy = retrieveBestArmy(allArmies);
             Integer currentAmount = distribution.get(bestArmy);
             distribution.put(bestArmy, currentAmount + STEP_UNITS);

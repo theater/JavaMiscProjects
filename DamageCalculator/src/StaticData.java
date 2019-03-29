@@ -4,6 +4,7 @@ import java.util.Map;
 
 public class StaticData {
 
+    public static final int TROOPS_AMOUNT = 208030;
     public static final int MAX_TIER = 10;
 
     private static final int TROOP_ATTACK = 477;
@@ -16,6 +17,7 @@ public class StaticData {
     private static final int CAVALRY_DAMAGE = 198;
     private static final int DISTANCE_DAMAGE = 183;
 
+    private static final int ABSOLUTE_MAX_TIER = 12;
     // private static final int ARTILLERY_ATTACK = 50;
     // private static final int ARTILLERY_DAMAGE = 50;
 
@@ -23,7 +25,7 @@ public class StaticData {
     // Array index is tier number -1, i.e. tier 5 has index 4, value is subtype
     static {
         Map<ArmyType, ArmySubType[]> tempMap = new HashMap<>();
-        ArmySubType[] distanceSubtypes = new ArmySubType[MAX_TIER];
+        ArmySubType[] distanceSubtypes = new ArmySubType[ABSOLUTE_MAX_TIER];
         distanceSubtypes[0] = ArmySubType.RIFLEMEN;
         distanceSubtypes[1] = ArmySubType.GRENADIERS;
         distanceSubtypes[2] = ArmySubType.GRENADIERS;
@@ -38,7 +40,7 @@ public class StaticData {
         distanceSubtypes[11] = ArmySubType.RIFLEMEN;
         tempMap.put(ArmyType.DISTANCE, distanceSubtypes);
 
-        ArmySubType[] cavalrySubtypes = new ArmySubType[MAX_TIER];
+        ArmySubType[] cavalrySubtypes = new ArmySubType[ABSOLUTE_MAX_TIER];
         cavalrySubtypes[0] = ArmySubType.HEAVY_CAVALRY;
         cavalrySubtypes[1] = ArmySubType.LIGHT_CAVALRY;
         cavalrySubtypes[2] = ArmySubType.HEAVY_CAVALRY;
@@ -53,7 +55,7 @@ public class StaticData {
         cavalrySubtypes[11] = ArmySubType.LIGHT_CAVALRY;
         tempMap.put(ArmyType.CAVALRY, cavalrySubtypes);
 
-        ArmySubType[] infantrySubtypes = new ArmySubType[MAX_TIER];
+        ArmySubType[] infantrySubtypes = new ArmySubType[ABSOLUTE_MAX_TIER];
         for (int i = 0; i < MAX_TIER; i++) {
             if (i % 2 == 0) {
                 infantrySubtypes[i] = ArmySubType.MUSKETEERS;
