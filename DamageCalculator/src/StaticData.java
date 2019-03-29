@@ -6,16 +6,18 @@ public class StaticData {
 
     public static final int MAX_TIER = 10;
 
-    private static final int TROOP_ATTACK = 50;
-    private static final int TROOP_DAMAGE = 50;
-    private static final int DISTANCE_ATTACK = 50;
-    private static final int DISTANCE_DAMAGE = 50;
+    private static final int TROOP_ATTACK = 477;
+    private static final int DISTANCE_ATTACK = 841;
     private static final int CAVALRY_ATTACK = 50;
-    private static final int CAVALRY_DAMAGE = 50;
     private static final int INFANTRY_ATTACK = 50;
+
+    private static final int TROOP_DAMAGE = 107;
     private static final int INFANTRY_DAMAGE = 50;
-    private static final int ARTILLERY_ATTACK = 50;
-    private static final int ARTILLERY_DAMAGE = 50;
+    private static final int DISTANCE_DAMAGE = 50;
+    private static final int CAVALRY_DAMAGE = 50;
+
+    // private static final int ARTILLERY_ATTACK = 50;
+    // private static final int ARTILLERY_DAMAGE = 50;
 
     public static final Map<ArmyType, ArmySubType[]> TYPE_TO_SUBTYPE_MAP;
     // Array index is tier number -1, i.e. tier 5 has index 4, value is subtype
