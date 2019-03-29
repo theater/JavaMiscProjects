@@ -80,6 +80,6 @@ public class DamageCalculator {
 
         double efficiencyFactor = army.getAttackEfficiency();
 
-        return baseDamage * (1 + (StaticData.DAMAGE_MODIFIERS.get(army.getType())) / 100) * efficiencyFactor;
+        return baseDamage * Math.min(1 + (StaticData.DAMAGE_MODIFIERS.get(army.getType()) / 100), 3) * efficiencyFactor;
     }
 }
