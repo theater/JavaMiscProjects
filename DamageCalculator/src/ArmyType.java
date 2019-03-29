@@ -3,6 +3,6 @@
 public enum ArmyType {
     DISTANCE,
     CAVALRY,
-    INFANTRY,
-    ARTILLERY
+    INFANTRY
+    // ARTILLERY
 }
