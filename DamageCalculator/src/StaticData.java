@@ -7,14 +7,14 @@ public class StaticData {
     public static final int MAX_TIER = 10;
 
     private static final int TROOP_ATTACK = 477;
+    private static final int INFANTRY_ATTACK = 758;
+    private static final int CAVALRY_ATTACK = 770;
     private static final int DISTANCE_ATTACK = 841;
-    private static final int CAVALRY_ATTACK = 50;
-    private static final int INFANTRY_ATTACK = 50;
 
     private static final int TROOP_DAMAGE = 107;
-    private static final int INFANTRY_DAMAGE = 50;
-    private static final int DISTANCE_DAMAGE = 50;
-    private static final int CAVALRY_DAMAGE = 50;
+    private static final int INFANTRY_DAMAGE = 153;
+    private static final int CAVALRY_DAMAGE = 198;
+    private static final int DISTANCE_DAMAGE = 183;
 
     // private static final int ARTILLERY_ATTACK = 50;
     // private static final int ARTILLERY_DAMAGE = 50;
