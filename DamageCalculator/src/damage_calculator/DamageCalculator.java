@@ -7,7 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 public class DamageCalculator {
+
+    private static Logger logger = Logger.getLogger(DamageCalculator.class);
 
     private static final double SPELL_CAPACITY_BOOST = 0.1;
     private static final double MARCH_CAPACITY_BOOST = 0.25;
@@ -16,28 +20,30 @@ public class DamageCalculator {
     private int calculatedMarchCapacity;
 
     private Map<Army, Integer> distribution = new HashMap<>();
+    private InputParameters inputParameters;
 
-    public DamageCalculator() {
+    public DamageCalculator(InputParameters inputParams) {
+        this.inputParameters = inputParams;
         calculatedMarchCapacity = calculateCapacity();
         initializeDistribution();
     }
 
     private int calculateCapacity() {
         double capacityModifier = 0;
-        if (StaticData.USE_MARCH_CAPACITY_BOOST) {
+        if (inputParameters.useMarchCapacityBoost) {
             capacityModifier += MARCH_CAPACITY_BOOST;
         }
-        if (StaticData.USE_MARCH_CAPACITY_SPELL) {
+        if (inputParameters.useMarchCapacitySpell) {
             capacityModifier += SPELL_CAPACITY_BOOST;
         }
-        int castleCapacity = StaticData.CASTLE_BASE_MARCH_CAPACITY.get(StaticData.CASTLE_LEVEL);
-        return (int) (capacityModifier * castleCapacity + StaticData.TROOPS_AMOUNT);
+        int castleCapacity = StaticData.CASTLE_BASE_MARCH_CAPACITY.get(inputParameters.castleLevel);
+        return (int) (capacityModifier * castleCapacity + inputParameters.troopsAmount);
     }
 
     private void initializeDistribution() {
         ArmyType[] armyTypes = ArmyType.values();
         for (ArmyType armyType : armyTypes) {
-            for (int tier = 0; tier < StaticData.MAX_TIER; tier++) {
+            for (int tier = 0; tier < inputParameters.maxTier; tier++) {
                 Army army = new Army(armyType, tier);
                 distribution.put(army, 0);
             }
@@ -53,20 +59,20 @@ public class DamageCalculator {
             distribution.put(bestArmy, currentAmount + STEP_UNITS);
         }
         long timeElapsed = System.currentTimeMillis() - startTime;
-        System.out.println("Time elapsed: " + timeElapsed + "ms.");
+        logger.info("Time elapsed: " + timeElapsed + "ms.");
         return this;
     }
 
     public DamageCalculator printResults() {
-        System.out.println("Initial capacity: " + StaticData.TROOPS_AMOUNT);
-        System.out.println("Calculated capacity: " + calculatedMarchCapacity);
+        logger.info("Initial capacity: " + inputParameters.troopsAmount);
+        logger.info("Calculated capacity: " + calculatedMarchCapacity);
 
         Set<Army> armies = distribution.keySet();
         List<Army> armiesToSort = new ArrayList<>(armies);
         Collections.sort(armiesToSort);
         for (Army army : armiesToSort) {
             int troopsAmount = distribution.get(army);
-            System.out.println(army + ":\t" + troopsAmount);
+            logger.info(army + ":\t" + troopsAmount);
         }
         return this;
     }
@@ -85,25 +91,7 @@ public class DamageCalculator {
     }
 
     private double calculateDamageDelta(Army army) {
-        double damage = calculateDamage(army);
+        double damage = army.getCalculatedFinalDamage();
         return damage * Math.sqrt(distribution.get(army) + STEP_UNITS) - damage * Math.sqrt(distribution.get(army));
-    }
-
-    // private double calculateDamageDelta(ArmyType armyType, int tierIndex, Map<ArmyType, int[]> dataStruct) {
-    // return (dataStruct.get(armyType)[tierIndex] * Math.sqrt(dataStruct.get(armyType)[tierIndex] + STEP_UNITS) -
-    // dataStruct.get(armyType)[tierIndex] * Math.sqrt(dataStruct.get(armyType)[tierIndex]));
-    // }
-
-    private double calculateDamage(Army army) {
-        int defense = 0;
-
-        int baseAttack = army.getBaseAttack();
-        double modifiedAttack = baseAttack * (1 + (StaticData.ATTACK_MODIFIERS.get(army.getType())) / 100);
-
-        double baseDamage = Math.pow(modifiedAttack, 2) / (modifiedAttack + defense);
-
-        double efficiencyFactor = army.getModifiedAttackEfficiency();
-
-        return baseDamage * Math.min(1 + (StaticData.DAMAGE_MODIFIERS.get(army.getType()) / 100), 3) * efficiencyFactor;
     }
 }

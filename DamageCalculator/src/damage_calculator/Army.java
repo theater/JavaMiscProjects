@@ -1,4 +1,5 @@
 package damage_calculator;
+
 public class Army implements Comparable<Army> {
 
     private static final int MAX_EFFICIENCY_FACTOR = 2;
@@ -9,13 +10,14 @@ public class Army implements Comparable<Army> {
     private double attackEfficiency = 1;
     private double modifiedAttackEfficiency;
     private int baseAttack;
+    private double calculatedFinalDamage;
 
     public Army(ArmyType type, int tier) {
         this.type = type;
         this.tier = tier;
         subType = StaticData.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
         baseAttack = StaticData.BASE_ATTACK_FACTORS.get(type)[tier];
-        attackEfficiency = subType == ArmySubType.GRENADIERS ? 1.2 : subType == ArmySubType.LIGHT_CAVALRY ? 0.8 : 1;
+        attackEfficiency = calculateAttackEfficiency();
         switch (type) {
             case CAVALRY:
                 modifiedAttackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, attackEfficiency + StaticData.CAVALRY_VS_INF_DAMAGE);
@@ -26,6 +28,28 @@ public class Army implements Comparable<Army> {
             default:
                 modifiedAttackEfficiency = attackEfficiency;
         }
+        calculatedFinalDamage = calculateDamage();
+    }
+
+    private double calculateAttackEfficiency() {
+        return subType == ArmySubType.GRENADIERS ? 1.2 : subType == ArmySubType.LIGHT_CAVALRY ? 0.8 : 1;
+    }
+
+    private double calculateDamage() {
+        int defense = 0;
+
+        int baseAttack = getBaseAttack();
+        double modifiedAttack = baseAttack * (1 + (StaticData.ATTACK_MODIFIERS.get(getType())) / 100);
+
+        double baseDamage = Math.pow(modifiedAttack, 2) / (modifiedAttack + defense);
+
+        double efficiencyFactor = getModifiedAttackEfficiency();
+
+        return baseDamage * Math.min(1 + (StaticData.DAMAGE_MODIFIERS.get(getType()) / 100), 3) * efficiencyFactor;
+    }
+
+    public double getCalculatedFinalDamage() {
+        return calculatedFinalDamage;
     }
 
     public ArmyType getType() {

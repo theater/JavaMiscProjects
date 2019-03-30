@@ -1,0 +1,19 @@
+{
+    "castleLevel": 30,
+    "troopsAmount": 208030,
+    "useMarchCapacityBoost": true,
+    "useMarchCapacitySpell": true,
+    "maxTier": 10,
+    "troopAttack": 477,
+    "infantryAttack": 758,
+    "cavalryAttack": 770,
+    "distanceAttack": 841,
+    "artilleryAttack": 50,
+    "troopDamage": 107,
+    "infantryDamage": 153,
+    "cavalryDamage": 198,
+    "distanceDamage": 183,
+    "artilleryDamage": 50,
+    "distanceVsInfantryDamage": 183,
+    "cavalryVsInfantryDamage": 183
+}
