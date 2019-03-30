@@ -1,17 +1,30 @@
 public class Army {
 
+    private static final int MAX_EFFICIENCY_FACTOR = 2;
+
     private ArmyType type;
     private ArmySubType subType;
     private int tier;
-    private double attackEfficiency = 1; // TODO think about this later
+    private double attackEfficiency = 1;
+    private double modifiedAttackEfficiency;
     private int baseAttack;
 
     public Army(ArmyType type, int tier) {
         this.type = type;
         this.tier = tier;
-        this.subType = StaticData.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
-        this.baseAttack = StaticData.BASE_ATTACK_FACTORS.get(type)[tier];
-        this.attackEfficiency = subType == ArmySubType.GRENADIERS ? 1.2 : subType == ArmySubType.LIGHT_CAVALRY ? 0.8 : 1;
+        subType = StaticData.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
+        baseAttack = StaticData.BASE_ATTACK_FACTORS.get(type)[tier];
+        attackEfficiency = subType == ArmySubType.GRENADIERS ? 1.2 : subType == ArmySubType.LIGHT_CAVALRY ? 0.8 : 1;
+        switch (type) {
+            case CAVALRY:
+                modifiedAttackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, attackEfficiency + StaticData.CAVALRY_VS_INF_DAMAGE);
+                break;
+            case DISTANCE:
+                modifiedAttackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, attackEfficiency + StaticData.DISTANCE_VS_INF_DAMAGE);
+                break;
+            default:
+                modifiedAttackEfficiency = attackEfficiency;
+        }
     }
 
     public ArmyType getType() {
@@ -37,6 +50,10 @@ public class Army {
 
     public int getBaseAttack() {
         return baseAttack;
+    }
+
+    public double getModifiedAttackEfficiency() {
+        return modifiedAttackEfficiency;
     }
 
     @Override
@@ -72,5 +89,4 @@ public class Army {
         }
         return true;
     }
-
 }

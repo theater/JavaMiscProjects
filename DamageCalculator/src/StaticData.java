@@ -5,21 +5,29 @@ import java.util.Map;
 public class StaticData {
 
     public static final int TROOPS_AMOUNT = 208030;
+    public static final boolean USE_MARCH_CAPACITY_BOOST = false;
+    public static final boolean USE_MARCH_CAPACITY_SPELL = false;
+
+
     public static final int MAX_TIER = 10;
 
     private static final int TROOP_ATTACK = 477;
     private static final int INFANTRY_ATTACK = 758;
     private static final int CAVALRY_ATTACK = 770;
     private static final int DISTANCE_ATTACK = 841;
+    // private static final int ARTILLERY_ATTACK = 50;
 
     private static final int TROOP_DAMAGE = 107;
     private static final int INFANTRY_DAMAGE = 153;
     private static final int CAVALRY_DAMAGE = 198;
     private static final int DISTANCE_DAMAGE = 183;
+    // private static final int ARTILLERY_DAMAGE = 50;
+
+    public static final int DISTANCE_VS_INF_DAMAGE = 183;
+    public static final int CAVALRY_VS_INF_DAMAGE = 183;
+
 
     private static final int ABSOLUTE_MAX_TIER = 12;
-    // private static final int ARTILLERY_ATTACK = 50;
-    // private static final int ARTILLERY_DAMAGE = 50;
 
     public static final Map<ArmyType, ArmySubType[]> TYPE_TO_SUBTYPE_MAP;
     // Array index is tier number -1, i.e. tier 5 has index 4, value is subtype

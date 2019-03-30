@@ -5,13 +5,30 @@ import java.util.Set;
 
 public class DamageCalculator {
 
+    private static final double SPELL_CAPACITY_BOOST = 0.1;
+    private static final double MARCH_CAPACITY_BOOST = 0.25;
     private static final int MAX_TIER = StaticData.MAX_TIER;
     private static final int STEP_UNITS = 1;
+    private static final double CASTLE_CAPACITY = 100600;
+
+    private int calculatedMarchCapacity;
 
     private Map<Army, Integer> distribution = new HashMap<>();
 
     DamageCalculator() {
+        calculatedMarchCapacity = calculateCapacity();
         initializeDistribution();
+    }
+
+    private int calculateCapacity() {
+        double capacityModifier = 0;
+        if (StaticData.USE_MARCH_CAPACITY_BOOST) {
+            capacityModifier += MARCH_CAPACITY_BOOST;
+        }
+        if (StaticData.USE_MARCH_CAPACITY_SPELL) {
+            capacityModifier += SPELL_CAPACITY_BOOST;
+        }
+        return (int) (capacityModifier * CASTLE_CAPACITY + StaticData.TROOPS_AMOUNT);
     }
 
     private void initializeDistribution() {
@@ -27,7 +44,7 @@ public class DamageCalculator {
     public DamageCalculator calculate() {
         long startTime = System.currentTimeMillis();
         Set<Army> allArmies = distribution.keySet();
-        for (int counter = 1; counter <= StaticData.TROOPS_AMOUNT; counter += STEP_UNITS) {
+        for (int counter = 1; counter <= calculatedMarchCapacity; counter += STEP_UNITS) {
             Army bestArmy = retrieveBestArmy(allArmies);
             Integer currentAmount = distribution.get(bestArmy);
             distribution.put(bestArmy, currentAmount + STEP_UNITS);
@@ -38,6 +55,9 @@ public class DamageCalculator {
     }
 
     public DamageCalculator printResults() {
+        System.out.println("Initial capacity: " + StaticData.TROOPS_AMOUNT);
+        System.out.println("Calculated capacity: " + calculatedMarchCapacity);
+
         Set<Entry<Army, Integer>> entrySet = distribution.entrySet();
         for (Entry<Army, Integer> entry : entrySet) {
             Army army = entry.getKey();
@@ -74,11 +94,11 @@ public class DamageCalculator {
         int defense = 0;
 
         int baseAttack = army.getBaseAttack();
-        int modifiedAttack = baseAttack * (1 + (StaticData.ATTACK_MODIFIERS.get(army.getType())) / 100);
+        double modifiedAttack = baseAttack * (1 + (StaticData.ATTACK_MODIFIERS.get(army.getType())) / 100);
 
         double baseDamage = Math.pow(modifiedAttack, 2) / (modifiedAttack + defense);
 
-        double efficiencyFactor = army.getAttackEfficiency();
+        double efficiencyFactor = army.getModifiedAttackEfficiency();
 
         return baseDamage * Math.min(1 + (StaticData.DAMAGE_MODIFIERS.get(army.getType()) / 100), 3) * efficiencyFactor;
     }
