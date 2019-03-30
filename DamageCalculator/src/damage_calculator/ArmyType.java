@@ -1,4 +1,4 @@
-package DamageCalculator;
+package damage_calculator;
 
 
 public enum ArmyType {

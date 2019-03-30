@@ -1,4 +1,4 @@
-package DamageCalculator;
+package damage_calculator;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

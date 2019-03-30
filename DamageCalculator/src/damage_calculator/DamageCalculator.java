@@ -1,4 +1,5 @@
-package DamageCalculator;
+package damage_calculator;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public class DamageCalculator {
 
     private Map<Army, Integer> distribution = new HashMap<>();
 
-    DamageCalculator() {
+    public DamageCalculator() {
         calculatedMarchCapacity = calculateCapacity();
         initializeDistribution();
     }
