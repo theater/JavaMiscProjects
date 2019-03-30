@@ -1,3 +1,4 @@
+package DamageCalculator;
 public class Army implements Comparable<Army> {
 
     private static final int MAX_EFFICIENCY_FACTOR = 2;

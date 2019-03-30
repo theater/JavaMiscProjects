@@ -1,3 +1,4 @@
+package DamageCalculator;
 
 
 public class BestArmyIndex {
