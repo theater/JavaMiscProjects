@@ -3,13 +3,16 @@ package input_parser;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import damage_calculator.InputParameters;
 
 public class InputParser {
 
-    private static final String SEPARATOR = ":";
+    private final Logger logger = Logger.getLogger(InputParser.class);
+
     private File fileToParse;
 
     public InputParser(String fileLocation) throws IOException {
@@ -18,6 +21,7 @@ public class InputParser {
 
     public InputParameters parse() throws IOException {
         InputParameters inputParams = new ObjectMapper().readValue(fileToParse, InputParameters.class);
+        logger.trace("Parsed parameters: " + inputParams);
         return inputParams;
     }
 }

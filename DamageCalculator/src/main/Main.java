@@ -20,7 +20,6 @@ class Main {
         logger.debug("File location: " + fileLocation);
         InputParser inputParser = new InputParser(fileLocation);
         InputParameters parsedInput = inputParser.parse();
-        logger.trace(parsedInput);
         new DamageCalculator(parsedInput).calculate().printResults();
     }
 
@@ -36,5 +35,6 @@ class Main {
             }
         }
         logger.info("Usage: java -jar DamageCalculator.jar -file <Path to JSON file>");
+
     }
 }
