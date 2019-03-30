@@ -9,7 +9,6 @@ public class StaticData {
     public static final boolean USE_MARCH_CAPACITY_BOOST = true;
     public static final boolean USE_MARCH_CAPACITY_SPELL = false;
 
-
     public static final int MAX_TIER = 10;
 
     private static final int TROOP_ATTACK = 477;
@@ -26,7 +25,6 @@ public class StaticData {
 
     public static final int DISTANCE_VS_INF_DAMAGE = 183;
     public static final int CAVALRY_VS_INF_DAMAGE = 183;
-
 
     private static final int ABSOLUTE_MAX_TIER = 12;
 
