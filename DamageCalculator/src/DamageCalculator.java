@@ -1,13 +1,14 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 public class DamageCalculator {
 
     private static final double SPELL_CAPACITY_BOOST = 0.1;
     private static final double MARCH_CAPACITY_BOOST = 0.25;
-    private static final int MAX_TIER = StaticData.MAX_TIER;
     private static final int STEP_UNITS = 1;
 
     private int calculatedMarchCapacity;
@@ -34,7 +35,7 @@ public class DamageCalculator {
     private void initializeDistribution() {
         ArmyType[] armyTypes = ArmyType.values();
         for (ArmyType armyType : armyTypes) {
-            for (int tier = 0; tier < MAX_TIER; tier++) {
+            for (int tier = 0; tier < StaticData.MAX_TIER; tier++) {
                 Army army = new Army(armyType, tier);
                 distribution.put(army, 0);
             }
@@ -58,10 +59,11 @@ public class DamageCalculator {
         System.out.println("Initial capacity: " + StaticData.TROOPS_AMOUNT);
         System.out.println("Calculated capacity: " + calculatedMarchCapacity);
 
-        Set<Entry<Army, Integer>> entrySet = distribution.entrySet();
-        for (Entry<Army, Integer> entry : entrySet) {
-            Army army = entry.getKey();
-            int troopsAmount = entry.getValue();
+        Set<Army> armies = distribution.keySet();
+        List<Army> armiesToSort = new ArrayList<>(armies);
+        Collections.sort(armiesToSort);
+        for (Army army : armiesToSort) {
+            int troopsAmount = distribution.get(army);
             System.out.println(army + ":\t" + troopsAmount);
         }
         return this;

@@ -1,4 +1,4 @@
-public class Army {
+public class Army implements Comparable<Army> {
 
     private static final int MAX_EFFICIENCY_FACTOR = 2;
 
@@ -88,5 +88,16 @@ public class Army {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(Army o) {
+        if (tier < o.tier) {
+            return 1;
+        } else if (tier > o.tier) {
+            return -1;
+        }
+
+        return type.compareTo(o.type);
     }
 }
