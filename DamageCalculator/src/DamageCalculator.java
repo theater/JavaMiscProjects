@@ -9,7 +9,6 @@ public class DamageCalculator {
     private static final double MARCH_CAPACITY_BOOST = 0.25;
     private static final int MAX_TIER = StaticData.MAX_TIER;
     private static final int STEP_UNITS = 1;
-    private static final double CASTLE_CAPACITY = 100600;
 
     private int calculatedMarchCapacity;
 
@@ -28,7 +27,8 @@ public class DamageCalculator {
         if (StaticData.USE_MARCH_CAPACITY_SPELL) {
             capacityModifier += SPELL_CAPACITY_BOOST;
         }
-        return (int) (capacityModifier * CASTLE_CAPACITY + StaticData.TROOPS_AMOUNT);
+        int castleCapacity = StaticData.CASTLE_BASE_MARCH_CAPACITY.get(StaticData.CASTLE_LEVEL);
+        return (int) (capacityModifier * castleCapacity + StaticData.TROOPS_AMOUNT);
     }
 
     private void initializeDistribution() {

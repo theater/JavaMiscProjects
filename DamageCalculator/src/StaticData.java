@@ -4,8 +4,9 @@ import java.util.Map;
 
 public class StaticData {
 
+    public static final int CASTLE_LEVEL = 30;
     public static final int TROOPS_AMOUNT = 208030;
-    public static final boolean USE_MARCH_CAPACITY_BOOST = false;
+    public static final boolean USE_MARCH_CAPACITY_BOOST = true;
     public static final boolean USE_MARCH_CAPACITY_SPELL = false;
 
 
@@ -78,31 +79,41 @@ public class StaticData {
 
     public static final Map<ArmyType, int[]> BASE_ATTACK_FACTORS;
     static {
-        Map<ArmyType, int[]> tempMap2 = new HashMap<>();
-        tempMap2.put(ArmyType.DISTANCE, new int[] { 106, 143, 165, 161, 218, 251, 245, 282, 382, 373, 505, 493 });
-        tempMap2.put(ArmyType.CAVALRY, new int[] { 113, 111, 150, 173, 169, 228, 223, 302, 295, 339, 459, 449 });
-        tempMap2.put(ArmyType.INFANTRY, new int[] { 34, 39, 45, 52, 60, 68, 79, 91, 104, 120, 138, 158 });
+        Map<ArmyType, int[]> tempMap = new HashMap<>();
+        tempMap.put(ArmyType.DISTANCE, new int[] { 106, 143, 165, 161, 218, 251, 245, 282, 382, 373, 505, 493 });
+        tempMap.put(ArmyType.CAVALRY, new int[] { 113, 111, 150, 173, 169, 228, 223, 302, 295, 339, 459, 449 });
+        tempMap.put(ArmyType.INFANTRY, new int[] { 34, 39, 45, 52, 60, 68, 79, 91, 104, 120, 138, 158 });
 
-        BASE_ATTACK_FACTORS = Collections.unmodifiableMap(tempMap2);
+        BASE_ATTACK_FACTORS = Collections.unmodifiableMap(tempMap);
     }
 
     public static final Map<ArmyType, Integer> ATTACK_MODIFIERS;
     static {
-        Map<ArmyType, Integer> tempMap3 = new HashMap<>();
-        tempMap3.put(ArmyType.DISTANCE, TROOP_ATTACK + DISTANCE_ATTACK);
-        tempMap3.put(ArmyType.CAVALRY, TROOP_ATTACK + CAVALRY_ATTACK);
-        tempMap3.put(ArmyType.INFANTRY, TROOP_ATTACK + INFANTRY_ATTACK);
+        Map<ArmyType, Integer> tempMap = new HashMap<>();
+        tempMap.put(ArmyType.DISTANCE, TROOP_ATTACK + DISTANCE_ATTACK);
+        tempMap.put(ArmyType.CAVALRY, TROOP_ATTACK + CAVALRY_ATTACK);
+        tempMap.put(ArmyType.INFANTRY, TROOP_ATTACK + INFANTRY_ATTACK);
 
-        ATTACK_MODIFIERS = Collections.unmodifiableMap(tempMap3);
+        ATTACK_MODIFIERS = Collections.unmodifiableMap(tempMap);
     }
 
     public static final Map<ArmyType, Integer> DAMAGE_MODIFIERS;
     static {
-        Map<ArmyType, Integer> tempMap3 = new HashMap<>();
-        tempMap3.put(ArmyType.DISTANCE, TROOP_DAMAGE + DISTANCE_DAMAGE);
-        tempMap3.put(ArmyType.CAVALRY, TROOP_DAMAGE + CAVALRY_DAMAGE);
-        tempMap3.put(ArmyType.INFANTRY, TROOP_DAMAGE + INFANTRY_DAMAGE);
+        Map<ArmyType, Integer> tempMap = new HashMap<>();
+        tempMap.put(ArmyType.DISTANCE, TROOP_DAMAGE + DISTANCE_DAMAGE);
+        tempMap.put(ArmyType.CAVALRY, TROOP_DAMAGE + CAVALRY_DAMAGE);
+        tempMap.put(ArmyType.INFANTRY, TROOP_DAMAGE + INFANTRY_DAMAGE);
 
-        DAMAGE_MODIFIERS = Collections.unmodifiableMap(tempMap3);
+        DAMAGE_MODIFIERS = Collections.unmodifiableMap(tempMap);
     }
+
+    public static final Map<Integer, Integer> CASTLE_BASE_MARCH_CAPACITY;
+    static {
+        Map<Integer, Integer> tempMap = new HashMap<>();
+        tempMap.put(30, 97500);
+        tempMap.put(32, 106500);
+
+        CASTLE_BASE_MARCH_CAPACITY = Collections.unmodifiableMap(tempMap);
+    }
+
 }
