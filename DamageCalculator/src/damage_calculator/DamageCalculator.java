@@ -2,11 +2,7 @@ package damage_calculator;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -20,7 +16,7 @@ public class DamageCalculator {
 
     private int calculatedMarchCapacity;
 
-    private Map<ArmyType, Army[]> distribution = new HashMap<>();
+    private List<Army> distribution = new ArrayList<>();
     private InputParameters inputParameters;
 
     public DamageCalculator(InputParameters inputParams) {
@@ -44,20 +40,17 @@ public class DamageCalculator {
     private void initializeDistribution() {
         ArmyType[] armyTypes = ArmyType.values();
         for (ArmyType armyType : armyTypes) {
-            Army[] tiers = new Army[inputParameters.maxTier];
-            distribution.put(armyType, tiers);
-            for (int tier = 0; tier < inputParameters.maxTier; tier++) {
-                Army army = new Army(armyType, tier);
-                tiers[tier] = army;
+            for (int i = 0; i < inputParameters.maxTier; i++) {
+                distribution.add(new Army(armyType, i));
             }
         }
+        Collections.sort(distribution);
     }
 
     public DamageCalculator calculate() {
         long startTime = System.currentTimeMillis();
-        Set<Entry<ArmyType, Army[]>> allArmies = distribution.entrySet();
-        for (int counter = 1; counter <= calculatedMarchCapacity; counter += STEP_UNITS) {
-            calculateBestArmy(allArmies);
+        for (int i = 0; i < calculatedMarchCapacity; i += STEP_UNITS) {
+            calculateBestArmy(distribution);
         }
         long timeElapsed = System.currentTimeMillis() - startTime;
         logger.info("Time elapsed: " + timeElapsed + "ms.");
@@ -67,36 +60,23 @@ public class DamageCalculator {
     public DamageCalculator printResults() {
         logger.info("Initial capacity: " + inputParameters.troopsAmount);
         logger.info("Calculated capacity: " + calculatedMarchCapacity);
-
-        List<Army> armiesToSort = new ArrayList<>();
-        Set<Entry<ArmyType, Army[]>> armies = distribution.entrySet();
-        for (Entry<ArmyType, Army[]> entry : armies) {
-            Army[] value = entry.getValue();
-            for (Army army : value) {
-                armiesToSort.add(army);
-            }
-        }
-        Collections.sort(armiesToSort);
-        for (Army army : armiesToSort) {
+        for (Army army : distribution) {
             logger.info(army);
         }
         return this;
     }
 
-    private void calculateBestArmy(Set<Entry<ArmyType, Army[]>> allArmies) {
+    private void calculateBestArmy(List<Army> distribution) {
         Army bestArmy = null;
         double maxDelta = 0;
-        for (Entry<ArmyType, Army[]> entry : allArmies) {
-            Army[] armiesPerType = entry.getValue();
-            for (int i = 0; i < armiesPerType.length; i++) {
-                Army army = armiesPerType[i];
-                double calculatedDelta = calculateDamageDelta(army);
-                if (maxDelta < calculatedDelta) {
-                    maxDelta = calculatedDelta;
-                    bestArmy = army;
-                }
+        for (Army army : distribution) {
+            double calculatedDelta = calculateDamageDelta(army);
+            if (maxDelta < calculatedDelta) {
+                maxDelta = calculatedDelta;
+                bestArmy = army;
             }
         }
+
         if (bestArmy != null) {
             bestArmy.addUnit(STEP_UNITS);
         } else {
@@ -105,7 +85,7 @@ public class DamageCalculator {
     }
 
     private double calculateDamageDelta(Army army) {
-        double damage = army.getCalculatedFinalDamage();
+        double damage = army.getCalculatedDamage();
         return damage * Math.sqrt(army.getTroopsNumber() + STEP_UNITS) - damage * Math.sqrt(army.getTroopsNumber());
     }
 }

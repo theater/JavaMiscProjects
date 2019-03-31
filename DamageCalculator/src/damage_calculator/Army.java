@@ -48,7 +48,7 @@ public class Army implements Comparable<Army> {
         setTroopsNumber(getTroopsNumber() + unitStep);
     }
 
-    public double getCalculatedFinalDamage() {
+    public double getCalculatedDamage() {
         return calculatedFinalDamage;
     }
 
