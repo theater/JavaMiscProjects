@@ -1,0 +1,150 @@
+{
+    "CASTLE_BASE_MARCH_CAPACITY": {
+        "32": 106500,
+        "30": 97500
+    },
+    "TYPE_TO_SUBTYPE_MAP": {
+        "INFANTRY": [
+            "MUSKETEERS",
+            "RIFLEMEN",
+            "MUSKETEERS",
+            "RIFLEMEN",
+            "MUSKETEERS",
+            "RIFLEMEN",
+            "MUSKETEERS",
+            "RIFLEMEN",
+            "MUSKETEERS",
+            "RIFLEMEN",
+            "MUSKETEERS",
+            "RIFLEMEN"
+        ],
+        "CAVALRY": [
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1"
+        ],
+        "DISTANCE": [
+            "RIFLEMEN",
+            "GRENADIERS",
+            "GRENADIERS",
+            "RIFLEMEN",
+            "GRENADIERS",
+            "GRENADIERS",
+            "RIFLEMEN",
+            "RIFLEMEN",
+            "GRENADIERS",
+            "RIFLEMEN",
+            "GRENADIERS",
+            "RIFLEMEN"
+        ],
+        "ARTILLERY": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ]
+    },
+    "distanceSubtypes": [
+        "RIFLEMEN",
+        "GRENADIERS",
+        "GRENADIERS",
+        "RIFLEMEN",
+        "GRENADIERS",
+        "GRENADIERS",
+        "RIFLEMEN",
+        "RIFLEMEN",
+        "GRENADIERS",
+        "RIFLEMEN",
+        "GRENADIERS",
+        "RIFLEMEN"
+    ],
+    "cavalrySubtypes": [
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1",
+        "SUB_ARTILLERY1"
+    ],
+    "BASE_ATTACK_FACTORS": {
+        "INFANTRY": [
+            34,
+            39,
+            45,
+            52,
+            60,
+            68,
+            79,
+            91,
+            104,
+            120,
+            138,
+            158
+        ],
+        "CAVALRY": [
+            113,
+            111,
+            150,
+            173,
+            169,
+            228,
+            223,
+            302,
+            295,
+            339,
+            459,
+            449
+        ],
+        "DISTANCE": [
+            106,
+            143,
+            165,
+            161,
+            218,
+            251,
+            245,
+            282,
+            382,
+            373,
+            505,
+            493
+        ],
+        "ARTILLERY": [
+            51,
+            91,
+            68,
+            121,
+            89,
+            160,
+            184,
+            136,
+            243,
+            180,
+            321,
+            237
+        ]
+    }
+}

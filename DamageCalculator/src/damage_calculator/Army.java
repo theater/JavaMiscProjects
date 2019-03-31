@@ -1,5 +1,9 @@
 package damage_calculator;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 public class Army implements Comparable<Army> {
@@ -7,7 +11,8 @@ public class Army implements Comparable<Army> {
     Logger logger = Logger.getLogger(Army.class);
 
     private static final int MAX_EFFICIENCY_FACTOR = 2;
-
+    public static Map<ArmyType, Integer> ATTACK_MODIFIERS;
+    public static Map<ArmyType, Integer> DAMAGE_MODIFIERS;
     private static InputParameters input;
 
     private ArmyType type;
@@ -18,7 +23,9 @@ public class Army implements Comparable<Army> {
     private double calculatedFinalDamage;
     private int troopsNumber = 0;
 
-    public Army(ArmyType type, int tier) {
+    public Army(ArmyType type, int tier, InputParameters input) {
+        initializeStaticFields(input);
+
         this.type = type;
         this.tier = tier;
         subType = StaticData.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
@@ -36,6 +43,34 @@ public class Army implements Comparable<Army> {
         calculatedFinalDamage = calculateDamage();
     }
 
+    private void initializeStaticFields(InputParameters inputParameters) {
+        if (Army.input == null) {
+            if (inputParameters == null) {
+                throw new IllegalArgumentException("Cannot initialize anything without proper input. InputParameters are null.");
+            }
+            setInput(inputParameters);
+        }
+
+        if (ATTACK_MODIFIERS == null) {
+            Map<ArmyType, Integer> tempMap = new HashMap<>();
+            tempMap.put(ArmyType.DISTANCE, inputParameters.troopAttack + inputParameters.distanceAttack);
+            tempMap.put(ArmyType.CAVALRY, inputParameters.troopAttack + inputParameters.cavalryAttack);
+            tempMap.put(ArmyType.INFANTRY, inputParameters.troopAttack + inputParameters.infantryAttack);
+            tempMap.put(ArmyType.ARTILLERY, inputParameters.troopAttack + inputParameters.artilleryAttack);
+            ATTACK_MODIFIERS = Collections.unmodifiableMap(tempMap);
+        }
+
+        if (DAMAGE_MODIFIERS == null) {
+            Map<ArmyType, Integer> tempMap = new HashMap<>();
+            tempMap.put(ArmyType.DISTANCE, inputParameters.troopDamage + inputParameters.distanceDamage);
+            tempMap.put(ArmyType.CAVALRY, inputParameters.troopDamage + inputParameters.cavalryDamage);
+            tempMap.put(ArmyType.INFANTRY, inputParameters.troopDamage + inputParameters.infantryDamage);
+            tempMap.put(ArmyType.ARTILLERY, inputParameters.troopDamage + inputParameters.artilleryDamage);
+            DAMAGE_MODIFIERS = Collections.unmodifiableMap(tempMap);
+        }
+
+    }
+
     private double calculateAttackEfficiency() {
         return subType == ArmySubType.GRENADIERS ? 1.2 : subType == ArmySubType.LIGHT_CAVALRY ? 0.8 : 1;
     }
@@ -44,7 +79,7 @@ public class Army implements Comparable<Army> {
         int baseAttack = getBaseAttack();
         logger.trace(this + " base attack:\t\t" + baseAttack);
 
-        double modifiedAttack = baseAttack * (1 + (StaticData.ATTACK_MODIFIERS.get(getType())) / 100);
+        double modifiedAttack = baseAttack * (1 + (ATTACK_MODIFIERS.get(getType())) / 100);
         logger.trace(this + " modified attack:\t" + modifiedAttack);
 
         int defense = 0;
@@ -55,7 +90,7 @@ public class Army implements Comparable<Army> {
         double efficiencyFactor = getAttackEfficiency();
         logger.trace(this + " efficiency:\t\t" + efficiencyFactor);
 
-        double calculatedDamage = baseDamage * Math.min(1 + (StaticData.DAMAGE_MODIFIERS.get(getType()) / 100), 3) * efficiencyFactor;
+        double calculatedDamage = baseDamage * Math.min(1 + (DAMAGE_MODIFIERS.get(getType()) / 100), 3) * efficiencyFactor;
         logger.trace(this + " calculated damage:\t" + calculatedDamage);
 
         return calculatedDamage;

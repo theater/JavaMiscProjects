@@ -2,9 +2,7 @@ package damage_calculator;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -29,25 +27,7 @@ public class DamageCalculator {
     }
 
     private void initializeStaticFields() {
-        Army.setInput(inputParameters);
 
-        {
-            Map<ArmyType, Integer> tempMap = new HashMap<>();
-            tempMap.put(ArmyType.DISTANCE, inputParameters.troopAttack + inputParameters.distanceAttack);
-            tempMap.put(ArmyType.CAVALRY, inputParameters.troopAttack + inputParameters.cavalryAttack);
-            tempMap.put(ArmyType.INFANTRY, inputParameters.troopAttack + inputParameters.infantryAttack);
-            tempMap.put(ArmyType.ARTILLERY, inputParameters.troopAttack + inputParameters.artilleryAttack);
-            StaticData.ATTACK_MODIFIERS = Collections.unmodifiableMap(tempMap);
-        }
-
-        {
-            Map<ArmyType, Integer> tempMap = new HashMap<>();
-            tempMap.put(ArmyType.DISTANCE, inputParameters.troopDamage + inputParameters.distanceDamage);
-            tempMap.put(ArmyType.CAVALRY, inputParameters.troopDamage + inputParameters.cavalryDamage);
-            tempMap.put(ArmyType.INFANTRY, inputParameters.troopDamage + inputParameters.infantryDamage);
-            tempMap.put(ArmyType.ARTILLERY, inputParameters.troopDamage + inputParameters.artilleryDamage);
-            StaticData.DAMAGE_MODIFIERS = Collections.unmodifiableMap(tempMap);
-        }
     }
 
     private int calculateCapacity() {
@@ -66,7 +46,7 @@ public class DamageCalculator {
         ArmyType[] armyTypes = ArmyType.values();
         for (ArmyType armyType : armyTypes) {
             for (int i = 0; i < inputParameters.maxTier; i++) {
-                distribution.add(new Army(armyType, i));
+                distribution.add(new Army(armyType, i, inputParameters));
             }
         }
         Collections.sort(distribution);

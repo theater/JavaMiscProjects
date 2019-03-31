@@ -5,6 +5,9 @@ import java.io.IOException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import damage_calculator.ConfigurationParameters;
 import damage_calculator.DamageCalculator;
 import damage_calculator.InputParameters;
 import input_parser.InputParser;
@@ -26,8 +29,10 @@ class Main {
         InputParser inputParser = new InputParser(fileLocation);
         InputParameters parsedInput = inputParser.parse();
         new DamageCalculator(parsedInput).calculate().printResults();
-        // BufferedWriter stream = new BufferedWriter(stream);
-        // new ObjectMapper().writeValueAsString(StaticData);
+
+        ConfigurationParameters configurationParameters = new ConfigurationParameters();
+        String writeValueAsString = new ObjectMapper().writeValueAsString(configurationParameters);
+        logger.info(writeValueAsString);
     }
 
     private static void parseCLIArguments(String[] args) {

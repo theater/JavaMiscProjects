@@ -43,18 +43,18 @@ public class StaticData {
         tempMap.put(ArmyType.CAVALRY, cavalrySubtypes);
 
         ArmySubType[] artillerySubtypes = new ArmySubType[ABSOLUTE_MAX_TIER];
-        cavalrySubtypes[0] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[1] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[2] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[3] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[4] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[5] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[6] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[7] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[8] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[9] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[10] = ArmySubType.SUB_ARTILLERY1;
-        cavalrySubtypes[11] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[0] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[1] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[2] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[3] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[4] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[5] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[6] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[7] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[8] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[9] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[10] = ArmySubType.SUB_ARTILLERY1;
+        artillerySubtypes[11] = ArmySubType.SUB_ARTILLERY1;
         tempMap.put(ArmyType.ARTILLERY, artillerySubtypes);
 
         ArmySubType[] infantrySubtypes = new ArmySubType[ABSOLUTE_MAX_TIER];
@@ -80,9 +80,6 @@ public class StaticData {
 
         BASE_ATTACK_FACTORS = Collections.unmodifiableMap(tempMap);
     }
-
-    public static Map<ArmyType, Integer> ATTACK_MODIFIERS;
-    public static Map<ArmyType, Integer> DAMAGE_MODIFIERS;
 
     public static final Map<Integer, Integer> CASTLE_BASE_MARCH_CAPACITY;
     static {
