@@ -19,18 +19,18 @@
             "RIFLEMEN"
         ],
         "CAVALRY": [
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1"
+            "HEAVY_CAVALRY",
+            "LIGHT_CAVALRY",
+            "HEAVY_CAVALRY",
+            "HEAVY_CAVALRY",
+            "LIGHT_CAVALRY",
+            "HEAVY_CAVALRY",
+            "LIGHT_CAVALRY",
+            "HEAVY_CAVALRY",
+            "LIGHT_CAVALRY",
+            "LIGHT_CAVALRY",
+            "HEAVY_CAVALRY",
+            "LIGHT_CAVALRY"
         ],
         "DISTANCE": [
             "RIFLEMEN",
@@ -47,18 +47,18 @@
             "RIFLEMEN"
         ],
         "ARTILLERY": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1",
+            "SUB_ARTILLERY1"
         ]
     },
     "distanceSubtypes": [
@@ -76,18 +76,18 @@
         "RIFLEMEN"
     ],
     "cavalrySubtypes": [
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1",
-        "SUB_ARTILLERY1"
+        "HEAVY_CAVALRY",
+        "LIGHT_CAVALRY",
+        "HEAVY_CAVALRY",
+        "HEAVY_CAVALRY",
+        "LIGHT_CAVALRY",
+        "HEAVY_CAVALRY",
+        "LIGHT_CAVALRY",
+        "HEAVY_CAVALRY",
+        "LIGHT_CAVALRY",
+        "LIGHT_CAVALRY",
+        "HEAVY_CAVALRY",
+        "LIGHT_CAVALRY"
     ],
     "BASE_ATTACK_FACTORS": {
         "INFANTRY": [
