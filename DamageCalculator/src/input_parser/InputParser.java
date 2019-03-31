@@ -21,7 +21,7 @@ public class InputParser {
 
     public InputParameters parse() throws IOException {
         InputParameters inputParams = new ObjectMapper().readValue(fileToParse, InputParameters.class);
-        logger.trace("Parsed parameters: " + inputParams);
+        logger.trace("Parsed parameters from JSON: " + inputParams);
         return inputParams;
     }
 }

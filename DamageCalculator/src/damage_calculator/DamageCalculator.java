@@ -36,6 +36,7 @@ public class DamageCalculator {
             tempMap.put(ArmyType.DISTANCE, inputParameters.troopAttack + inputParameters.distanceAttack);
             tempMap.put(ArmyType.CAVALRY, inputParameters.troopAttack + inputParameters.cavalryAttack);
             tempMap.put(ArmyType.INFANTRY, inputParameters.troopAttack + inputParameters.infantryAttack);
+            tempMap.put(ArmyType.ARTILLERY, inputParameters.troopAttack + inputParameters.artilleryAttack);
             StaticData.ATTACK_MODIFIERS = Collections.unmodifiableMap(tempMap);
         }
 
@@ -44,6 +45,7 @@ public class DamageCalculator {
             tempMap.put(ArmyType.DISTANCE, inputParameters.troopDamage + inputParameters.distanceDamage);
             tempMap.put(ArmyType.CAVALRY, inputParameters.troopDamage + inputParameters.cavalryDamage);
             tempMap.put(ArmyType.INFANTRY, inputParameters.troopDamage + inputParameters.infantryDamage);
+            tempMap.put(ArmyType.ARTILLERY, inputParameters.troopDamage + inputParameters.artilleryDamage);
             StaticData.DAMAGE_MODIFIERS = Collections.unmodifiableMap(tempMap);
         }
     }

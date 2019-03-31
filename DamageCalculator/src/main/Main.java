@@ -26,6 +26,8 @@ class Main {
         InputParser inputParser = new InputParser(fileLocation);
         InputParameters parsedInput = inputParser.parse();
         new DamageCalculator(parsedInput).calculate().printResults();
+        // BufferedWriter stream = new BufferedWriter(stream);
+        // new ObjectMapper().writeValueAsString(StaticData);
     }
 
     private static void parseCLIArguments(String[] args) {

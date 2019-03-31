@@ -42,6 +42,21 @@ public class StaticData {
         cavalrySubtypes[11] = ArmySubType.LIGHT_CAVALRY;
         tempMap.put(ArmyType.CAVALRY, cavalrySubtypes);
 
+        ArmySubType[] artillerySubtypes = new ArmySubType[ABSOLUTE_MAX_TIER];
+        cavalrySubtypes[0] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[1] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[2] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[3] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[4] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[5] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[6] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[7] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[8] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[9] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[10] = ArmySubType.SUB_ARTILLERY1;
+        cavalrySubtypes[11] = ArmySubType.SUB_ARTILLERY1;
+        tempMap.put(ArmyType.ARTILLERY, artillerySubtypes);
+
         ArmySubType[] infantrySubtypes = new ArmySubType[ABSOLUTE_MAX_TIER];
         for (int i = 0; i < ABSOLUTE_MAX_TIER; i++) {
             if (i % 2 == 0) {
@@ -61,6 +76,7 @@ public class StaticData {
         tempMap.put(ArmyType.DISTANCE, new int[] { 106, 143, 165, 161, 218, 251, 245, 282, 382, 373, 505, 493 });
         tempMap.put(ArmyType.CAVALRY, new int[] { 113, 111, 150, 173, 169, 228, 223, 302, 295, 339, 459, 449 });
         tempMap.put(ArmyType.INFANTRY, new int[] { 34, 39, 45, 52, 60, 68, 79, 91, 104, 120, 138, 158 });
+        tempMap.put(ArmyType.ARTILLERY, new int[] { 51, 91, 68, 121, 89, 160, 184, 136, 243, 180, 321, 237 });
 
         BASE_ATTACK_FACTORS = Collections.unmodifiableMap(tempMap);
     }
