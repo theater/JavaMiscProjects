@@ -8,25 +8,24 @@ public class Army implements Comparable<Army> {
     private ArmySubType subType;
     private int tier;
     private double attackEfficiency = 1;
-    private double modifiedAttackEfficiency;
     private int baseAttack;
     private double calculatedFinalDamage;
+    private int troopsNumber = 0;
 
     public Army(ArmyType type, int tier) {
         this.type = type;
         this.tier = tier;
         subType = StaticData.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
         baseAttack = StaticData.BASE_ATTACK_FACTORS.get(type)[tier];
-        attackEfficiency = calculateAttackEfficiency();
         switch (type) {
             case CAVALRY:
-                modifiedAttackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, attackEfficiency + StaticData.CAVALRY_VS_INF_DAMAGE);
+                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + StaticData.CAVALRY_VS_INF_DAMAGE);
                 break;
             case DISTANCE:
-                modifiedAttackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, attackEfficiency + StaticData.DISTANCE_VS_INF_DAMAGE);
+                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + StaticData.DISTANCE_VS_INF_DAMAGE);
                 break;
             default:
-                modifiedAttackEfficiency = attackEfficiency;
+                break;
         }
         calculatedFinalDamage = calculateDamage();
     }
@@ -36,16 +35,17 @@ public class Army implements Comparable<Army> {
     }
 
     private double calculateDamage() {
-        int defense = 0;
-
         int baseAttack = getBaseAttack();
         double modifiedAttack = baseAttack * (1 + (StaticData.ATTACK_MODIFIERS.get(getType())) / 100);
-
+        int defense = 0;
         double baseDamage = Math.pow(modifiedAttack, 2) / (modifiedAttack + defense);
 
-        double efficiencyFactor = getModifiedAttackEfficiency();
-
+        double efficiencyFactor = getAttackEfficiency();
         return baseDamage * Math.min(1 + (StaticData.DAMAGE_MODIFIERS.get(getType()) / 100), 3) * efficiencyFactor;
+    }
+
+    public void addUnit(int unitStep) {
+        setTroopsNumber(getTroopsNumber() + unitStep);
     }
 
     public double getCalculatedFinalDamage() {
@@ -70,15 +70,11 @@ public class Army implements Comparable<Army> {
 
     @Override
     public String toString() {
-        return "Type=" + type + "\tSubType=" + subType + "\tT[" + (tier + 1) + "]";
+        return "Type=" + type + "\tSubType=" + subType + "\tT[" + (tier + 1) + "]:\t" + troopsNumber;
     }
 
     public int getBaseAttack() {
         return baseAttack;
-    }
-
-    public double getModifiedAttackEfficiency() {
-        return modifiedAttackEfficiency;
     }
 
     @Override
@@ -124,5 +120,13 @@ public class Army implements Comparable<Army> {
         }
 
         return type.compareTo(o.type);
+    }
+
+    public int getTroopsNumber() {
+        return troopsNumber;
+    }
+
+    public void setTroopsNumber(int troopsNumber) {
+        this.troopsNumber = troopsNumber;
     }
 }

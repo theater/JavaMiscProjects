@@ -26,7 +26,7 @@ class Main {
     private static void parseCLIArguments(String[] args) {
         if (args.length != 2) {
             if (args.length == 0) {
-                logger.warn("No arguments passed to CLI.");
+                logger.warn("No arguments passed to CLI. Will use default file.");
             }
         } else {
             if ("-file".equals(args[0]) && !args[1].isEmpty()) {
