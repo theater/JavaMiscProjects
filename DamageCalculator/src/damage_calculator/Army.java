@@ -1,6 +1,10 @@
 package damage_calculator;
 
+import org.apache.log4j.Logger;
+
 public class Army implements Comparable<Army> {
+
+    Logger logger = Logger.getLogger(Army.class);
 
     private static final int MAX_EFFICIENCY_FACTOR = 2;
 
@@ -38,12 +42,19 @@ public class Army implements Comparable<Army> {
 
     private double calculateDamage() {
         int baseAttack = getBaseAttack();
+        logger.trace(this + " base attack:\t" + baseAttack);
         double modifiedAttack = baseAttack * (1 + (StaticData.ATTACK_MODIFIERS.get(getType())) / 100);
+        logger.trace(this + " modified attack:\t" + modifiedAttack);
         int defense = 0;
-        double baseDamage = Math.pow(modifiedAttack, 2) / (modifiedAttack + defense);
+        double baseDamage = input.limitArmyDamage ? modifiedAttack * Math.min(0.75, modifiedAttack / (modifiedAttack + defense)) : Math.pow(modifiedAttack, 2) / (modifiedAttack + defense);
+        logger.trace(this + " base damage:\t" + baseDamage);
 
         double efficiencyFactor = getAttackEfficiency();
-        return baseDamage * Math.min(1 + (StaticData.DAMAGE_MODIFIERS.get(getType()) / 100), 3) * efficiencyFactor;
+        logger.trace(this + " efficiency:\t" + efficiencyFactor);
+
+        double calculatedDamage = baseDamage * Math.min(1 + (StaticData.DAMAGE_MODIFIERS.get(getType()) / 100), 3) * efficiencyFactor;
+        logger.trace(this + " calculated damage:" + calculatedDamage);
+        return calculatedDamage;
     }
 
     public void addUnit(int unitStep) {
@@ -72,7 +83,7 @@ public class Army implements Comparable<Army> {
 
     @Override
     public String toString() {
-        return "Type=" + type + "\tSubType=" + subType + "\tT[" + (tier + 1) + "]:\t" + troopsNumber;
+        return "Type=" + type + "\tT[" + (tier + 1) + "]:\t";
     }
 
     public int getBaseAttack() {

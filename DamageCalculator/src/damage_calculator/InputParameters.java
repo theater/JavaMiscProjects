@@ -7,6 +7,7 @@ public class InputParameters {
     public int troopsAmount = 100000;
     public boolean useMarchCapacityBoost = true;
     public boolean useMarchCapacitySpell = true;
+    public boolean limitArmyDamage = false;
 
     public int maxTier = 10;
 

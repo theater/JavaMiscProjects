@@ -97,7 +97,7 @@ public class DamageCalculator {
         logger.info("Initial capacity: " + inputParameters.troopsAmount);
         logger.info("Calculated capacity: " + calculatedMarchCapacity);
         for (Army army : distribution) {
-            logger.info(army);
+            logger.info(army + " troops:\t" + army.getTroopsNumber());
         }
         return this;
     }

@@ -64,6 +64,7 @@ public class StaticData {
 
         BASE_ATTACK_FACTORS = Collections.unmodifiableMap(tempMap);
     }
+
     public static Map<ArmyType, Integer> ATTACK_MODIFIERS;
     public static Map<ArmyType, Integer> DAMAGE_MODIFIERS;
 
