@@ -42,18 +42,22 @@ public class Army implements Comparable<Army> {
 
     private double calculateDamage() {
         int baseAttack = getBaseAttack();
-        logger.trace(this + " base attack:\t" + baseAttack);
+        logger.trace(this + " base attack:\t\t" + baseAttack);
+
         double modifiedAttack = baseAttack * (1 + (StaticData.ATTACK_MODIFIERS.get(getType())) / 100);
         logger.trace(this + " modified attack:\t" + modifiedAttack);
+
         int defense = 0;
+
         double baseDamage = input.limitArmyDamage ? modifiedAttack * Math.min(0.75, modifiedAttack / (modifiedAttack + defense)) : Math.pow(modifiedAttack, 2) / (modifiedAttack + defense);
-        logger.trace(this + " base damage:\t" + baseDamage);
+        logger.trace(this + " base damage:\t\t" + baseDamage);
 
         double efficiencyFactor = getAttackEfficiency();
-        logger.trace(this + " efficiency:\t" + efficiencyFactor);
+        logger.trace(this + " efficiency:\t\t" + efficiencyFactor);
 
         double calculatedDamage = baseDamage * Math.min(1 + (StaticData.DAMAGE_MODIFIERS.get(getType()) / 100), 3) * efficiencyFactor;
-        logger.trace(this + " calculated damage:" + calculatedDamage);
+        logger.trace(this + " calculated damage:\t" + calculatedDamage);
+
         return calculatedDamage;
     }
 

@@ -3,7 +3,7 @@
     "troopsAmount": 208030,
     "useMarchCapacityBoost": true,
     "useMarchCapacitySpell": true,
-    "limitArmyDamage" : false,
+    "limitArmyDamage" : true,
     "maxTier": 10,
     "troopAttack": 477,
     "infantryAttack": 758,
