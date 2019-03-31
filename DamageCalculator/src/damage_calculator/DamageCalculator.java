@@ -2,7 +2,9 @@ package damage_calculator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -19,10 +21,31 @@ public class DamageCalculator {
     private List<Army> distribution = new ArrayList<>();
     private InputParameters inputParameters;
 
-    public DamageCalculator(InputParameters inputParams) {
-        this.inputParameters = inputParams;
+    public DamageCalculator(InputParameters inputParameters) {
+        this.inputParameters = inputParameters;
         calculatedMarchCapacity = calculateCapacity();
+        initializeStaticFields();
         initializeDistribution();
+    }
+
+    private void initializeStaticFields() {
+        Army.setInput(inputParameters);
+
+        {
+            Map<ArmyType, Integer> tempMap = new HashMap<>();
+            tempMap.put(ArmyType.DISTANCE, inputParameters.troopAttack + inputParameters.distanceAttack);
+            tempMap.put(ArmyType.CAVALRY, inputParameters.troopAttack + inputParameters.cavalryAttack);
+            tempMap.put(ArmyType.INFANTRY, inputParameters.troopAttack + inputParameters.infantryAttack);
+            StaticData.ATTACK_MODIFIERS = Collections.unmodifiableMap(tempMap);
+        }
+
+        {
+            Map<ArmyType, Integer> tempMap = new HashMap<>();
+            tempMap.put(ArmyType.DISTANCE, inputParameters.troopDamage + inputParameters.distanceDamage);
+            tempMap.put(ArmyType.CAVALRY, inputParameters.troopDamage + inputParameters.cavalryDamage);
+            tempMap.put(ArmyType.INFANTRY, inputParameters.troopDamage + inputParameters.infantryDamage);
+            StaticData.DAMAGE_MODIFIERS = Collections.unmodifiableMap(tempMap);
+        }
     }
 
     private int calculateCapacity() {
@@ -54,7 +77,20 @@ public class DamageCalculator {
         }
         long timeElapsed = System.currentTimeMillis() - startTime;
         logger.info("Time elapsed: " + timeElapsed + "ms.");
+        validateResult();
         return this;
+    }
+
+    private void validateResult() {
+        int troopsCount = 0;
+        for (Army army : distribution) {
+            troopsCount += army.getTroopsNumber();
+        }
+        if (troopsCount != calculatedMarchCapacity) {
+            logger.warn("Calculated troops count differs from calculated capacity. Troops count:" + troopsCount);
+        } else {
+            logger.info("Calculation finished successfully.");
+        }
     }
 
     public DamageCalculator printResults() {

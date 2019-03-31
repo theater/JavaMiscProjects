@@ -4,6 +4,8 @@ public class Army implements Comparable<Army> {
 
     private static final int MAX_EFFICIENCY_FACTOR = 2;
 
+    private static InputParameters input;
+
     private ArmyType type;
     private ArmySubType subType;
     private int tier;
@@ -19,10 +21,10 @@ public class Army implements Comparable<Army> {
         baseAttack = StaticData.BASE_ATTACK_FACTORS.get(type)[tier];
         switch (type) {
             case CAVALRY:
-                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + StaticData.CAVALRY_VS_INF_DAMAGE);
+                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + input.cavalryVsInfantryDamage);
                 break;
             case DISTANCE:
-                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + StaticData.DISTANCE_VS_INF_DAMAGE);
+                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + input.distanceVsInfantryDamage);
                 break;
             default:
                 break;
@@ -129,4 +131,13 @@ public class Army implements Comparable<Army> {
     public void setTroopsNumber(int troopsNumber) {
         this.troopsNumber = troopsNumber;
     }
+
+    public static InputParameters getInput() {
+        return input;
+    }
+
+    public static void setInput(InputParameters input) {
+        Army.input = input;
+    }
+
 }
