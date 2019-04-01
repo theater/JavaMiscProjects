@@ -32,10 +32,10 @@ public class Army implements Comparable<Army> {
         baseAttack = StaticData.BASE_ATTACK_FACTORS.get(type)[tier];
         switch (type) {
             case CAVALRY:
-                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + input.cavalryVsInfantryDamage);
+                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + input.cavalryVsInfantryDamage / 100);
                 break;
             case DISTANCE:
-                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + input.distanceVsInfantryDamage);
+                attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + input.distanceVsInfantryDamage / 100);
                 break;
             default:
                 break;

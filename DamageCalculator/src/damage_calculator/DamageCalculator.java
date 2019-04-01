@@ -1,5 +1,6 @@
 package damage_calculator;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +56,12 @@ public class DamageCalculator {
     public DamageCalculator calculate() {
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < calculatedMarchCapacity; i += STEP_UNITS) {
-            calculateBestArmy(distribution);
+            Army bestArmy = calculateBestArmy(distribution);
+            if (bestArmy != null) {
+                bestArmy.addUnit(STEP_UNITS);
+            } else {
+                logger.error("Unable to calculate best Army. Army is null");
+            }
         }
         long timeElapsed = System.currentTimeMillis() - startTime;
         logger.info("Time elapsed: " + timeElapsed + "ms.");
@@ -78,13 +84,16 @@ public class DamageCalculator {
     public DamageCalculator printResults() {
         logger.info("Initial capacity: " + inputParameters.troopsAmount);
         logger.info("Calculated capacity: " + calculatedMarchCapacity);
+        double totalDamage = 0;
         for (Army army : distribution) {
             logger.info(army + " troops:\t" + army.getTroopsNumber());
+            totalDamage += army.getCalculatedDamage();
         }
+        logger.info("Total damage:\t" + new DecimalFormat("#.0").format(totalDamage));
         return this;
     }
 
-    private void calculateBestArmy(List<Army> distribution) {
+    private Army calculateBestArmy(List<Army> distribution) {
         Army bestArmy = null;
         double maxDelta = 0;
         for (Army army : distribution) {
@@ -94,12 +103,7 @@ public class DamageCalculator {
                 bestArmy = army;
             }
         }
-
-        if (bestArmy != null) {
-            bestArmy.addUnit(STEP_UNITS);
-        } else {
-            logger.error("Unable to calculate best Army. Army is null");
-        }
+        return bestArmy;
     }
 
     private double calculateDamageDelta(Army army) {
