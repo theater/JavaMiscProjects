@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import damage_calculator.ConfigurationParameters;
 import damage_calculator.DamageCalculator;
 import damage_calculator.InputParameters;
+import input_parser.ConfigurationParser;
 import input_parser.InputParser;
 
 
@@ -18,6 +19,7 @@ class Main {
     private static Logger logger = Logger.getLogger(Main.class);
 
     private static String fileLocation = null;
+    private static String configFileLocation = "resources\\Configuration.json";
 
     public static void main(String[] args) throws IOException {
         parseCLIArguments(args);
@@ -30,7 +32,8 @@ class Main {
         InputParameters parsedInput = inputParser.parse();
         new DamageCalculator(parsedInput).calculate().printResults();
 
-        ConfigurationParameters configurationParameters = new ConfigurationParameters();
+        // ConfigurationParameters configurationParameters = new ConfigurationParameters();
+        ConfigurationParameters configurationParameters = new ConfigurationParser(configFileLocation).parse();
         String writeValueAsString = new ObjectMapper().writeValueAsString(configurationParameters);
         logger.info(writeValueAsString);
     }

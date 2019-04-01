@@ -10,9 +10,9 @@ public class Army implements Comparable<Army> {
 
     Logger logger = Logger.getLogger(Army.class);
 
-    private static final int MAX_EFFICIENCY_FACTOR = 2;
-    private static Map<ArmyType, Integer> ATTACK_MODIFIERS;
-    private static Map<ArmyType, Integer> DAMAGE_MODIFIERS;
+    private static final int MAX_EFFICIENCY_FACTOR = 3;
+    private static Map<ArmyType, Double> ATTACK_MODIFIERS;
+    private static Map<ArmyType, Double> DAMAGE_MODIFIERS;
     private static InputParameters input;
 
     private ArmyType type;
@@ -52,7 +52,7 @@ public class Army implements Comparable<Army> {
         }
 
         if (ATTACK_MODIFIERS == null) {
-            Map<ArmyType, Integer> tempMap = new HashMap<>();
+            Map<ArmyType, Double> tempMap = new HashMap<>();
             tempMap.put(ArmyType.DISTANCE, inputParameters.troopAttack + inputParameters.distanceAttack);
             tempMap.put(ArmyType.CAVALRY, inputParameters.troopAttack + inputParameters.cavalryAttack);
             tempMap.put(ArmyType.INFANTRY, inputParameters.troopAttack + inputParameters.infantryAttack);
@@ -61,7 +61,7 @@ public class Army implements Comparable<Army> {
         }
 
         if (DAMAGE_MODIFIERS == null) {
-            Map<ArmyType, Integer> tempMap = new HashMap<>();
+            Map<ArmyType, Double> tempMap = new HashMap<>();
             tempMap.put(ArmyType.DISTANCE, inputParameters.troopDamage + inputParameters.distanceDamage);
             tempMap.put(ArmyType.CAVALRY, inputParameters.troopDamage + inputParameters.cavalryDamage);
             tempMap.put(ArmyType.INFANTRY, inputParameters.troopDamage + inputParameters.infantryDamage);

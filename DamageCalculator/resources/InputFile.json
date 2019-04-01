@@ -15,6 +15,6 @@
     "cavalryDamage": 198,
     "distanceDamage": 183,
     "artilleryDamage": 50,
-    "distanceVsInfantryDamage": 183,
-    "cavalryVsInfantryDamage": 183
+    "distanceVsInfantryDamage": 12.5,
+    "cavalryVsInfantryDamage": 8
 }
