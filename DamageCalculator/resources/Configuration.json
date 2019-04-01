@@ -47,18 +47,18 @@
             "RIFLEMEN"
         ],
         "ARTILLERY": [
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1",
-            "SUB_ARTILLERY1"
+            "CANNON",
+            "MORTAR",
+            "CANNON",
+            "MORTAR",
+            "CANNON",
+            "MORTAR",
+            "MORTAR",
+            "CANNON",
+            "MORTAR",
+            "CANNON",
+            "MORTAR",
+            "CANNON"
         ]
     },
     "distanceSubtypes": [

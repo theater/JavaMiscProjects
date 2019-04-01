@@ -8,6 +8,6 @@ public enum ArmySubType {
     PIKEMEN,
     LIGHT_CAVALRY,
     HEAVY_CAVALRY,
-    SUB_ARTILLERY1,
-    SUB_ARTILLERY2
+    CANNON,
+    MORTAR
 }
