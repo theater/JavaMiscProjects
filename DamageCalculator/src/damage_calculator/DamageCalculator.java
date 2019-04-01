@@ -20,14 +20,17 @@ public class DamageCalculator {
     private static final double MARCH_CAPACITY_BOOST = 0.25;
     private static final int STEP_UNITS = 1;
 
-    protected int calculatedMarchCapacity;
-    protected List<Army> armyDistribution = new ArrayList<>();
-    protected double totalArmyDamage;
-    protected UserInputParameters inputParameters;
     protected static Configuration configuration;
+    protected double totalArmyDamage;
+
+    private int calculatedMarchCapacity;
+    private List<Army> armyDistribution = new ArrayList<>();
+    private UserInputParameters inputParameters;
+    private CalculationsHelper helper;
 
     public DamageCalculator(String userInputFilePath, String configurationFilePath) throws IOException {
         importExternalData(userInputFilePath, configurationFilePath);
+        helper = new CalculationsHelper(inputParameters, configuration);
         calculatedMarchCapacity = calculateCapacity();
         initializeDistribution();
     }
@@ -35,7 +38,7 @@ public class DamageCalculator {
     private void importExternalData(String userDataFileLocation, String configFileLocation) throws IOException {
         JSONParser jsonParser = new JSONParser();
         inputParameters = jsonParser.parseInputParameters(userDataFileLocation);
-        String parsedUserInputAsString = jsonParser.getMapper().writeValueAsString(configuration);
+        String parsedUserInputAsString = jsonParser.getMapper().writeValueAsString(inputParameters);
         logger.debug(parsedUserInputAsString);
 
         configuration = jsonParser.parseConfiguration(configFileLocation);
@@ -59,7 +62,7 @@ public class DamageCalculator {
         ArmyType[] armyTypes = ArmyType.values();
         for (ArmyType armyType : armyTypes) {
             for (int i = 0; i < inputParameters.maxTier; i++) {
-                armyDistribution.add(new Army(armyType, i, inputParameters));
+                armyDistribution.add(new Army(armyType, i, helper));
             }
         }
         Collections.sort(armyDistribution);
