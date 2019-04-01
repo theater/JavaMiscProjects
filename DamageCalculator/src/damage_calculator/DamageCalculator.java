@@ -87,7 +87,7 @@ public class DamageCalculator {
         double totalDamage = 0;
         for (Army army : distribution) {
             logger.info(army + " troops:\t" + army.getTroopsNumber());
-            totalDamage += army.getCalculatedDamage();
+            totalDamage += army.getCalculatedDamage() * Math.sqrt(army.getTroopsNumber());
         }
         logger.info("Total damage:\t" + new DecimalFormat("#.0").format(totalDamage));
         return this;
