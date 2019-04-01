@@ -15,20 +15,15 @@ public class DamageCalculator {
     private static final double MARCH_CAPACITY_BOOST = 0.25;
     private static final int STEP_UNITS = 1;
 
-    private int calculatedMarchCapacity;
-
-    private List<Army> distribution = new ArrayList<>();
-    private InputParameters inputParameters;
+    protected int calculatedMarchCapacity;
+    protected List<Army> armyDistribution = new ArrayList<>();
+    protected double totalArmyDamage;
+    protected InputParameters inputParameters;
 
     public DamageCalculator(InputParameters inputParameters) {
         this.inputParameters = inputParameters;
         calculatedMarchCapacity = calculateCapacity();
-        initializeStaticFields();
         initializeDistribution();
-    }
-
-    private void initializeStaticFields() {
-
     }
 
     private int calculateCapacity() {
@@ -47,16 +42,22 @@ public class DamageCalculator {
         ArmyType[] armyTypes = ArmyType.values();
         for (ArmyType armyType : armyTypes) {
             for (int i = 0; i < inputParameters.maxTier; i++) {
-                distribution.add(new Army(armyType, i, inputParameters));
+                armyDistribution.add(new Army(armyType, i, inputParameters));
             }
         }
-        Collections.sort(distribution);
+        Collections.sort(armyDistribution);
     }
 
     public DamageCalculator calculate() {
+        calculateDistribution();
+        calculateTotalDamage();
+        return this;
+    }
+
+    public DamageCalculator calculateDistribution() {
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < calculatedMarchCapacity; i += STEP_UNITS) {
-            Army bestArmy = calculateBestArmy(distribution);
+            Army bestArmy = calculateBestArmy(armyDistribution);
             if (bestArmy != null) {
                 bestArmy.addUnits(STEP_UNITS);
             } else {
@@ -71,7 +72,7 @@ public class DamageCalculator {
 
     private void validateResult() {
         int troopsCount = 0;
-        for (Army army : distribution) {
+        for (Army army : armyDistribution) {
             troopsCount += army.getTroopsNumber();
         }
         if (troopsCount != calculatedMarchCapacity) {
@@ -81,16 +82,26 @@ public class DamageCalculator {
         }
     }
 
+    public void calculateTotalDamage() {
+        double totalDamage = 0;
+        for (Army army : armyDistribution) {
+            totalDamage += army.getCalculatedDamage() * Math.sqrt(army.getTroopsNumber());
+        }
+        totalArmyDamage = totalDamage;
+    }
+
     public DamageCalculator printResults() {
         logger.info("Initial capacity: " + inputParameters.troopsAmount);
         logger.info("Calculated capacity: " + calculatedMarchCapacity);
-        double totalDamage = 0;
-        for (Army army : distribution) {
+        for (Army army : armyDistribution) {
             logger.info(army + " troops:\t" + army.getTroopsNumber());
-            totalDamage += army.getCalculatedDamage() * Math.sqrt(army.getTroopsNumber());
         }
-        logger.info("Total damage:\t" + new DecimalFormat("#.0").format(totalDamage));
+        printTotalDamage();
         return this;
+    }
+
+    protected void printTotalDamage() {
+        logger.info("Total damage:\t" + new DecimalFormat("#.0").format(totalArmyDamage));
     }
 
     private Army calculateBestArmy(List<Army> distribution) {

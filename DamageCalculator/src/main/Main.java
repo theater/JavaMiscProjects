@@ -8,8 +8,8 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import damage_calculator.ConfigurationParameters;
-import damage_calculator.DamageCalculator;
 import damage_calculator.InputParameters;
+import damage_calculator.WolfDamageCalculator;
 import input_parser.ConfigurationParser;
 import input_parser.InputParser;
 
@@ -30,7 +30,7 @@ class Main {
         logger.info("Log level: " + Logger.getRootLogger().getLevel());
         InputParser inputParser = new InputParser(fileLocation);
         InputParameters parsedInput = inputParser.parse();
-        new DamageCalculator(parsedInput).calculate().printResults();
+        new WolfDamageCalculator(parsedInput).calculate().printResults();
 
         // ConfigurationParameters configurationParameters = new ConfigurationParameters();
         ConfigurationParameters configurationParameters = new ConfigurationParser(configFileLocation).parse();
