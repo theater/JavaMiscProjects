@@ -1,11 +1,16 @@
 package damage_calculator;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
+import config.Configuration;
+import config.UserInputParameters;
+import input_parser.JSONParser;
 
 public class DamageCalculator {
 
@@ -18,12 +23,24 @@ public class DamageCalculator {
     protected int calculatedMarchCapacity;
     protected List<Army> armyDistribution = new ArrayList<>();
     protected double totalArmyDamage;
-    protected InputParameters inputParameters;
+    protected UserInputParameters inputParameters;
+    protected static Configuration configuration;
 
-    public DamageCalculator(InputParameters inputParameters) {
-        this.inputParameters = inputParameters;
+    public DamageCalculator(String userInputFilePath, String configurationFilePath) throws IOException {
+        importExternalData(userInputFilePath, configurationFilePath);
         calculatedMarchCapacity = calculateCapacity();
         initializeDistribution();
+    }
+
+    private void importExternalData(String userDataFileLocation, String configFileLocation) throws IOException {
+        JSONParser jsonParser = new JSONParser();
+        inputParameters = jsonParser.parseInputParameters(userDataFileLocation);
+        String parsedUserInputAsString = jsonParser.getMapper().writeValueAsString(configuration);
+        logger.debug(parsedUserInputAsString);
+
+        configuration = jsonParser.parseConfiguration(configFileLocation);
+        String parsedConfigurationAsString = jsonParser.getMapper().writeValueAsString(configuration);
+        logger.debug(parsedConfigurationAsString);
     }
 
     private int calculateCapacity() {
@@ -34,7 +51,7 @@ public class DamageCalculator {
         if (inputParameters.useMarchCapacitySpell) {
             capacityModifier += SPELL_CAPACITY_BOOST;
         }
-        int baseCapacity = StaticData.CASTLE_BASE_MARCH_CAPACITY.get(inputParameters.castleLevel);
+        int baseCapacity = configuration.CASTLE_BASE_MARCH_CAPACITY.get(inputParameters.castleLevel);
         return (int) (capacityModifier * baseCapacity + inputParameters.troopsAmount);
     }
 

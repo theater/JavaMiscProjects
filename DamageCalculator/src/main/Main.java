@@ -5,37 +5,24 @@ import java.io.IOException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import damage_calculator.ConfigurationParameters;
-import damage_calculator.InputParameters;
 import damage_calculator.WolfDamageCalculator;
-import input_parser.ConfigurationParser;
-import input_parser.InputParser;
 
 
 class Main {
 
     private static Logger logger = Logger.getLogger(Main.class);
 
-    private static String fileLocation = null;
+    private static String userDataFileLocation = null;
     private static String configFileLocation = "resources\\Configuration.json";
 
     public static void main(String[] args) throws IOException {
         parseCLIArguments(args);
-        if (fileLocation == null || fileLocation.isEmpty()) {
+        if (userDataFileLocation == null || userDataFileLocation.isEmpty()) {
             throw new IllegalArgumentException("Missing mandatory input parameter. Please provide input JSON file by using -file <JSON file> parameter.");
         }
-        logger.info("File location: " + fileLocation);
+        logger.info("File location: " + userDataFileLocation);
         logger.info("Log level: " + Logger.getRootLogger().getLevel());
-        InputParser inputParser = new InputParser(fileLocation);
-        InputParameters parsedInput = inputParser.parse();
-        new WolfDamageCalculator(parsedInput).calculate().printResults();
-
-        // ConfigurationParameters configurationParameters = new ConfigurationParameters();
-        ConfigurationParameters configurationParameters = new ConfigurationParser(configFileLocation).parse();
-        String writeValueAsString = new ObjectMapper().writeValueAsString(configurationParameters);
-        logger.info(writeValueAsString);
+        new WolfDamageCalculator(userDataFileLocation, configFileLocation).calculate().printResults();
     }
 
     private static void parseCLIArguments(String[] args) {
@@ -49,7 +36,7 @@ class Main {
         for (int i = 0; i < args.length; i += 2) {
             if ("-file".equals(args[i])) {
                 if (i + 1 < args.length && !args[i + 1].isEmpty()) {
-                    fileLocation = args[i + 1];
+                    userDataFileLocation = args[i + 1];
                 }
             }
             if ("-logLevel".equals(args[i])) {

@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import config.UserInputParameters;
+
 public class Army implements Comparable<Army> {
 
     Logger logger = Logger.getLogger(Army.class);
@@ -13,7 +15,7 @@ public class Army implements Comparable<Army> {
     private static final int MAX_EFFICIENCY_FACTOR = 3;
     private static Map<ArmyType, Double> ATTACK_MODIFIERS;
     private static Map<ArmyType, Double> DAMAGE_MODIFIERS;
-    private static InputParameters input;
+    private static UserInputParameters input;
 
     private ArmyType type;
     private ArmySubType subType;
@@ -23,13 +25,13 @@ public class Army implements Comparable<Army> {
     private double calculatedFinalDamage;
     private int troopsNumber = 0;
 
-    public Army(ArmyType type, int tier, InputParameters input) {
+    public Army(ArmyType type, int tier, UserInputParameters input) {
         initializeStaticFields(input);
 
         this.type = type;
         this.tier = tier;
-        subType = StaticData.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
-        baseAttack = StaticData.BASE_ATTACK_FACTORS.get(type)[tier];
+        subType = DamageCalculator.configuration.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
+        baseAttack = DamageCalculator.configuration.BASE_ATTACK_FACTORS.get(type)[tier];
         switch (type) {
             case CAVALRY:
                 attackEfficiency = Math.min(MAX_EFFICIENCY_FACTOR, calculateAttackEfficiency() + input.cavalryVsInfantryDamage / 100);
@@ -43,7 +45,7 @@ public class Army implements Comparable<Army> {
         calculatedFinalDamage = calculateDamage();
     }
 
-    private void initializeStaticFields(InputParameters inputParameters) {
+    private void initializeStaticFields(UserInputParameters inputParameters) {
         if (Army.input == null) {
             if (inputParameters == null) {
                 throw new IllegalArgumentException("Cannot initialize anything without proper input. InputParameters are null.");
@@ -182,11 +184,11 @@ public class Army implements Comparable<Army> {
         this.troopsNumber = troopsNumber;
     }
 
-    public static InputParameters getInput() {
+    public static UserInputParameters getInput() {
         return input;
     }
 
-    public static void setInput(InputParameters input) {
+    public static void setInput(UserInputParameters input) {
         Army.input = input;
     }
 

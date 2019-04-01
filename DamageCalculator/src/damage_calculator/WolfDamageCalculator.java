@@ -1,5 +1,6 @@
 package damage_calculator;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;
@@ -8,8 +9,9 @@ public class WolfDamageCalculator extends DamageCalculator {
 
     Logger logger = Logger.getLogger(WolfDamageCalculator.class);
 
-    public WolfDamageCalculator(InputParameters inputParameters) {
-        super(inputParameters);
+
+    public WolfDamageCalculator(String userInputFilePath, String configurationFilePath) throws IOException {
+        super(userInputFilePath, configurationFilePath);
     }
 
     @Override

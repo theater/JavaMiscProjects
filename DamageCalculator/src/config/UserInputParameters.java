@@ -1,7 +1,7 @@
-package damage_calculator;
+package config;
 
 
-public class InputParameters {
+public class UserInputParameters {
 
     public int castleLevel = 30;
     public int troopsAmount = 100000;
