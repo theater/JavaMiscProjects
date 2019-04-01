@@ -58,7 +58,7 @@ public class DamageCalculator {
         for (int i = 0; i < calculatedMarchCapacity; i += STEP_UNITS) {
             Army bestArmy = calculateBestArmy(distribution);
             if (bestArmy != null) {
-                bestArmy.addUnit(STEP_UNITS);
+                bestArmy.addUnits(STEP_UNITS);
             } else {
                 logger.error("Unable to calculate best Army. Army is null");
             }

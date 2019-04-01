@@ -11,8 +11,8 @@ public class Army implements Comparable<Army> {
     Logger logger = Logger.getLogger(Army.class);
 
     private static final int MAX_EFFICIENCY_FACTOR = 2;
-    public static Map<ArmyType, Integer> ATTACK_MODIFIERS;
-    public static Map<ArmyType, Integer> DAMAGE_MODIFIERS;
+    private static Map<ArmyType, Integer> ATTACK_MODIFIERS;
+    private static Map<ArmyType, Integer> DAMAGE_MODIFIERS;
     private static InputParameters input;
 
     private ArmyType type;
@@ -96,8 +96,8 @@ public class Army implements Comparable<Army> {
         return calculatedDamage;
     }
 
-    public void addUnit(int unitStep) {
-        setTroopsNumber(getTroopsNumber() + unitStep);
+    public void addUnits(int numberOfUnits) {
+        setTroopsNumber(getTroopsNumber() + numberOfUnits);
     }
 
     public double getCalculatedDamage() {
