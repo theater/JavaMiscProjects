@@ -3,11 +3,13 @@ package damage_calculator;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class WolfDamageCalculator extends DamageCalculator {
 
-    Logger logger = Logger.getLogger(WolfDamageCalculator.class);
+    Logger logger = LoggerFactory.getLogger(WolfDamageCalculator.class);
 
 
     public WolfDamageCalculator(String userInputFilePath, String configurationFilePath) throws IOException {

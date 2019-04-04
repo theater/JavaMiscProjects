@@ -1,10 +1,11 @@
 package damage_calculator;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Army implements Comparable<Army> {
 
-    Logger logger = Logger.getLogger(Army.class);
+    Logger logger = LoggerFactory.getLogger(Army.class);
 
     private static final int MAX_EFFICIENCY_FACTOR = 3;
 

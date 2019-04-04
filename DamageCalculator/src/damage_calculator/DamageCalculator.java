@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import config.Configuration;
 import config.UserInputParameters;
@@ -14,7 +15,7 @@ import input_parser.JSONParser;
 
 public class DamageCalculator {
 
-    private static Logger logger = Logger.getLogger(DamageCalculator.class);
+    private static Logger logger = LoggerFactory.getLogger(DamageCalculator.class);
 
     private static final double SPELL_CAPACITY_BOOST = 0.1;
     private static final double MARCH_CAPACITY_BOOST = 0.25;
