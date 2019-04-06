@@ -15,54 +15,36 @@ import main.java.parser.JSONParser;
 
 public class DamageCalculator {
 
-    private static final String NEW_LINE = "\n\r";
-
     private static Logger logger = LoggerFactory.getLogger(DamageCalculator.class);
+
+    private static final String NEW_LINE = "\n\r";
+    private static String configFileLocation = "resources\\Configuration.json";
 
     private static final double SPELL_CAPACITY_BOOST = 0.1;
     private static final double MARCH_CAPACITY_BOOST = 0.25;
     private static final int STEP_UNITS = 1;
-
     protected static Configuration configuration;
-    protected double totalArmyDamage;
+    static {
+        try {
+            JSONParser jsonParser = new JSONParser();
+            Configuration parsedConfig = jsonParser.parseConfiguration(configFileLocation);
+            DamageCalculator.configuration = parsedConfig;
+        } catch (IOException e) {
+            logger.error("Unable to initalize configuration");
+        }
+    }
 
+    protected double totalArmyDamage;
     private int calculatedMarchCapacity;
     private List<Army> armyDistribution = new ArrayList<>();
     private UserInputParameters inputParameters;
     private CalculationsHelper helper;
 
-    public DamageCalculator(UserInputParameters parameters, String configurationFilePath) throws IOException {
+    public DamageCalculator(UserInputParameters parameters) throws IOException {
         this.inputParameters = parameters;
-        importExternalData(configurationFilePath);
-        helper = new CalculationsHelper(inputParameters, configuration);
+        helper = new CalculationsHelper(inputParameters, DamageCalculator.configuration);
         calculatedMarchCapacity = calculateCapacity();
         initializeDistribution();
-    }
-
-    public DamageCalculator(String userInputFilePath, String configurationFilePath) throws IOException {
-        importExternalData(userInputFilePath, configurationFilePath);
-        helper = new CalculationsHelper(inputParameters, configuration);
-        calculatedMarchCapacity = calculateCapacity();
-        initializeDistribution();
-    }
-
-    private void importExternalData(String configFileLocation) throws IOException {
-        importExternalData(null, configFileLocation);
-    }
-
-    private void importExternalData(String userDataFileLocation, String configFileLocation) throws IOException {
-        JSONParser jsonParser = new JSONParser();
-        if (userDataFileLocation != null) {
-            inputParameters = jsonParser.parseInputParameters(userDataFileLocation);
-            String parsedUserInputAsString = jsonParser.getMapper().writeValueAsString(inputParameters);
-            logger.debug(parsedUserInputAsString);
-        }
-
-        if (configFileLocation != null) {
-            configuration = jsonParser.parseConfiguration(configFileLocation);
-            String parsedConfigurationAsString = jsonParser.getMapper().writeValueAsString(configuration);
-            logger.debug(parsedConfigurationAsString);
-        }
     }
 
     private int calculateCapacity() {
@@ -93,7 +75,7 @@ public class DamageCalculator {
         return this;
     }
 
-    public DamageCalculator calculateDistribution() {
+    private DamageCalculator calculateDistribution() {
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < calculatedMarchCapacity; i += STEP_UNITS) {
             Army bestArmy = calculateBestArmy(armyDistribution);
@@ -109,6 +91,14 @@ public class DamageCalculator {
         return this;
     }
 
+    private void calculateTotalDamage() {
+        double totalDamage = 0;
+        for (Army army : armyDistribution) {
+            totalDamage += army.getCalculatedDamage() * Math.sqrt(army.getTroopsNumber());
+        }
+        totalArmyDamage = totalDamage;
+    }
+
     private void validateResult() {
         int troopsCount = 0;
         for (Army army : armyDistribution) {
@@ -119,14 +109,6 @@ public class DamageCalculator {
         } else {
             logger.info("Calculation finished successfully.");
         }
-    }
-
-    public void calculateTotalDamage() {
-        double totalDamage = 0;
-        for (Army army : armyDistribution) {
-            totalDamage += army.getCalculatedDamage() * Math.sqrt(army.getTroopsNumber());
-        }
-        totalArmyDamage = totalDamage;
     }
 
     public String printResults() {
