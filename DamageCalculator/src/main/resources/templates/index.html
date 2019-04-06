@@ -1,0 +1,32 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<h3>User input</h3>
+	<form action="#" th:action="@{/calculate}" th:object="${inputData}" method="post">
+		<table border="1">
+			<tr>
+				<td>
+					<label>"Castle level"</label>
+				</td>
+				<td>
+					<input type="text" th:field="*{castleLevel}" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>"Troops amount"</label>
+				</td>
+				<td>
+					<input type="text" th:field="*{troopsAmount}" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="submit" value="Submit" />
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

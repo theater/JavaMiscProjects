@@ -15,6 +15,8 @@ import main.java.parser.JSONParser;
 
 public class DamageCalculator {
 
+    private static final String NEW_LINE = "\n\r";
+
     private static Logger logger = LoggerFactory.getLogger(DamageCalculator.class);
 
     private static final double SPELL_CAPACITY_BOOST = 0.1;
@@ -49,20 +51,20 @@ public class DamageCalculator {
 
     private int calculateCapacity() {
         double capacityModifier = 0;
-        if (inputParameters.useMarchCapacityBoost) {
+        if (inputParameters.isUseMarchCapacityBoost()) {
             capacityModifier += MARCH_CAPACITY_BOOST;
         }
-        if (inputParameters.useMarchCapacitySpell) {
+        if (inputParameters.isUseMarchCapacitySpell()) {
             capacityModifier += SPELL_CAPACITY_BOOST;
         }
-        int baseCapacity = configuration.CASTLE_BASE_MARCH_CAPACITY.get(inputParameters.castleLevel);
-        return (int) (capacityModifier * baseCapacity + inputParameters.troopsAmount);
+        int baseCapacity = configuration.CASTLE_BASE_MARCH_CAPACITY.get(inputParameters.getCastleLevel());
+        return (int) (capacityModifier * baseCapacity + inputParameters.getTroopsAmount());
     }
 
     private void initializeDistribution() {
         ArmyType[] armyTypes = ArmyType.values();
         for (ArmyType armyType : armyTypes) {
-            for (int i = 0; i < inputParameters.maxTier; i++) {
+            for (int i = 0; i < inputParameters.getMaxTier(); i++) {
                 armyDistribution.add(new Army(armyType, i, helper));
             }
         }
@@ -113,10 +115,10 @@ public class DamageCalculator {
 
     public String printResults() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Initial capacity: " + inputParameters.troopsAmount + "\n\r");
-        sb.append("Calculated capacity: " + calculatedMarchCapacity + "\n\r");
+        sb.append("Initial capacity: " + inputParameters.getTroopsAmount() + NEW_LINE);
+        sb.append("Calculated capacity: " + calculatedMarchCapacity + NEW_LINE);
         for (Army army : armyDistribution) {
-            sb.append(army + " troops:\t" + army.getTroopsNumber() + "\n\r");
+            sb.append(army + " troops:\t" + army.getTroopsNumber() + NEW_LINE);
         }
         sb.append(totalDamageToString());
         logger.info(sb.toString());
@@ -126,7 +128,7 @@ public class DamageCalculator {
     public String printToHTMLTable() {
         final String LINE_SEPARATOR = "<BR>";
         StringBuilder sb = new StringBuilder();
-        sb.append("Initial capacity: " + getInputParameters().troopsAmount + LINE_SEPARATOR);
+        sb.append("Initial capacity: " + getInputParameters().getTroopsAmount() + LINE_SEPARATOR);
         sb.append("Calculated capacity: " + getCalculatedMarchCapacity() + LINE_SEPARATOR);
 
         sb.append("<TABLE>");
