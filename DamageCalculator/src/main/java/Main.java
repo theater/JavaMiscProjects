@@ -16,7 +16,7 @@ public class Main {
     private static Logger logger = LoggerFactory.getLogger(Calculate.class);
 
     public static void main(String[] args) throws IOException {
-        logger.info("Usage: open http://localhost:8080/calculate in your browser");
         SpringApplication.run(Main.class, args);
+        logger.info("Usage: open http://localhost:8080/calculate in your browser");
     }
 }
