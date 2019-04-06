@@ -17,7 +17,7 @@ public class WolfDamageCalculator extends DamageCalculator {
     }
 
     @Override
-    protected void printTotalDamage() {
-        logger.info("Total damage:\t" + new DecimalFormat("#").format((totalArmyDamage / 1000) * 30));
+    public String totalDamageToString() {
+        return "Total damage:\t" + new DecimalFormat("#").format((totalArmyDamage / 1000) * 30) + "\n";
     }
 }

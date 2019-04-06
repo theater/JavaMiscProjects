@@ -111,18 +111,20 @@ public class DamageCalculator {
         totalArmyDamage = totalDamage;
     }
 
-    public DamageCalculator printResults() {
-        logger.info("Initial capacity: " + inputParameters.troopsAmount);
-        logger.info("Calculated capacity: " + calculatedMarchCapacity);
+    public String printResults() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Initial capacity: " + inputParameters.troopsAmount + "\n\r");
+        sb.append("Calculated capacity: " + calculatedMarchCapacity + "\n\r");
         for (Army army : armyDistribution) {
-            logger.info(army + " troops:\t" + army.getTroopsNumber());
+            sb.append(army + " troops:\t" + army.getTroopsNumber() + "\n\r");
         }
-        printTotalDamage();
-        return this;
+        sb.append(totalDamageToString());
+        logger.info(sb.toString());
+        return sb.toString();
     }
 
-    protected void printTotalDamage() {
-        logger.info("Total damage:\t" + new DecimalFormat("#.0").format(totalArmyDamage));
+    public String totalDamageToString() {
+        return "Total damage:\t" + new DecimalFormat("#.0").format(totalArmyDamage) + "\n";
     }
 
     private Army calculateBestArmy(List<Army> distribution) {
@@ -141,5 +143,20 @@ public class DamageCalculator {
     private double calculateDamageDelta(Army army) {
         double damage = army.getCalculatedDamage();
         return damage * Math.sqrt(army.getTroopsNumber() + STEP_UNITS) - damage * Math.sqrt(army.getTroopsNumber());
+    }
+
+
+    public List<Army> getArmyDistribution() {
+        return armyDistribution;
+    }
+
+
+    public UserInputParameters getInputParameters() {
+        return inputParameters;
+    }
+
+
+    public int getCalculatedMarchCapacity() {
+        return calculatedMarchCapacity;
     }
 }
