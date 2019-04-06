@@ -31,6 +31,14 @@ public class DamageCalculator {
     private UserInputParameters inputParameters;
     private CalculationsHelper helper;
 
+    public DamageCalculator(UserInputParameters parameters, String configurationFilePath) throws IOException {
+        this.inputParameters = parameters;
+        importExternalData(configurationFilePath);
+        helper = new CalculationsHelper(inputParameters, configuration);
+        calculatedMarchCapacity = calculateCapacity();
+        initializeDistribution();
+    }
+
     public DamageCalculator(String userInputFilePath, String configurationFilePath) throws IOException {
         importExternalData(userInputFilePath, configurationFilePath);
         helper = new CalculationsHelper(inputParameters, configuration);
@@ -38,15 +46,23 @@ public class DamageCalculator {
         initializeDistribution();
     }
 
+    private void importExternalData(String configFileLocation) throws IOException {
+        importExternalData(null, configFileLocation);
+    }
+
     private void importExternalData(String userDataFileLocation, String configFileLocation) throws IOException {
         JSONParser jsonParser = new JSONParser();
-        inputParameters = jsonParser.parseInputParameters(userDataFileLocation);
-        String parsedUserInputAsString = jsonParser.getMapper().writeValueAsString(inputParameters);
-        logger.debug(parsedUserInputAsString);
+        if (userDataFileLocation != null) {
+            inputParameters = jsonParser.parseInputParameters(userDataFileLocation);
+            String parsedUserInputAsString = jsonParser.getMapper().writeValueAsString(inputParameters);
+            logger.debug(parsedUserInputAsString);
+        }
 
-        configuration = jsonParser.parseConfiguration(configFileLocation);
-        String parsedConfigurationAsString = jsonParser.getMapper().writeValueAsString(configuration);
-        logger.debug(parsedConfigurationAsString);
+        if (configFileLocation != null) {
+            configuration = jsonParser.parseConfiguration(configFileLocation);
+            String parsedConfigurationAsString = jsonParser.getMapper().writeValueAsString(configuration);
+            logger.debug(parsedConfigurationAsString);
+        }
     }
 
     private int calculateCapacity() {
@@ -128,22 +144,29 @@ public class DamageCalculator {
     public String printToHTMLTable() {
         final String LINE_SEPARATOR = "<BR>";
         StringBuilder sb = new StringBuilder();
+
+        sb.append("<h3>Calculations</h3>");
         sb.append("Initial capacity: " + getInputParameters().getTroopsAmount() + LINE_SEPARATOR);
         sb.append("Calculated capacity: " + getCalculatedMarchCapacity() + LINE_SEPARATOR);
+        sb.append(totalDamageToString());
 
-        sb.append("<TABLE>");
+        sb.append("<h3>Army Distribution</h3>");
+        sb.append("<FORM>");
+        sb.append("<TABLE border=1>");
         sb.append("<TR>");
         sb.append("<TH>Army type</TH>");
+        sb.append("<TH>Tier</TH>");
         sb.append("<TH>Troops to send</TH>");
         sb.append("</TR>");
         for (Army army : getArmyDistribution()) {
             sb.append("<TR>");
-            sb.append("<TD>").append(army.getType() + "[" + army.getTier() + "]").append("</TD>");
+            sb.append("<TD>").append(army.getType()).append("</TD>");
+            sb.append("<TD>").append(army.getTier() + 1).append("</TD>");
             sb.append("<TD>").append(army.getTroopsNumber()).append("</TD>");
             sb.append("</TR>");
         }
         sb.append("</TABLE>");
-        sb.append(totalDamageToString());
+        sb.append("</FORM>");
         return sb.toString();
     }
 

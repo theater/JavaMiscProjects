@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import main.java.calculator.DamageCalculator;
 import main.java.calculator.WolfDamageCalculator;
-import main.java.config.InputParams;
+import main.java.config.UserInputParameters;
 
 @RestController
 public class Calculate {
@@ -28,16 +28,14 @@ public class Calculate {
 
     @RequestMapping(value = "/calculate", method = RequestMethod.GET)
     public ModelAndView showForm() {
-        return new ModelAndView("index", "inputData", new InputParams());
+        return new ModelAndView("index", "inputData", new UserInputParameters());
     }
 
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
-    public String submit(@Valid @ModelAttribute("inputData") InputParams inputData,
+    public String submit(@Valid @ModelAttribute("inputData") UserInputParameters inputData,
             BindingResult result, ModelMap model) throws IOException {
-        // DamageCalculator calculator = new WolfDamageCalculator(userDataFileLocation, configFileLocation).calculate();
-        model.addAttribute("castleLevel", inputData.getCastleLevel());
-        model.addAttribute("troopsAmount", inputData.getTroopsAmount());
-        return model.toString();
+        DamageCalculator calculator = new WolfDamageCalculator(inputData, configFileLocation).calculate();
+        return calculator.printToHTMLTable();
     }
 
     // OLD stuff

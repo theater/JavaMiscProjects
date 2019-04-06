@@ -4,10 +4,10 @@ package main.java.config;
 public class UserInputParameters {
 
     private int castleLevel = 30;
-    private int troopsAmount = 100000;
+    private int troopsAmount = 200000;
     private boolean useMarchCapacityBoost = true;
     private boolean useMarchCapacitySpell = true;
-    private boolean limitArmyDamage = false;
+    private boolean limitArmyDamage = true;
 
     private int maxTier = 10;
 
