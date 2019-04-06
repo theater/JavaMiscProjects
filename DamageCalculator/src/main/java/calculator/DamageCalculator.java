@@ -123,6 +123,28 @@ public class DamageCalculator {
         return sb.toString();
     }
 
+    public String printToHTMLTable() {
+        final String LINE_SEPARATOR = "<BR>";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Initial capacity: " + getInputParameters().troopsAmount + LINE_SEPARATOR);
+        sb.append("Calculated capacity: " + getCalculatedMarchCapacity() + LINE_SEPARATOR);
+
+        sb.append("<TABLE>");
+        sb.append("<TR>");
+        sb.append("<TH>Army type</TH>");
+        sb.append("<TH>Troops to send</TH>");
+        sb.append("</TR>");
+        for (Army army : getArmyDistribution()) {
+            sb.append("<TR>");
+            sb.append("<TD>").append(army.getType() + "[" + army.getTier() + "]").append("</TD>");
+            sb.append("<TD>").append(army.getTroopsNumber()).append("</TD>");
+            sb.append("</TR>");
+        }
+        sb.append("</TABLE>");
+        sb.append(totalDamageToString());
+        return sb.toString();
+    }
+
     public String totalDamageToString() {
         return "Total damage:\t" + new DecimalFormat("#.0").format(totalArmyDamage) + "\n";
     }
@@ -145,16 +167,13 @@ public class DamageCalculator {
         return damage * Math.sqrt(army.getTroopsNumber() + STEP_UNITS) - damage * Math.sqrt(army.getTroopsNumber());
     }
 
-
     public List<Army> getArmyDistribution() {
         return armyDistribution;
     }
 
-
     public UserInputParameters getInputParameters() {
         return inputParameters;
     }
-
 
     public int getCalculatedMarchCapacity() {
         return calculatedMarchCapacity;
