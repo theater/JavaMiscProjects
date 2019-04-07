@@ -1,15 +1,15 @@
 package main.java.parser;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import main.java.config.Configuration;
-import main.java.config.UserInputParameters;
 
 public class JSONParser {
 
@@ -17,16 +17,9 @@ public class JSONParser {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    public UserInputParameters parseInputParameters(String fileLocation) throws IOException {
-        File fileToParse = new java.io.File(fileLocation);
-        UserInputParameters inputParams = mapper.readValue(fileToParse, UserInputParameters.class);
-        logger.trace("Parsed parameters from JSON: " + inputParams);
-        return inputParams;
-    }
-
-    public Configuration parseConfiguration(String fileLocation) throws IOException {
-        File fileToParse = new java.io.File(fileLocation);
-        Configuration config = mapper.readValue(fileToParse, Configuration.class);
+    public Configuration parseConfiguration(String file) throws IOException {
+        InputStream is = new ClassPathResource(file).getInputStream();
+        Configuration config = mapper.readValue(is, Configuration.class);
         logger.trace("Parsed configuration from JSON: " + config);
         return config;
     }
