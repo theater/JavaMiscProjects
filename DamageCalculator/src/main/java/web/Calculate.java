@@ -26,7 +26,7 @@ public class Calculate {
 
     @RequestMapping(value = "/calculate", method = RequestMethod.GET)
     public ModelAndView showForm() {
-        return new ModelAndView("index", "inputData", new UserInputParameters());
+        return new ModelAndView("calculateForm", "inputData", new UserInputParameters());
     }
 
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)

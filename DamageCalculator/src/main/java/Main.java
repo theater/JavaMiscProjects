@@ -17,6 +17,6 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         SpringApplication.run(Main.class, args);
-        logger.info("Usage: open http://localhost:8080/calculate in your browser");
+        logger.info("Usage: open http://localhost:8080 in your browser");
     }
 }
