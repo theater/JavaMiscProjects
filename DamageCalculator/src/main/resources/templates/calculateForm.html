@@ -1,0 +1,85 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<h3>User input</h3>
+	<form action="#" th:action="@{/calculate}" th:object="${inputData}" method="post">
+		<table border="1">
+			<tr>
+			     <td><label>"Castle level"</label></td>
+	             <td><input type="text" th:field="*{castleLevel}" value=30/></td>
+			</tr>
+			<tr>
+			     <td><label>"Troops amount"</label></td>
+                 <td><input type="text" th:field="*{troopsAmount}" value=200000/></td>
+			</tr>
+			<tr>
+			     <td><label>"Use march capacity boost"</label></td>
+                 <td><input type="checkbox" th:field="*{useMarchCapacityBoost}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Use march capacity spell"</label></td>
+                 <td><input type="checkbox" th:field="*{useMarchCapacitySpell}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Limit army damage"</label></td>
+                 <td><input type="checkbox" th:field="*{limitArmyDamage}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Max tier"</label></td>
+                 <td><input type="number" th:field="*{maxTier}" value=10/></td>
+			</tr>
+			<tr>
+			     <td><label>"Army attack"</label></td>
+                 <td><input type="text" th:field="*{troopAttack}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Infantry attack"</label></td>
+                 <td><input type="text" th:field="*{infantryAttack}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Cavalry attack"</label></td>
+                 <td><input type="text" th:field="*{cavalryAttack}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Distance attack"</label></td>
+                 <td><input type="text" th:field="*{distanceAttack}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Artillery attack"</label></td>
+                 <td><input type="text" th:field="*{artilleryAttack}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Troops damage"</label></td>
+                 <td><input type="text" th:field="*{troopDamage}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Infantry damage"</label></td>
+                 <td><input type="text" th:field="*{infantryDamage}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Cavalry damage"</label></td>
+                 <td><input type="text" th:field="*{cavalryDamage}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Distance damage"</label></td>
+                 <td><input type="text" th:field="*{distanceDamage}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Artillery damage"</label></td>
+                 <td><input type="text" th:field="*{artilleryDamage}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Distance vs Infantry damage"</label></td>
+                 <td><input type="text" th:field="*{distanceVsInfantryDamage}" /></td>
+			</tr>
+			<tr>
+			     <td><label>"Cavalry vs Infantry damage"</label></td>
+                 <td><input type="text" th:field="*{cavalryVsInfantryDamage}" /></td>
+			</tr>
+		</table>
+		<br>
+		<input type="submit" value="Submit" />
+	</form>
+</body>
+</html>
