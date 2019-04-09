@@ -18,7 +18,7 @@ public class DamageCalculator {
     private static Logger logger = LoggerFactory.getLogger(DamageCalculator.class);
 
     private static final String NEW_LINE = "\n\r";
-    private static String configFileLocation = "resources\\Configuration.json";
+    private static String configFileName = "Configuration.json";
 
     private static final double SPELL_CAPACITY_BOOST = 0.1;
     private static final double MARCH_CAPACITY_BOOST = 0.25;
@@ -27,7 +27,7 @@ public class DamageCalculator {
     static {
         try {
             JSONParser jsonParser = new JSONParser();
-            Configuration parsedConfig = jsonParser.parseConfiguration(configFileLocation);
+            Configuration parsedConfig = jsonParser.parseConfiguration(configFileName);
             DamageCalculator.configuration = parsedConfig;
         } catch (IOException e) {
             logger.error("Unable to initalize configuration");

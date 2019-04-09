@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import main.java.calculator.DamageCalculator;
 import main.java.calculator.WolfDamageCalculator;
 import main.java.config.UserInputParameters;
-import main.java.parser.JSONParser;
 
 @RestController
 public class Calculate {
@@ -35,30 +34,4 @@ public class Calculate {
         DamageCalculator calculator = new WolfDamageCalculator(inputData).calculate();
         return calculator.printToHTMLTable();
     }
-
-    // OLD stuff
-    @RequestMapping("/result")
-    public String calculateFromInputFile() throws IOException {
-        final String userDataFileLocation = "resources\\InputFile.json";
-        DamageCalculator calculator = buildWolfDamageCalculatorFromFile(userDataFileLocation);
-        calculator.calculate();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("<HTML>");
-        sb.append(calculator.printToHTMLTable());
-        sb.append("</HTML>");
-        return sb.toString();
-    }
-
-    private WolfDamageCalculator buildWolfDamageCalculatorFromFile(String userDataFileLocation) throws IOException {
-        JSONParser jsonParser = new JSONParser();
-        UserInputParameters inputParameters = null;
-        if (userDataFileLocation != null) {
-            inputParameters = jsonParser.parseInputParameters(userDataFileLocation);
-            String parsedUserInputAsString = jsonParser.getMapper().writeValueAsString(inputParameters);
-            logger.debug(parsedUserInputAsString);
-        }
-        return new WolfDamageCalculator(inputParameters);
-    }
-
 }
