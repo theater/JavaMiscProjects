@@ -99,34 +99,6 @@
             "CANNON"
         ]
     },
-    "distanceSubtypes": [
-        "RIFLEMEN",
-        "GRENADIERS",
-        "GRENADIERS",
-        "RIFLEMEN",
-        "GRENADIERS",
-        "GRENADIERS",
-        "RIFLEMEN",
-        "RIFLEMEN",
-        "GRENADIERS",
-        "RIFLEMEN",
-        "GRENADIERS",
-        "RIFLEMEN"
-    ],
-    "cavalrySubtypes": [
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY",
-        "HEAVY_CAVALRY",
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY",
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY",
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY",
-        "LIGHT_CAVALRY",
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY"
-    ],
     "BASE_ATTACK_FACTORS": {
         "INFANTRY": [
             34,

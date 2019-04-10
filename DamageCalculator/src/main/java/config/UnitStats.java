@@ -1,6 +1,8 @@
 package main.java.config;
 
 public class UnitStats {
+
+	private int tier;
 	private int attack;
 	private int defense;
 	private int health;
@@ -27,6 +29,19 @@ public class UnitStats {
 
 	public void setHealth(int health) {
 		this.health = health;
+	}
+
+	public int getTier() {
+		return tier;
+	}
+
+	public void setTier(int tier) {
+		this.tier = tier;
+	}
+
+	@Override
+	public String toString() {
+		return "UnitStats [attack=" + attack + ", defense=" + defense + ", health=" + health + "]";
 	}
 
 }

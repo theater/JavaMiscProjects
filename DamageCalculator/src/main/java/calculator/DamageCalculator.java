@@ -30,7 +30,8 @@ public class DamageCalculator {
             Configuration parsedConfig = jsonParser.parseConfiguration(configFileName);
             DamageCalculator.configuration = parsedConfig;
         } catch (IOException e) {
-            logger.error("Unable to initalize configuration");
+            logger.error("Unable to initalize configuration" + e);
+            System.exit(1);
         }
     }
 
