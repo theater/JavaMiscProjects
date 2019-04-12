@@ -99,34 +99,6 @@
             "CANNON"
         ]
     },
-    "distanceSubtypes": [
-        "RIFLEMEN",
-        "GRENADIERS",
-        "GRENADIERS",
-        "RIFLEMEN",
-        "GRENADIERS",
-        "GRENADIERS",
-        "RIFLEMEN",
-        "RIFLEMEN",
-        "GRENADIERS",
-        "RIFLEMEN",
-        "GRENADIERS",
-        "RIFLEMEN"
-    ],
-    "cavalrySubtypes": [
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY",
-        "HEAVY_CAVALRY",
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY",
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY",
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY",
-        "LIGHT_CAVALRY",
-        "HEAVY_CAVALRY",
-        "LIGHT_CAVALRY"
-    ],
     "BASE_ATTACK_FACTORS": {
         "INFANTRY": [
             34,
@@ -183,6 +155,304 @@
             180,
             321,
             237
+        ]
+    },
+    "BASE_UNIT_STATS_PER_ARMYTYPE" : {
+        "INFANTRY": [
+            {
+                "tier":    1,
+                "attack":  34,
+                "defense": 91,
+                "health":  84
+            },
+            {
+                "tier":    2,
+                "attack":  39,
+                "defense": 104,
+                "health":  97
+            },
+            {
+                "tier":    3,
+                "attack":  45,
+                "defense": 120,
+                "health":  111
+            },
+            {
+                "tier":    4,
+                "attack":  52,
+                "defense": 138,
+                "health":  128
+            },
+            {
+                "tier":    5,
+                "attack":  60,
+                "defense": 159,
+                "health":  147
+            },
+            {
+                "tier":    6,
+                "attack":  68,
+                "defense": 183,
+                "health":  169
+            },
+            {
+                "tier":    7,
+                "attack":  79,
+                "defense": 210,
+                "health":  194
+            },
+            {
+                "tier":    8,
+                "attack":  91,
+                "defense": 241,
+                "health":  223
+            },
+            {
+                "tier":    9,
+                "attack":  104,
+                "defense": 278,
+                "health":  257
+            },
+            {
+                "tier":    10,
+                "attack":  120,
+                "defense": 319,
+                "health":  296
+            },
+            {
+                "tier":    11,
+                "attack":  138,
+                "defense": 367,
+                "health":  340
+            },
+            {
+                "tier":    12,
+                "attack":  158,
+                "defense": 422,
+                "health":  391
+            }
+        ],
+        "CAVALRY": [
+            {
+                "tier":    1,
+                "attack":  113,
+                "defense": 45,
+                "health":  32
+            },
+            {
+                "tier":    2,
+                "attack":  111,
+                "defense": 52,
+                "health":  37
+            },
+            {
+                "tier":    3,
+                "attack":  150,
+                "defense": 60,
+                "health":  43
+            },
+            {
+                "tier":    4,
+                "attack":  173,
+                "defense": 69,
+                "health":  49
+            },
+            {
+                "tier":    5,
+                "attack":  169,
+                "defense": 79,
+                "health":  57
+            },
+            {
+                "tier":    6,
+                "attack":  228,
+                "defense": 91,
+                "health":  65
+            },
+            {
+                "tier":    7,
+                "attack":  223,
+                "defense": 105,
+                "health":  75
+            },
+            {
+                "tier":    8,
+                "attack":  302,
+                "defense": 121,
+                "health":  86
+            },
+            {
+                "tier":    9,
+                "attack":  295,
+                "defense": 139,
+                "health":  99
+            },
+            {
+                "tier":    10,
+                "attack":  339,
+                "defense": 160,
+                "health":  114
+            },
+            {
+                "tier":    11,
+                "attack":  459,
+                "defense": 184,
+                "health":  131
+            },
+            {
+                "tier":    12,
+                "attack":  449,
+                "defense": 211,
+                "health":  151
+            }
+        ],
+        "DISTANCE": [
+            {
+                "tier":    1,
+                "attack":  106,
+                "defense": 30,
+                "health":  29
+            },
+            {
+                "tier":    2,
+                "attack":  143,
+                "defense": 35,
+                "health":  33
+            },
+            {
+                "tier":    3,
+                "attack":  165,
+                "defense": 40,
+                "health":  38
+            },
+            {
+                "tier":    4,
+                "attack":  161,
+                "defense": 46,
+                "health":  44
+            },
+            {
+                "tier":    5,
+                "attack":  218,
+                "defense": 53,
+                "health":  50
+            },
+            {
+                "tier":    6,
+                "attack":  251,
+                "defense": 61,
+                "health":  58
+            },
+            {
+                "tier":    7,
+                "attack":  245,
+                "defense": 70,
+                "health":  66
+            },
+            {
+                "tier":    8,
+                "attack":  282,
+                "defense": 80,
+                "health":  76
+            },
+            {
+                "tier":    9,
+                "attack":  382,
+                "defense": 93,
+                "health":  88
+            },
+            {
+                "tier":    10,
+                "attack":  373,
+                "defense": 106,
+                "health":  101
+            },
+            {
+                "tier":    11,
+                "attack":  505,
+                "defense": 122,
+                "health":  116
+            },
+            {
+                "tier":    12,
+                "attack":  493,
+                "defense": 141,
+                "health":  133
+            }
+        ],
+        "ARTILLERY": [
+            {
+                "tier":    1,
+                "attack":  51,
+                "defense": 83,
+                "health":  61
+            },
+            {
+                "tier":    2,
+                "attack":  91,
+                "defense": 53,
+                "health":  65
+            },
+            {
+                "tier":    3,
+                "attack":  68,
+                "defense": 110,
+                "health":  81
+            },
+            {
+                "tier":    4,
+                "attack":  121,
+                "defense": 70,
+                "health":  86
+            },
+            {
+                "tier":    5,
+                "attack":  89,
+                "defense": 145,
+                "health":  107
+            },
+            {
+                "tier":    6,
+                "attack":  160,
+                "defense": 92,
+                "health":  114
+            },
+            {
+                "tier":    7,
+                "attack":  184,
+                "defense": 106,
+                "health":  131
+            },
+            {
+                "tier":    8,
+                "attack":  136,
+                "defense": 221,
+                "health":  162
+            },
+            {
+                "tier":    9,
+                "attack":  243,
+                "defense": 140,
+                "health":  173
+            },
+            {
+                "tier":    10,
+                "attack":  180,
+                "defense": 293,
+                "health":  215
+            },
+            {
+                "tier":    11,
+                "attack":  321,
+                "defense": 185,
+                "health":  229
+            },
+            {
+                "tier":    12,
+                "attack":  237,
+                "defense": 387,
+                "health":  284
+            }
         ]
     }
 }

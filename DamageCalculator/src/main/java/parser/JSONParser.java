@@ -20,7 +20,11 @@ public class JSONParser {
     public Configuration parseConfiguration(String file) throws IOException {
         InputStream is = new ClassPathResource(file).getInputStream();
         Configuration config = mapper.readValue(is, Configuration.class);
-        logger.trace("Parsed configuration from JSON: " + config);
+        
+        logger.info("Parsed configuration from JSON: " + config);
+        //TODO DELETE ME !
+        config.pritnBaseArmyFactors();
+        
         return config;
     }
 
