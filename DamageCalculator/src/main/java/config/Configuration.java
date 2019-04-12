@@ -37,7 +37,7 @@ public class Configuration {
     	for (Entry<ArmyType, ArrayList<UnitStats>> entry : entrySet) {
 			List<UnitStats> tiersStats = entry.getValue();
 			for (UnitStats tierStats : tiersStats) {
-				logger.info("UnitType: " + entry.getKey() + ": " + tierStats);
+				logger.debug("UnitType: " + entry.getKey() + ": " + tierStats);
 			}
 		}
     }

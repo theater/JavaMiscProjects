@@ -28,11 +28,15 @@ public class CalculateJSON {
     }
 
     @PostMapping("/calculateJSON")
-    public String submit(@RequestParam String jsonContent) throws IOException {
-        logger.info("JSON Content:" + jsonContent);
+    public String submit(@RequestParam String jsonContent1, @RequestParam String jsonContent2) throws IOException {
+        logger.info("JSON Content:" + jsonContent1);
         ObjectMapper mapper = new ObjectMapper();
-        UserInputParameters userParameters = mapper.readValue(jsonContent, UserInputParameters.class);
-        DamageCalculator calculator = new WolfDamageCalculator(userParameters).calculate();
+        UserInputParameters userParameters1 = mapper.readValue(jsonContent1, UserInputParameters.class);
+        DamageCalculator calculator = new WolfDamageCalculator(userParameters1).calculate();
+        
+        
+        
+        
         return calculator.printToHTMLTable();
     }
 }
