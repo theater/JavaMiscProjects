@@ -41,19 +41,31 @@ public class Battle {
 		for (Army army : defender) {
 			logger.info("ArmyOfDefenderFinal:" + army);
 		}
+		for (Army army : attackerLosses) {
+			if (army.getNumber() > 0) {
+				logger.info("Attacker losses:" + army);
+			}
+		}
+		for (Army army : defenderLosses) {
+			if (army.getNumber() > 0) {
+				logger.info("Defender losses:" + army);
+			}
+		}
+
 	}
 
 	private void doRound() {
 		for (int i = 0; i <  attacker.size(); i++) {
 			Army attackingArmyOfAttacker = attacker.get(i);
-			Army defendingArmy = getOpponentArmy(attackingArmyOfAttacker, defender);
-			int defenderLosses = calculateDefenderLosses(attackingArmyOfAttacker, defendingArmy);
-			updateLosses(defenderLosses, defendingArmy, true);
+			Army defenderDefendingArmy = getOpponentArmy(attackingArmyOfAttacker, defender);
+			int defenderLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
 
 			Army attackingArmyOfDefender = defender.get(i);
-			defendingArmy = getOpponentArmy(attackingArmyOfDefender, attacker);
-			defenderLosses = calculateDefenderLosses(attackingArmyOfDefender, defendingArmy);
-			updateLosses(defenderLosses, defendingArmy, false);
+			Army attackerDefendingArmy = getOpponentArmy(attackingArmyOfDefender, attacker);
+			int attackerLosses = calculateDefenderLosses(attackingArmyOfDefender, attackerDefendingArmy);
+
+			updateLosses(defenderLosses, defenderDefendingArmy, true);
+			updateLosses(attackerLosses, attackerDefendingArmy, false);
 		}
 	}
 

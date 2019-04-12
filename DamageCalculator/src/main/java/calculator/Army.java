@@ -2,7 +2,7 @@ package main.java.calculator;
 
 import main.java.config.Configuration;
 
-public class Army implements Comparable<Army>{
+public class Army implements Comparable<Army> {
 	private ArmyType type;
 	private ArmySubType subType;
 	private int tier;
@@ -20,7 +20,7 @@ public class Army implements Comparable<Army>{
 	@Override
 	public int compareTo(Army object) {
 		int result = Integer.compare(object.getSubType().getAttackSpeed(), this.getSubType().getAttackSpeed());
-		if(result == 0) {
+		if (result == 0) {
 			result = Integer.compare(object.getTier(), this.getTier());
 		}
 		return result;
@@ -50,7 +50,6 @@ public class Army implements Comparable<Army>{
 		this.number = number;
 	}
 
-
 	public ArmySubType getSubType() {
 		return subType;
 	}
@@ -61,8 +60,7 @@ public class Army implements Comparable<Army>{
 
 	@Override
 	public String toString() {
-		return "[type=" + type + "[" + tier + "], subType=" + subType + ", number=" + number + "]";
+		return "[type=" + type + "[" + (tier + 1) + "], subType=" + subType + ", number=" + number + "]";
 	}
-
 
 }
