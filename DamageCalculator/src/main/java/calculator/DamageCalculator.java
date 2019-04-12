@@ -37,7 +37,7 @@ public class DamageCalculator {
 
     protected double totalArmyDamage;
     private int calculatedMarchCapacity;
-    private List<Army> armyDistribution = new ArrayList<>();
+    private List<WolfArmy> armyDistribution = new ArrayList<>();
     private UserInputParameters inputParameters;
     private CalculationsHelper helper;
 
@@ -64,7 +64,7 @@ public class DamageCalculator {
         ArmyType[] armyTypes = ArmyType.values();
         for (ArmyType armyType : armyTypes) {
             for (int i = 0; i < inputParameters.getMaxTier(); i++) {
-                armyDistribution.add(new Army(armyType, i, helper));
+                armyDistribution.add(new WolfArmy(armyType, i, helper));
             }
         }
         Collections.sort(armyDistribution);
@@ -79,11 +79,11 @@ public class DamageCalculator {
     private DamageCalculator calculateDistribution() {
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < calculatedMarchCapacity; i += STEP_UNITS) {
-            Army bestArmy = calculateBestArmy(armyDistribution);
+            WolfArmy bestArmy = calculateBestArmy(armyDistribution);
             if (bestArmy != null) {
                 bestArmy.addUnits(STEP_UNITS);
             } else {
-                logger.error("Unable to calculate best Army. Army is null");
+                logger.error("Unable to calculate best WolfArmy. WolfArmy is null");
             }
         }
         long timeElapsed = System.currentTimeMillis() - startTime;
@@ -94,7 +94,7 @@ public class DamageCalculator {
 
     private void calculateTotalDamage() {
         double totalDamage = 0;
-        for (Army army : armyDistribution) {
+        for (WolfArmy army : armyDistribution) {
             totalDamage += army.getCalculatedDamage() * Math.sqrt(army.getTroopsNumber());
         }
         totalArmyDamage = totalDamage;
@@ -102,7 +102,7 @@ public class DamageCalculator {
 
     private void validateResult() {
         int troopsCount = 0;
-        for (Army army : armyDistribution) {
+        for (WolfArmy army : armyDistribution) {
             troopsCount += army.getTroopsNumber();
         }
         if (troopsCount != calculatedMarchCapacity) {
@@ -116,7 +116,7 @@ public class DamageCalculator {
         StringBuilder sb = new StringBuilder();
         sb.append("Initial capacity: " + inputParameters.getTroopsAmount() + NEW_LINE);
         sb.append("Calculated capacity: " + calculatedMarchCapacity + NEW_LINE);
-        for (Army army : armyDistribution) {
+        for (WolfArmy army : armyDistribution) {
             sb.append(army + " troops:\t" + army.getTroopsNumber() + NEW_LINE);
         }
         sb.append(totalDamageToString());
@@ -133,15 +133,15 @@ public class DamageCalculator {
         sb.append("Calculated capacity: " + getCalculatedMarchCapacity() + LINE_SEPARATOR);
         sb.append(totalDamageToString());
 
-        sb.append("<h3>Army Distribution</h3>");
+        sb.append("<h3>WolfArmy Distribution</h3>");
         sb.append("<FORM>");
         sb.append("<TABLE border=1>");
         sb.append("<TR>");
-        sb.append("<TH>Army type</TH>");
+        sb.append("<TH>WolfArmy type</TH>");
         sb.append("<TH>Tier</TH>");
         sb.append("<TH>Troops to send</TH>");
         sb.append("</TR>");
-        for (Army army : getArmyDistribution()) {
+        for (WolfArmy army : getArmyDistribution()) {
             sb.append("<TR>");
             sb.append("<TD>").append(army.getType()).append("</TD>");
             sb.append("<TD>").append(army.getTier() + 1).append("</TD>");
@@ -157,10 +157,10 @@ public class DamageCalculator {
         return "Total damage:\t" + new DecimalFormat("#.0").format(totalArmyDamage) + "\n";
     }
 
-    private Army calculateBestArmy(List<Army> distribution) {
-        Army bestArmy = null;
+    private WolfArmy calculateBestArmy(List<WolfArmy> distribution) {
+        WolfArmy bestArmy = null;
         double maxDelta = 0;
-        for (Army army : distribution) {
+        for (WolfArmy army : distribution) {
             double calculatedDelta = calculateDamageDelta(army);
             if (maxDelta < calculatedDelta) {
                 maxDelta = calculatedDelta;
@@ -170,12 +170,12 @@ public class DamageCalculator {
         return bestArmy;
     }
 
-    private double calculateDamageDelta(Army army) {
+    private double calculateDamageDelta(WolfArmy army) {
         double damage = army.getCalculatedDamage();
         return damage * Math.sqrt(army.getTroopsNumber() + STEP_UNITS) - damage * Math.sqrt(army.getTroopsNumber());
     }
 
-    public List<Army> getArmyDistribution() {
+    public List<WolfArmy> getArmyDistribution() {
         return armyDistribution;
     }
 
