@@ -12,21 +12,18 @@ public class Army implements Comparable<Army>{
 		this.type = type;
 		this.tier = tier;
 		this.number = number;
-		
+
 		Configuration configuration = DamageCalculator.configuration;
 		this.subType = configuration.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
 	}
-	
+
 	@Override
 	public int compareTo(Army object) {
-		if(object.getSubType().getAttackSpeed() < subType.getAttackSpeed()) {
-			return -1;
-		} else if (object.getSubType().getAttackSpeed() > subType.getAttackSpeed()){
-			return 1;
-		} else if(object.getSubType().getAttackSpeed() == subType.getAttackSpeed()) {
-				return (object.getTier() > getTier()) ? 1 : -1;
-			}
-		return 0;
+		int result = Integer.compare(object.getSubType().getAttackSpeed(), this.getSubType().getAttackSpeed());
+		if(result == 0) {
+			result = Integer.compare(object.getTier(), this.getTier());
+		}
+		return result;
 	}
 
 	public ArmyType getType() {
@@ -64,8 +61,8 @@ public class Army implements Comparable<Army>{
 
 	@Override
 	public String toString() {
-		return "[type=" + type + "[" + tier + "], number=" + number + "]";
+		return "[type=" + type + "[" + tier + "], subType=" + subType + ", number=" + number + "]";
 	}
-	
-	
+
+
 }

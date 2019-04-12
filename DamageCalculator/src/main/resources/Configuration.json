@@ -44,17 +44,17 @@
     "TYPE_TO_SUBTYPE_MAP": {
         "INFANTRY": [
             "MUSKETEERS",
-            "RIFLEMEN",
+            "PIKEMEN",
             "MUSKETEERS",
-            "RIFLEMEN",
+            "PIKEMEN",
             "MUSKETEERS",
-            "RIFLEMEN",
+            "PIKEMEN",
             "MUSKETEERS",
-            "RIFLEMEN",
+            "PIKEMEN",
             "MUSKETEERS",
-            "RIFLEMEN",
+            "PIKEMEN",
             "MUSKETEERS",
-            "RIFLEMEN"
+            "PIKEMEN"
         ],
         "CAVALRY": [
             "HEAVY_CAVALRY",
