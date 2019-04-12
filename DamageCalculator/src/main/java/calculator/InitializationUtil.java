@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class InitializationUtil {
-	
-	private static final int MAX_TIER = 10;
+
+	private static final int MAX_TIER = 12;
 	public static void initializeAttacker(List<Army> army) {
 		army.add(makeDistanceArmy(0, 100));
 		army.add(makeDistanceArmy(1, 100));
@@ -18,6 +18,7 @@ public class InitializationUtil {
 		army.add(makeDistanceArmy(8, 100));
 		army.add(makeDistanceArmy(9, 100));
 		army.add(makeDistanceArmy(10, 100));
+		army.add(makeDistanceArmy(11, 100));
 
 		army.add(makeInfantryArmy(0, 100));
 		army.add(makeInfantryArmy(1, 100));
@@ -30,6 +31,7 @@ public class InitializationUtil {
 		army.add(makeInfantryArmy(8, 100));
 		army.add(makeInfantryArmy(9, 100));
 		army.add(makeInfantryArmy(10, 100));
+		army.add(makeInfantryArmy(11, 100));
 
 		army.add(makeCavalryArmy(0, 100));
 		army.add(makeCavalryArmy(1, 100));
@@ -42,6 +44,7 @@ public class InitializationUtil {
 		army.add(makeCavalryArmy(8, 100));
 		army.add(makeCavalryArmy(9, 100));
 		army.add(makeCavalryArmy(10, 100));
+		army.add(makeCavalryArmy(11, 100));
 
 		army.add(makeArtilleryArmy(0, 100));
 		army.add(makeArtilleryArmy(1, 100));
@@ -54,7 +57,8 @@ public class InitializationUtil {
 		army.add(makeArtilleryArmy(8, 100));
 		army.add(makeArtilleryArmy(9, 100));
 		army.add(makeArtilleryArmy(10, 100));
-		
+		army.add(makeArtilleryArmy(11, 100));
+
 		Collections.sort(army);
 	}
 
@@ -67,7 +71,7 @@ public class InitializationUtil {
 		}
 		Collections.sort(list);
 	}
-	
+
 	private static Army makeDistanceArmy(int tier, int number) {
 		return new Army(ArmyType.DISTANCE, tier, number);
 	}

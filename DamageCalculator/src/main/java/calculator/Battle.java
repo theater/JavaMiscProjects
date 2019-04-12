@@ -15,7 +15,7 @@ public class Battle {
 //	March attackersLosses = new March();
 //	March defenderLosses = new March();
 
-	private final static int COUNTER = 50;
+	private final static int COUNTER = 5;
 
 	private List<Army> attacker = new ArrayList<>();
 	private List<Army> defender = new ArrayList<>();
@@ -32,9 +32,9 @@ public class Battle {
 	}
 
 	public void fight() {
-//		for (int i = 0; i < COUNTER; i++) {
+		for (int i = 0; i < COUNTER; i++) {
 			doRound();
-//		}
+		}
 		for (Army army : attacker) {
 			logger.info("ArmyOfAtackerFinal:" + army);
 		}
@@ -72,16 +72,21 @@ public class Battle {
 	private Army getOpponentArmy(Army attackingArmyOfAttacker, List<Army> defender) {
 		Army result = defender.get(defender.size() -1);
 		for (int i = defender.size() - 1; i >= 0; i--) {
-			if(result.getNumber() == 0) {
-				result = defender.get(i);
+			Army iteratedArmy = defender.get(i);
+			if (iteratedArmy.getNumber() <= 0) {
+				continue;
+			}
+			if (result.getNumber() <= 0) {
+				result = iteratedArmy;
+				continue;
 			}
 
-			Army iteratedArmy = defender.get(i);
 			Integer currentCriteria = BattleHelper.CHOICE_CRIT.get(result.getSubType());
 			Integer iteratedCriteria = BattleHelper.CHOICE_CRIT.get(iteratedArmy.getSubType());
 			if(currentCriteria > iteratedCriteria) {
 				result = iteratedArmy;
-			} else if (currentCriteria == iteratedCriteria && result.getTier() >= iteratedArmy.getTier()) {
+			} else if (currentCriteria == iteratedCriteria
+					&& (iteratedArmy.getTier() < result.getTier())) {
 				result = iteratedArmy;
 			}
 		}
@@ -90,7 +95,7 @@ public class Battle {
 
 	private int calculateDefenderLosses(Army attackingArmyOfAttacker, Army defendingArmy) {
 		logger.info("Attacking army: " + attackingArmyOfAttacker + "\tDefendingArmy: " + defendingArmy);
-		return 30;
+		return 12;
 	}
 
 	private void updateLosses(int defenderLossesNumber, Army defendingArmy, boolean isForDefender) {
