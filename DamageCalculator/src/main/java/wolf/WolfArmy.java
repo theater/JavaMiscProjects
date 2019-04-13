@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import main.java.config.ArmySubType;
 import main.java.config.ArmyType;
+import main.java.config.CalculationsHelper;
 
 public class WolfArmy implements Comparable<WolfArmy> {
 
@@ -16,12 +17,12 @@ public class WolfArmy implements Comparable<WolfArmy> {
     private ArmySubType subType;
     private int tier;
     private double attackEfficiency;
-    private int baseAttack;
+    private double baseAttack;
     private double calculatedFinalDamage;
     private int troopsNumber = 0;
-    private WolfCalculationsHelper helper;
+    private CalculationsHelper helper;
 
-    public WolfArmy(ArmyType type, int tier, WolfCalculationsHelper helper) {
+    public WolfArmy(ArmyType type, int tier, CalculationsHelper helper) {
         this.type = type;
         this.tier = tier;
         this.helper = helper;
@@ -39,13 +40,13 @@ public class WolfArmy implements Comparable<WolfArmy> {
     }
 
     private double calculateDamage() {
-        int baseAttack = getBaseAttack();
+        double baseAttack = getBaseAttack();
         logger.trace(this + " base attack:\t\t" + baseAttack);
 
         double modifiedAttack = baseAttack * (1 + (helper.ATTACK_MODIFIERS.get(getType())) / 100);
         logger.trace(this + " modified attack:\t" + modifiedAttack);
 
-        int defense = 0;
+        double defense = 0;
 
         double baseDamage = modifiedAttack * Math.min(0.75, modifiedAttack / (modifiedAttack + defense));
         logger.trace(this + " base damage:\t\t" + baseDamage);
@@ -84,7 +85,7 @@ public class WolfArmy implements Comparable<WolfArmy> {
         return "Type=" + type + "\tT[" + (tier + 1) + "]:\t";
     }
 
-    public int getBaseAttack() {
+    public double getBaseAttack() {
         return baseAttack;
     }
 

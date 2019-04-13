@@ -1,25 +1,42 @@
 package main.java.battle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import main.java.config.ArmyStats;
 import main.java.config.ArmySubType;
 import main.java.config.ArmyType;
+import main.java.config.CalculationsHelper;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
-import main.java.config.ArmyStats;
 
 public class Army implements Comparable<Army> {
+	private static Logger logger = LoggerFactory.getLogger(Army.class);
+
 	private ArmyType type;
 	private ArmySubType subType;
 	private int tier;
 	private int number;
+
 	private ArmyStats armyStats;
 
 	public Army(ArmyType type, int tier, int number) {
 		this.type = type;
 		this.tier = tier;
 		this.number = number;
+
 		Configuration configuration = ConfigManager.getInstance().getConfiguration();
-		this.armyStats = configuration.BASE_UNIT_STATS_PER_ARMYTYPE.get(type).get(tier).clone();
 		this.subType = configuration.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
+	}
+
+	public void addModifiedArmyStats(CalculationsHelper helper) {
+		Configuration configuration = ConfigManager.getInstance().getConfiguration();
+		ArmyStats baseArmyStats = configuration.BASE_UNIT_STATS_PER_ARMYTYPE.get(type).get(tier);
+
+		double attack = calculateDamage(baseArmyStats, helper);
+		double defense = calculateDefense(baseArmyStats, helper);
+		double health = calculateHealth(baseArmyStats, helper);
+		armyStats = new ArmyStats(attack, defense, health);
 	}
 
 	@Override
@@ -29,6 +46,36 @@ public class Army implements Comparable<Army> {
 			result = Integer.compare(this.getTier(), object.getTier());
 		}
 		return result;
+	}
+
+	private double calculateDamage(ArmyStats armyStats, CalculationsHelper helper) {
+		double baseAttack = armyStats.getAttack();
+		logger.trace(this + " base attack:\t\t" + baseAttack);
+
+		double modifiedAttack = baseAttack * (1 + (helper.ATTACK_MODIFIERS.get(getType())) / 100);
+		logger.trace(this + " modified attack:\t" + modifiedAttack);
+
+		return modifiedAttack;
+	}
+
+	private double calculateDefense(ArmyStats armyStats, CalculationsHelper helper) {
+		double baseDefense = armyStats.getDefense();
+		logger.trace(this + " base defense:\t\t" + baseDefense);
+
+		double modifiedDefense = baseDefense * (1 + (helper.DEFENSE_MODIFIERS.get(getType())) / 100);
+		logger.trace(this + " modified defense:\t" + modifiedDefense);
+
+		return modifiedDefense;
+	}
+
+	private double calculateHealth(ArmyStats armyStats, CalculationsHelper helper) {
+		double baseHealth = armyStats.getHealth();
+		logger.trace(this + " base defense:\t\t" + baseHealth);
+
+		double modifiedHealth = baseHealth * (1 + (helper.HEALTH_MODIFIERS.get(getType())) / 100);
+		logger.trace(this + " modified defense:\t" + modifiedHealth);
+
+		return modifiedHealth;
 	}
 
 	public ArmyType getType() {
@@ -70,10 +117,6 @@ public class Army implements Comparable<Army> {
 
 	public ArmyStats getArmyStats() {
 		return armyStats;
-	}
-
-	public void setArmyStats(ArmyStats armyStats) {
-		this.armyStats = armyStats;
 	}
 
 }

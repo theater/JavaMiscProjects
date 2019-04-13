@@ -1,49 +1,49 @@
 package main.java.config;
 
-import java.util.ArrayList;
-
 public class ArmyStats {
 
-	private int attack;
-	private int defense;
-	private int health;
+	private double attack;
+	private double defense;
+	private double health;
 
-	public int getAttack() {
-		return attack;
+	public ArmyStats() {
+		// Used for Jackson serialization purposes only
 	}
 
-	public void setAttack(int attack) {
+	public ArmyStats(double attack, double defense, double health) {
 		this.attack = attack;
-	}
-
-	public int getDefense() {
-		return defense;
-	}
-
-	public void setDefense(int defense) {
 		this.defense = defense;
-	}
-
-	public int getHealth() {
-		return health;
-	}
-
-	public void setHealth(int health) {
 		this.health = health;
 	}
 
 	@Override
-	public String toString() {
-		return "UnitStats [attack=" + attack + ", defense=" + defense + ", health=" + health + "]";
+	public ArmyStats clone() {
+		return new ArmyStats(attack, defense, health);
 	}
 
-	@Override
-	public ArmyStats clone() {
-		ArmyStats unitStats = new ArmyStats();
-		unitStats.setAttack(attack);
-		unitStats.setDefense(defense);
-		unitStats.setHealth(health);
-		return unitStats;
+	public double getAttack() {
+		return attack;
 	}
+
+	public void setAttack(double attack) {
+		this.attack = attack;
+	}
+
+	public double getDefense() {
+		return defense;
+	}
+
+	public void setDefense(double defense) {
+		this.defense = defense;
+	}
+
+	public double getHealth() {
+		return health;
+	}
+
+	public void setHealth(double health) {
+		this.health = health;
+	}
+
 
 }

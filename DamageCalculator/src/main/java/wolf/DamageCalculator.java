@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import main.java.config.ArmyType;
+import main.java.config.CalculationsHelper;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
 import main.java.config.UserInputParameters;
@@ -28,11 +29,11 @@ public class DamageCalculator {
     private int calculatedMarchCapacity;
     private List<WolfArmy> armyDistribution = new ArrayList<>();
     private UserInputParameters inputParameters;
-    private WolfCalculationsHelper helper;
+    private CalculationsHelper helper;
 
     public DamageCalculator(UserInputParameters parameters) throws IOException {
         this.inputParameters = parameters;
-        helper = new WolfCalculationsHelper(inputParameters);
+        helper = new CalculationsHelper(inputParameters);
         calculatedMarchCapacity = calculateCapacity();
         initializeDistribution();
     }

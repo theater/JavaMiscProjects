@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import main.java.config.ArmyType;
+import main.java.config.CalculationsHelper;
 import main.java.config.ConfigManager;
 import main.java.config.UserInputParameters;
 import main.java.parser.JSONParser;
@@ -62,6 +63,7 @@ public class Battle {
 	private void initializeArmyCollection(List<Army> armyCollection, UserInputParameters input) {
 		ArmyType[] armyTypes = ArmyType.values();
 		Map<ArmyType, List<Integer>> army = input.getArmy();
+		CalculationsHelper calculationsHelper = new CalculationsHelper(input);
 		for (ArmyType armyType : armyTypes) {
 			List<Integer> armyByType = army.get(armyType);
 			for (int i = 0; i < MAX_TIER; i++) {
@@ -71,16 +73,11 @@ public class Battle {
 				}
 				Army newArmy = new Army(armyType, i, unitsAmount);
 				armyCollection.add(newArmy);
-				addArmyModifiers(newArmy, input);
+				newArmy.addModifiedArmyStats(calculationsHelper);
 			}
 		}
 		Collections.sort(armyCollection);
 	}
-
-	private void addArmyModifiers(Army newArmy, UserInputParameters attackerInput) {
-		//TODO add new fields to Army class and calculate necessary modifiers in this method
-	}
-
 
 	public void fight() {
 		for (int i = 0; i < COUNTER; i++) {
