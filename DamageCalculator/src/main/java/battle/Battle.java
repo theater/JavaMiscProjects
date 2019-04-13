@@ -15,21 +15,24 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import main.java.config.ArmyStats;
+import main.java.config.ArmySubType;
 import main.java.config.ArmyType;
 import main.java.config.CalculationsHelper;
 import main.java.config.ConfigManager;
+import main.java.config.Configuration;
 import main.java.config.UserInputParameters;
 import main.java.parser.JSONParser;
 
 public class Battle {
 
 	private static Logger logger = LoggerFactory.getLogger(Battle.class);
-	private static final int MAX_TIER = ConfigManager.getInstance().getConfiguration().ABSOLUTE_MAX_TIER;
+
+	private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
+	private static final int MAX_TIER = CONFIGURATION.ABSOLUTE_MAX_TIER;
 
 	private final static int COUNTER = 5;
 	private static final String attackerFile = "attacker.json";
 	private static final String defenderFile = "defender.json";
-
 
 	private List<Army> attacker = new ArrayList<>();
 	private List<Army> defender = new ArrayList<>();
@@ -48,7 +51,6 @@ public class Battle {
 		initializeArmyCollection(attackerLosses);
 		initializeArmyCollection(defenderLosses);
 	}
-
 
 	private void initializeArmyCollection(List<Army> armyCollection) {
 		ArmyType[] armyTypes = ArmyType.values();
@@ -80,7 +82,7 @@ public class Battle {
 	}
 
 	public void fight() {
-		//TODO this will be calculated currently is constant
+		// TODO this will be calculated currently is constant
 		int counter = COUNTER;
 		for (int i = 0; i < counter; i++) {
 			doRound();
@@ -88,7 +90,7 @@ public class Battle {
 	}
 
 	private void doRound() {
-		for (int i = 0; i <  attacker.size(); i++) {
+		for (int i = 0; i < attacker.size(); i++) {
 			Army attackingArmyOfAttacker = attacker.get(i);
 			Army defenderDefendingArmy = getOpponentArmy(attackingArmyOfAttacker, defender);
 			int defenderLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
@@ -116,10 +118,9 @@ public class Battle {
 
 			Integer currentCriteria = BattleHelper.CHOICE_CRIT.get(result.getSubType());
 			Integer iteratedCriteria = BattleHelper.CHOICE_CRIT.get(iteratedArmy.getSubType());
-			if(currentCriteria > iteratedCriteria) {
+			if (currentCriteria > iteratedCriteria) {
 				result = iteratedArmy;
-			} else if (currentCriteria == iteratedCriteria
-					&& (iteratedArmy.getTier() < result.getTier())) {
+			} else if (currentCriteria == iteratedCriteria && (iteratedArmy.getTier() < result.getTier())) {
 				result = iteratedArmy;
 			}
 		}
@@ -136,33 +137,42 @@ public class Battle {
 		double baseDamage = calculateBaseDamage(defense, modifiedAttack);
 		logger.trace(this + " base damage:\t\t" + baseDamage);
 
-		double efficiencyFactor = calculateEfficiency();
+		double efficiencyFactor = calculateEfficiency(attackingArmy.getSubType(), defendingArmy.getSubType());
 		logger.trace(this + " efficiency:\t\t" + efficiencyFactor);
 
-		double damageModifiers = Math.min(1 + ((attackerStats.getDamage() - defenderStats.getDamageReduction()) / 100), 3);
+		double damageModifiers = Math.min(1 + ((attackerStats.getDamage() - defenderStats.getDamageReduction()) / 100),
+				3);
 		logger.trace(this + " damageModifiers:\t\t" + damageModifiers);
 		double calculatedDamage = baseDamage * damageModifiers * efficiencyFactor;
 
-		double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber()))
-				/ defenderStats.getHealth();
+		double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber())
+				* specificDamageFactor(attackingArmy, defendingArmy)) / defenderStats.getHealth();
 
 		return losses <= defendingArmy.getNumber() ? (int) losses : 0;
 	}
 
+	private int specificDamageFactor(Army attackingArmy, Army defendingArmy) {
+		return 1;
+	}
 
 	private double calculateBaseDamage(double defense, double modifiedAttack) {
 		return modifiedAttack * Math.max(0.3, Math.min(0.75, modifiedAttack / (modifiedAttack + defense)));
 	}
 
-	private double calculateEfficiency() {
-		return 1;
+	private double calculateEfficiency(ArmySubType attackerSubType, ArmySubType defenderSubType) {
+		Map<ArmySubType, Double> staticEfficiency = CONFIGURATION.STATIC_EFFICIENCY.get(attackerSubType);
+		if (staticEfficiency == null) {
+			return 1;
+		}
+		Double efficiency = staticEfficiency.get(defenderSubType);
+		logger.info("Efficiency: " + efficiency);
+		return efficiency == null || efficiency == 0 ? 1 : efficiency;
 	}
-
 
 	private void updateLosses(int defenderLossesNumber, Army defendingArmy, boolean isForDefender) {
 		List<Army> lossesToUpdate = isForDefender ? defenderLosses : attackerLosses;
 		List<Army> armyToUpdate = isForDefender ? defender : attacker;
-		for (int i = 0; i < armyToUpdate.size() ; i ++) {
+		for (int i = 0; i < armyToUpdate.size(); i++) {
 			Army army = armyToUpdate.get(i);
 			if (army.getTier() == defendingArmy.getTier() && army.getType() == defendingArmy.getType()) {
 				int value = army.getNumber() - defenderLossesNumber;
@@ -174,12 +184,31 @@ public class Battle {
 		}
 	}
 
-
-	public static void main (String ...args) throws JsonGenerationException, JsonMappingException, IOException {
+	public static void main(String... args) throws JsonGenerationException, JsonMappingException, IOException {
 		logger.info("Entering main");
 
 		Battle battle = new Battle();
 		battle.fight();
+
+//		Map<ArmySubType, Map<ArmySubType, Double>> map = new HashMap<>();
+//		Map<ArmySubType, Double> innerMap = new HashMap<>();
+//		innerMap.put(ArmySubType.PIKEMEN, 1.0);
+//		innerMap.put(ArmySubType.MUSKETEERS, 1.0);
+//		innerMap.put(ArmySubType.RIFLEMEN, 1.0);
+//		innerMap.put(ArmySubType.GRENADIERS, 1.0);
+//		innerMap.put(ArmySubType.LIGHT_CAVALRY, 1.0);
+//		innerMap.put(ArmySubType.HEAVY_CAVALRY, 1.0);
+//		map.put(ArmySubType.PIKEMEN, innerMap);
+//
+//		innerMap = new HashMap<>();
+//		innerMap.put(ArmySubType.PIKEMEN, 1.0);
+//		innerMap.put(ArmySubType.MUSKETEERS, 1.0);
+//		innerMap.put(ArmySubType.RIFLEMEN, 1.0);
+//		innerMap.put(ArmySubType.GRENADIERS, 1.0);
+//		innerMap.put(ArmySubType.LIGHT_CAVALRY, 1.2);
+//		innerMap.put(ArmySubType.HEAVY_CAVALRY, 1.2);
+//		map.put(ArmySubType.MUSKETEERS, innerMap);
+//		printInputParams(map);
 	}
 
 	public void printResults() {
@@ -201,11 +230,10 @@ public class Battle {
 		}
 	}
 
-	//Careful - it erases resources\\inputParams.json. Use it only as a template
-	private static void printInputParams(Object object) throws IOException, JsonGenerationException, JsonMappingException {
-		UserInputParameters userInputParameters = new UserInputParameters();
+	// Careful - it erases resources\\inputParams.json. Use it only as a template
+	private static void printInputParams(Object object)
+			throws IOException, JsonGenerationException, JsonMappingException {
 		ObjectMapper mapper = new ObjectMapper();
-//		mapper.writeValue(new File("resources\\inputParams.json"), userInputParameters);
 		mapper.writeValue(new File("resources\\inputParams.json"), object);
 	}
 }

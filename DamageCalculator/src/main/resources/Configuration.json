@@ -1,411 +1,461 @@
 {
-	"ABSOLUTE_MAX_TIER" : 12,
-    "CASTLE_BASE_MARCH_CAPACITY": {
-        "1": 2000,
-        "2": 4000,
-        "3": 6000,
-        "4": 8000,
-        "5": 10000,
-        "6": 12500,
-        "7": 15000,
-        "8": 17500,
-        "9": 20000,
-        "10": 22500,
-        "11": 25500,
-        "12": 28500,
-        "13": 31500,
-        "14": 34500,
-        "15": 37500,
-        "16": 41000,
-        "17": 44500,
-        "18": 48000,
-        "19": 51500,
-        "20": 55000,
-        "21": 59000,
-        "22": 63000,
-        "23": 67000,
-        "24": 71000,
-        "25": 75000,
-        "26": 79500,
-        "27": 84000,
-        "28": 88500,
-        "29": 93000,
-        "30": 97500,
-        "31": 102000,
-        "32": 106500,
-        "33": 111000,
-        "34": 115500,
-        "35": 120000,
-        "36": 130000,
-        "37": 140000,
-        "38": 150000,
-        "39": 160000,
-        "40": 170000
-    },
-    "TYPE_TO_SUBTYPE_MAP": {
-        "INFANTRY": [
-            "MUSKETEERS",
-            "PIKEMEN",
-            "MUSKETEERS",
-            "PIKEMEN",
-            "MUSKETEERS",
-            "PIKEMEN",
-            "MUSKETEERS",
-            "PIKEMEN",
-            "MUSKETEERS",
-            "PIKEMEN",
-            "MUSKETEERS",
-            "PIKEMEN"
-        ],
-        "CAVALRY": [
-            "HEAVY_CAVALRY",
-            "LIGHT_CAVALRY",
-            "HEAVY_CAVALRY",
-            "HEAVY_CAVALRY",
-            "LIGHT_CAVALRY",
-            "HEAVY_CAVALRY",
-            "LIGHT_CAVALRY",
-            "HEAVY_CAVALRY",
-            "LIGHT_CAVALRY",
-            "LIGHT_CAVALRY",
-            "HEAVY_CAVALRY",
-            "LIGHT_CAVALRY"
-        ],
-        "DISTANCE": [
-            "RIFLEMEN",
-            "GRENADIERS",
-            "GRENADIERS",
-            "RIFLEMEN",
-            "GRENADIERS",
-            "GRENADIERS",
-            "RIFLEMEN",
-            "RIFLEMEN",
-            "GRENADIERS",
-            "RIFLEMEN",
-            "GRENADIERS",
-            "RIFLEMEN"
-        ],
-        "ARTILLERY": [
-            "CANNON",
-            "MORTAR",
-            "CANNON",
-            "MORTAR",
-            "CANNON",
-            "MORTAR",
-            "MORTAR",
-            "CANNON",
-            "MORTAR",
-            "CANNON",
-            "MORTAR",
-            "CANNON"
-        ]
-    },
-    "BASE_ATTACK_FACTORS": {
-        "INFANTRY": [
-            34,
-            39,
-            45,
-            52,
-            60,
-            68,
-            79,
-            91,
-            104,
-            120,
-            138,
-            158
-        ],
-        "CAVALRY": [
-            113,
-            111,
-            150,
-            173,
-            169,
-            228,
-            223,
-            302,
-            295,
-            339,
-            459,
-            449
-        ],
-        "DISTANCE": [
-            106,
-            143,
-            165,
-            161,
-            218,
-            251,
-            245,
-            282,
-            382,
-            373,
-            505,
-            493
-        ],
-        "ARTILLERY": [
-            51,
-            91,
-            68,
-            121,
-            89,
-            160,
-            184,
-            136,
-            243,
-            180,
-            321,
-            237
-        ]
-    },
-    "BASE_UNIT_STATS_PER_ARMYTYPE" : {
-        "INFANTRY": [
-            {
-                "attack":  34,
-                "defense": 91,
-                "health":  84
-            },
-            {
-                "attack":  39,
-                "defense": 104,
-                "health":  97
-            },
-            {
-                "attack":  45,
-                "defense": 120,
-                "health":  111
-            },
-            {
-                "attack":  52,
-                "defense": 138,
-                "health":  128
-            },
-            {
-                "attack":  60,
-                "defense": 159,
-                "health":  147
-            },
-            {
-                "attack":  68,
-                "defense": 183,
-                "health":  169
-            },
-            {
-                "attack":  79,
-                "defense": 210,
-                "health":  194
-            },
-            {
-                "attack":  91,
-                "defense": 241,
-                "health":  223
-            },
-            {
-                "attack":  104,
-                "defense": 278,
-                "health":  257
-            },
-            {
-                "attack":  120,
-                "defense": 319,
-                "health":  296
-            },
-            {
-                "attack":  138,
-                "defense": 367,
-                "health":  340
-            },
-            {
-                "attack":  158,
-                "defense": 422,
-                "health":  391
-            }
-        ],
-        "CAVALRY": [
-            {
-                "attack":  113,
-                "defense": 45,
-                "health":  32
-            },
-            {
-                "attack":  111,
-                "defense": 52,
-                "health":  37
-            },
-            {
-                "attack":  150,
-                "defense": 60,
-                "health":  43
-            },
-            {
-                "attack":  173,
-                "defense": 69,
-                "health":  49
-            },
-            {
-                "attack":  169,
-                "defense": 79,
-                "health":  57
-            },
-            {
-                "attack":  228,
-                "defense": 91,
-                "health":  65
-            },
-            {
-                "attack":  223,
-                "defense": 105,
-                "health":  75
-            },
-            {
-                "attack":  302,
-                "defense": 121,
-                "health":  86
-            },
-            {
-                "attack":  295,
-                "defense": 139,
-                "health":  99
-            },
-            {
-                "attack":  339,
-                "defense": 160,
-                "health":  114
-            },
-            {
-                "attack":  459,
-                "defense": 184,
-                "health":  131
-            },
-            {
-                "attack":  449,
-                "defense": 211,
-                "health":  151
-            }
-        ],
-        "DISTANCE": [
-            {
-                "attack":  106,
-                "defense": 30,
-                "health":  29
-            },
-            {
-                "attack":  143,
-                "defense": 35,
-                "health":  33
-            },
-            {
-                "attack":  165,
-                "defense": 40,
-                "health":  38
-            },
-            {
-                "attack":  161,
-                "defense": 46,
-                "health":  44
-            },
-            {
-                "attack":  218,
-                "defense": 53,
-                "health":  50
-            },
-            {
-                "attack":  251,
-                "defense": 61,
-                "health":  58
-            },
-            {
-                "attack":  245,
-                "defense": 70,
-                "health":  66
-            },
-            {
-                "attack":  282,
-                "defense": 80,
-                "health":  76
-            },
-            {
-                "attack":  382,
-                "defense": 93,
-                "health":  88
-            },
-            {
-                "attack":  373,
-                "defense": 106,
-                "health":  101
-            },
-            {
-                "attack":  505,
-                "defense": 122,
-                "health":  116
-            },
-            {
-                "attack":  493,
-                "defense": 141,
-                "health":  133
-            }
-        ],
-        "ARTILLERY": [
-            {
-                "attack":  51,
-                "defense": 83,
-                "health":  61
-            },
-            {
-                "attack":  91,
-                "defense": 53,
-                "health":  65
-            },
-            {
-                "attack":  68,
-                "defense": 110,
-                "health":  81
-            },
-            {
-                "attack":  121,
-                "defense": 70,
-                "health":  86
-            },
-            {
-                "attack":  89,
-                "defense": 145,
-                "health":  107
-            },
-            {
-                "attack":  160,
-                "defense": 92,
-                "health":  114
-            },
-            {
-                "attack":  184,
-                "defense": 106,
-                "health":  131
-            },
-            {
-                "attack":  136,
-                "defense": 221,
-                "health":  162
-            },
-            {
-                "attack":  243,
-                "defense": 140,
-                "health":  173
-            },
-            {
-                "attack":  180,
-                "defense": 293,
-                "health":  215
-            },
-            {
-                "attack":  321,
-                "defense": 185,
-                "health":  229
-            },
-            {
-                "attack":  237,
-                "defense": 387,
-                "health":  284
-            }
-        ]
-    }
+	"ABSOLUTE_MAX_TIER": 12,
+	"CASTLE_BASE_MARCH_CAPACITY": {
+		"1": 2000,
+		"2": 4000,
+		"3": 6000,
+		"4": 8000,
+		"5": 10000,
+		"6": 12500,
+		"7": 15000,
+		"8": 17500,
+		"9": 20000,
+		"10": 22500,
+		"11": 25500,
+		"12": 28500,
+		"13": 31500,
+		"14": 34500,
+		"15": 37500,
+		"16": 41000,
+		"17": 44500,
+		"18": 48000,
+		"19": 51500,
+		"20": 55000,
+		"21": 59000,
+		"22": 63000,
+		"23": 67000,
+		"24": 71000,
+		"25": 75000,
+		"26": 79500,
+		"27": 84000,
+		"28": 88500,
+		"29": 93000,
+		"30": 97500,
+		"31": 102000,
+		"32": 106500,
+		"33": 111000,
+		"34": 115500,
+		"35": 120000,
+		"36": 130000,
+		"37": 140000,
+		"38": 150000,
+		"39": 160000,
+		"40": 170000
+	},
+	"TYPE_TO_SUBTYPE_MAP": {
+		"INFANTRY": [
+			"MUSKETEERS",
+			"PIKEMEN",
+			"MUSKETEERS",
+			"PIKEMEN",
+			"MUSKETEERS",
+			"PIKEMEN",
+			"MUSKETEERS",
+			"PIKEMEN",
+			"MUSKETEERS",
+			"PIKEMEN",
+			"MUSKETEERS",
+			"PIKEMEN"
+		],
+		"CAVALRY": [
+			"HEAVY_CAVALRY",
+			"LIGHT_CAVALRY",
+			"HEAVY_CAVALRY",
+			"HEAVY_CAVALRY",
+			"LIGHT_CAVALRY",
+			"HEAVY_CAVALRY",
+			"LIGHT_CAVALRY",
+			"HEAVY_CAVALRY",
+			"LIGHT_CAVALRY",
+			"LIGHT_CAVALRY",
+			"HEAVY_CAVALRY",
+			"LIGHT_CAVALRY"
+		],
+		"DISTANCE": [
+			"RIFLEMEN",
+			"GRENADIERS",
+			"GRENADIERS",
+			"RIFLEMEN",
+			"GRENADIERS",
+			"GRENADIERS",
+			"RIFLEMEN",
+			"RIFLEMEN",
+			"GRENADIERS",
+			"RIFLEMEN",
+			"GRENADIERS",
+			"RIFLEMEN"
+		],
+		"ARTILLERY": [
+			"CANNON",
+			"MORTAR",
+			"CANNON",
+			"MORTAR",
+			"CANNON",
+			"MORTAR",
+			"MORTAR",
+			"CANNON",
+			"MORTAR",
+			"CANNON",
+			"MORTAR",
+			"CANNON"
+		]
+	},
+	"BASE_ATTACK_FACTORS": {
+		"INFANTRY": [
+			34,
+			39,
+			45,
+			52,
+			60,
+			68,
+			79,
+			91,
+			104,
+			120,
+			138,
+			158
+		],
+		"CAVALRY": [
+			113,
+			111,
+			150,
+			173,
+			169,
+			228,
+			223,
+			302,
+			295,
+			339,
+			459,
+			449
+		],
+		"DISTANCE": [
+			106,
+			143,
+			165,
+			161,
+			218,
+			251,
+			245,
+			282,
+			382,
+			373,
+			505,
+			493
+		],
+		"ARTILLERY": [
+			51,
+			91,
+			68,
+			121,
+			89,
+			160,
+			184,
+			136,
+			243,
+			180,
+			321,
+			237
+		]
+	},
+	"BASE_UNIT_STATS_PER_ARMYTYPE": {
+		"INFANTRY": [
+			{
+				"attack": 34,
+				"defense": 91,
+				"health": 84
+			},
+			{
+				"attack": 39,
+				"defense": 104,
+				"health": 97
+			},
+			{
+				"attack": 45,
+				"defense": 120,
+				"health": 111
+			},
+			{
+				"attack": 52,
+				"defense": 138,
+				"health": 128
+			},
+			{
+				"attack": 60,
+				"defense": 159,
+				"health": 147
+			},
+			{
+				"attack": 68,
+				"defense": 183,
+				"health": 169
+			},
+			{
+				"attack": 79,
+				"defense": 210,
+				"health": 194
+			},
+			{
+				"attack": 91,
+				"defense": 241,
+				"health": 223
+			},
+			{
+				"attack": 104,
+				"defense": 278,
+				"health": 257
+			},
+			{
+				"attack": 120,
+				"defense": 319,
+				"health": 296
+			},
+			{
+				"attack": 138,
+				"defense": 367,
+				"health": 340
+			},
+			{
+				"attack": 158,
+				"defense": 422,
+				"health": 391
+			}
+		],
+		"CAVALRY": [
+			{
+				"attack": 113,
+				"defense": 45,
+				"health": 32
+			},
+			{
+				"attack": 111,
+				"defense": 52,
+				"health": 37
+			},
+			{
+				"attack": 150,
+				"defense": 60,
+				"health": 43
+			},
+			{
+				"attack": 173,
+				"defense": 69,
+				"health": 49
+			},
+			{
+				"attack": 169,
+				"defense": 79,
+				"health": 57
+			},
+			{
+				"attack": 228,
+				"defense": 91,
+				"health": 65
+			},
+			{
+				"attack": 223,
+				"defense": 105,
+				"health": 75
+			},
+			{
+				"attack": 302,
+				"defense": 121,
+				"health": 86
+			},
+			{
+				"attack": 295,
+				"defense": 139,
+				"health": 99
+			},
+			{
+				"attack": 339,
+				"defense": 160,
+				"health": 114
+			},
+			{
+				"attack": 459,
+				"defense": 184,
+				"health": 131
+			},
+			{
+				"attack": 449,
+				"defense": 211,
+				"health": 151
+			}
+		],
+		"DISTANCE": [
+			{
+				"attack": 106,
+				"defense": 30,
+				"health": 29
+			},
+			{
+				"attack": 143,
+				"defense": 35,
+				"health": 33
+			},
+			{
+				"attack": 165,
+				"defense": 40,
+				"health": 38
+			},
+			{
+				"attack": 161,
+				"defense": 46,
+				"health": 44
+			},
+			{
+				"attack": 218,
+				"defense": 53,
+				"health": 50
+			},
+			{
+				"attack": 251,
+				"defense": 61,
+				"health": 58
+			},
+			{
+				"attack": 245,
+				"defense": 70,
+				"health": 66
+			},
+			{
+				"attack": 282,
+				"defense": 80,
+				"health": 76
+			},
+			{
+				"attack": 382,
+				"defense": 93,
+				"health": 88
+			},
+			{
+				"attack": 373,
+				"defense": 106,
+				"health": 101
+			},
+			{
+				"attack": 505,
+				"defense": 122,
+				"health": 116
+			},
+			{
+				"attack": 493,
+				"defense": 141,
+				"health": 133
+			}
+		],
+		"ARTILLERY": [
+			{
+				"attack": 51,
+				"defense": 83,
+				"health": 61
+			},
+			{
+				"attack": 91,
+				"defense": 53,
+				"health": 65
+			},
+			{
+				"attack": 68,
+				"defense": 110,
+				"health": 81
+			},
+			{
+				"attack": 121,
+				"defense": 70,
+				"health": 86
+			},
+			{
+				"attack": 89,
+				"defense": 145,
+				"health": 107
+			},
+			{
+				"attack": 160,
+				"defense": 92,
+				"health": 114
+			},
+			{
+				"attack": 184,
+				"defense": 106,
+				"health": 131
+			},
+			{
+				"attack": 136,
+				"defense": 221,
+				"health": 162
+			},
+			{
+				"attack": 243,
+				"defense": 140,
+				"health": 173
+			},
+			{
+				"attack": 180,
+				"defense": 293,
+				"health": 215
+			},
+			{
+				"attack": 321,
+				"defense": 185,
+				"health": 229
+			},
+			{
+				"attack": 237,
+				"defense": 387,
+				"health": 284
+			}
+		]
+	},
+	"STATIC_EFFICIENCY": {
+		"PIKEMEN": {
+			"RIFLEMEN": 1.0,
+			"PIKEMEN": 1.0,
+			"GRENADIERS": 1.0,
+			"MUSKETEERS": 1.0,
+			"LIGHT_CAVALRY": 1.0,
+			"HEAVY_CAVALRY": 1.0
+		},
+		"MUSKETEERS": {
+			"RIFLEMEN": 1.0,
+			"PIKEMEN": 1.0,
+			"GRENADIERS": 1.0,
+			"MUSKETEERS": 1.0,
+			"LIGHT_CAVALRY": 1.2,
+			"HEAVY_CAVALRY": 1.2
+		},
+		"RIFLEMEN": {
+			"RIFLEMEN": 1.2,
+			"PIKEMEN": 0.8,
+			"GRENADIERS": 1.2,
+			"MUSKETEERS": 1.0,
+			"LIGHT_CAVALRY": 1.2,
+			"HEAVY_CAVALRY": 1.2
+		},
+		"GRENADIERS": {
+			"RIFLEMEN": 1.0,
+			"PIKEMEN": 1.0,
+			"GRENADIERS": 1.0,
+			"MUSKETEERS": 1.0,
+			"LIGHT_CAVALRY": 1.2,
+			"HEAVY_CAVALRY": 1.2
+		},
+		"LIGHT_CAVALRY": {
+			"RIFLEMEN": 1.0,
+			"PIKEMEN": 1.0,
+			"GRENADIERS": 1.0,
+			"MUSKETEERS": 0.8,
+			"LIGHT_CAVALRY": 1.0,
+			"HEAVY_CAVALRY": 1.0
+		},
+		"HEAVY_CAVALRY": {
+			"RIFLEMEN": 1.0,
+			"PIKEMEN": 1.2,
+			"GRENADIERS": 1.0,
+			"MUSKETEERS": 1.0,
+			"LIGHT_CAVALRY": 1.0,
+			"HEAVY_CAVALRY": 1.0
+		}
+	}
 }
