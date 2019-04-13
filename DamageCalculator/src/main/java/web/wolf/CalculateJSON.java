@@ -22,12 +22,12 @@ public class CalculateJSON {
 
     private static Logger logger = LoggerFactory.getLogger(CalculateJSON.class);
 
-    @RequestMapping(value = "/calculateJSON", method = RequestMethod.GET)
+    @RequestMapping(value = "/wolf/calculateJSON", method = RequestMethod.GET)
     public ModelAndView showForm() {
         return new ModelAndView("calculateJSON", "jsonContent", new String());
     }
 
-    @PostMapping("/calculateJSON")
+    @PostMapping("/wolf/calculateJSON")
     public String submit(@RequestParam String jsonContent) throws IOException {
         logger.info("JSON Content:" + jsonContent);
         ObjectMapper mapper = new ObjectMapper();

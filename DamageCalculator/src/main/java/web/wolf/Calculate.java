@@ -23,12 +23,12 @@ public class Calculate {
 
     private static Logger logger = LoggerFactory.getLogger(Calculate.class);
 
-    @RequestMapping(value = "/calculate", method = RequestMethod.GET)
+    @RequestMapping(value = "/wolf/calculate", method = RequestMethod.GET)
     public ModelAndView showForm() {
         return new ModelAndView("calculateForm", "inputData", new UserInputParameters());
     }
 
-    @RequestMapping(value = "/calculate", method = RequestMethod.POST)
+    @RequestMapping(value = "/wolf/calculate", method = RequestMethod.POST)
     public String submit(@Valid @ModelAttribute("inputData") UserInputParameters inputData,
             BindingResult result, ModelMap model) throws IOException {
         DamageCalculator calculator = new WolfDamageCalculator(inputData).calculate();
