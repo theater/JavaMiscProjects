@@ -146,7 +146,7 @@ public class Battle {
 		double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber()))
 				/ defenderStats.getHealth();
 
-		return (int) losses;
+		return losses <= defendingArmy.getNumber() ? (int) losses : 0;
 	}
 
 
