@@ -8,9 +8,10 @@ import java.util.Map;
 public class CalculationsHelper {
 
     public final Map<ArmyType, Double> ATTACK_MODIFIERS;
-    public final Map<ArmyType, Double> DAMAGE_MODIFIERS;
     public final Map<ArmyType, Double> DEFENSE_MODIFIERS;
     public final Map<ArmyType, Double> HEALTH_MODIFIERS;
+    public final Map<ArmyType, Double> DAMAGE_MODIFIERS;
+    public final Map<ArmyType, Double> DAMAGE_REDUCTION_MODIFIERS;
     public final Map<ArmyType, ArmySubType[]> TYPE_TO_SUBTYPE_MAP;
     public final double CAVALRY_VS_INFANTRY_DAMAGE;
     public final double DISTANCE_VS_INFANTRY_DAMAGE;
@@ -33,14 +34,6 @@ public class CalculationsHelper {
             ATTACK_MODIFIERS = Collections.unmodifiableMap(tempMap);
         }
         {
-            Map<ArmyType, Double> tempMap = new HashMap<>();
-            tempMap.put(ArmyType.DISTANCE, input.getTroopDamage() + input.getDistanceDamage());
-            tempMap.put(ArmyType.CAVALRY, input.getTroopDamage() + input.getCavalryDamage());
-            tempMap.put(ArmyType.INFANTRY, input.getTroopDamage() + input.getInfantryDamage());
-            tempMap.put(ArmyType.ARTILLERY, input.getTroopDamage() + input.getArtilleryDamage());
-            DAMAGE_MODIFIERS = Collections.unmodifiableMap(tempMap);
-        }
-        {
         	Map<ArmyType, Double> tempMap = new HashMap<>();
         	tempMap.put(ArmyType.DISTANCE, input.getTroopDefense() + input.getDistanceDefense());
         	tempMap.put(ArmyType.CAVALRY, input.getTroopDefense() + input.getCavalryDefense());
@@ -55,6 +48,22 @@ public class CalculationsHelper {
         	tempMap.put(ArmyType.INFANTRY, input.getTroopHealth() + input.getInfantryHealth());
         	tempMap.put(ArmyType.ARTILLERY, input.getTroopHealth() + input.getArtilleryHealth());
         	HEALTH_MODIFIERS = Collections.unmodifiableMap(tempMap);
+        }
+        {
+            Map<ArmyType, Double> tempMap = new HashMap<>();
+            tempMap.put(ArmyType.DISTANCE, input.getTroopDamage() + input.getDistanceDamage());
+            tempMap.put(ArmyType.CAVALRY, input.getTroopDamage() + input.getCavalryDamage());
+            tempMap.put(ArmyType.INFANTRY, input.getTroopDamage() + input.getInfantryDamage());
+            tempMap.put(ArmyType.ARTILLERY, input.getTroopDamage() + input.getArtilleryDamage());
+            DAMAGE_MODIFIERS = Collections.unmodifiableMap(tempMap);
+        }
+        {
+            Map<ArmyType, Double> tempMap = new HashMap<>();
+            tempMap.put(ArmyType.DISTANCE, input.getTroopDamageReduction() + input.getDistanceDamageReduction());
+            tempMap.put(ArmyType.CAVALRY, input.getTroopDamageReduction() + input.getCavalryDamageReduction());
+            tempMap.put(ArmyType.INFANTRY, input.getTroopDamageReduction() + input.getInfantryDamageReduction());
+            tempMap.put(ArmyType.ARTILLERY, input.getTroopDamageReduction() + input.getArtilleryDamageReduction());
+            DAMAGE_REDUCTION_MODIFIERS = Collections.unmodifiableMap(tempMap);
         }
 
     }

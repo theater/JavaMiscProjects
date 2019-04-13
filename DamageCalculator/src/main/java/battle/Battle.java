@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import main.java.config.ArmyStats;
 import main.java.config.ArmyType;
 import main.java.config.CalculationsHelper;
 import main.java.config.ConfigManager;
@@ -35,7 +36,6 @@ public class Battle {
 
 	private List<Army> attackerLosses = new ArrayList<>();
 	private List<Army> defenderLosses = new ArrayList<>();
-
 
 	public Battle() throws IOException {
 		JSONParser parser = new JSONParser();
@@ -80,26 +80,11 @@ public class Battle {
 	}
 
 	public void fight() {
-		for (int i = 0; i < COUNTER; i++) {
+		//TODO this will be calculated currently is constant
+		int counter = COUNTER;
+		for (int i = 0; i < counter; i++) {
 			doRound();
 		}
-		for (Army army : attacker) {
-			logger.info("ArmyOfAtackerFinal:" + army);
-		}
-		for (Army army : defender) {
-			logger.info("ArmyOfDefenderFinal:" + army);
-		}
-		for (Army army : attackerLosses) {
-			if (army.getNumber() > 0) {
-				logger.info("Attacker losses:" + army);
-			}
-		}
-		for (Army army : defenderLosses) {
-			if (army.getNumber() > 0) {
-				logger.info("Defender losses:" + army);
-			}
-		}
-
 	}
 
 	private void doRound() {
@@ -141,10 +126,38 @@ public class Battle {
 		return result;
 	}
 
-	private int calculateDefenderLosses(Army attackingArmyOfAttacker, Army defendingArmy) {
-		logger.info("Attacking army: " + attackingArmyOfAttacker + "\tDefendingArmy: " + defendingArmy);
-		return 12;
+	private int calculateDefenderLosses(Army attackingArmy, Army defendingArmy) {
+		logger.info("Attacking army: " + attackingArmy + "\tDefendingArmy: " + defendingArmy);
+		ArmyStats attackerStats = attackingArmy.getArmyStats();
+		ArmyStats defenderStats = defendingArmy.getArmyStats();
+
+		double defense = defenderStats.getDefense();
+		double modifiedAttack = attackerStats.getAttack();
+		double baseDamage = calculateBaseDamage(defense, modifiedAttack);
+		logger.trace(this + " base damage:\t\t" + baseDamage);
+
+		double efficiencyFactor = calculateEfficiency();
+		logger.trace(this + " efficiency:\t\t" + efficiencyFactor);
+
+		double damageModifiers = Math.min(1 + ((attackerStats.getDamage() - defenderStats.getDamageReduction()) / 100), 3);
+		logger.trace(this + " damageModifiers:\t\t" + damageModifiers);
+		double calculatedDamage = baseDamage * damageModifiers * efficiencyFactor;
+
+		double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber()))
+				/ defenderStats.getHealth();
+
+		return (int) losses;
 	}
+
+
+	private double calculateBaseDamage(double defense, double modifiedAttack) {
+		return modifiedAttack * Math.max(0.3, Math.min(0.75, modifiedAttack / (modifiedAttack + defense)));
+	}
+
+	private double calculateEfficiency() {
+		return 1;
+	}
+
 
 	private void updateLosses(int defenderLossesNumber, Army defendingArmy, boolean isForDefender) {
 		List<Army> lossesToUpdate = isForDefender ? defenderLosses : attackerLosses;
@@ -167,6 +180,25 @@ public class Battle {
 
 		Battle battle = new Battle();
 		battle.fight();
+	}
+
+	public void printResults() {
+		for (Army army : attacker) {
+			logger.info("ArmyOfAtackerFinal:" + army);
+		}
+		for (Army army : defender) {
+			logger.info("ArmyOfDefenderFinal:" + army);
+		}
+		for (Army army : attackerLosses) {
+			if (army.getNumber() > 0) {
+				logger.info("Attacker losses:" + army);
+			}
+		}
+		for (Army army : defenderLosses) {
+			if (army.getNumber() > 0) {
+				logger.info("Defender losses:" + army);
+			}
+		}
 	}
 
 	//Careful - it erases resources\\inputParams.json. Use it only as a template

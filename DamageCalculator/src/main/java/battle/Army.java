@@ -17,7 +17,6 @@ public class Army implements Comparable<Army> {
 	private ArmySubType subType;
 	private int tier;
 	private int number;
-
 	private ArmyStats armyStats;
 
 	public Army(ArmyType type, int tier, int number) {
@@ -33,10 +32,12 @@ public class Army implements Comparable<Army> {
 		Configuration configuration = ConfigManager.getInstance().getConfiguration();
 		ArmyStats baseArmyStats = configuration.BASE_UNIT_STATS_PER_ARMYTYPE.get(type).get(tier);
 
-		double attack = calculateDamage(baseArmyStats, helper);
+		double attack = calculateAttack(baseArmyStats, helper);
 		double defense = calculateDefense(baseArmyStats, helper);
 		double health = calculateHealth(baseArmyStats, helper);
-		armyStats = new ArmyStats(attack, defense, health);
+		double damage = calculateDamage(baseArmyStats, helper);
+		double damageReduction = calculateDamageReduction(baseArmyStats, helper);
+		armyStats = new ArmyStats(attack, defense, health, damage, damageReduction);
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class Army implements Comparable<Army> {
 		return result;
 	}
 
-	private double calculateDamage(ArmyStats armyStats, CalculationsHelper helper) {
+	private double calculateAttack(ArmyStats armyStats, CalculationsHelper helper) {
 		double baseAttack = armyStats.getAttack();
 		logger.trace(this + " base attack:\t\t" + baseAttack);
 
@@ -76,6 +77,20 @@ public class Army implements Comparable<Army> {
 		logger.trace(this + " modified defense:\t" + modifiedHealth);
 
 		return modifiedHealth;
+	}
+
+	private double calculateDamage(ArmyStats armyStats, CalculationsHelper helper) {
+		double modifiedDamage = helper.DAMAGE_MODIFIERS.get(getType());
+		logger.trace(this + " modified damage:\t" + modifiedDamage);
+
+		return modifiedDamage;
+	}
+
+	private double calculateDamageReduction(ArmyStats armyStats, CalculationsHelper helper) {
+		double modifiedDamageReduction = helper.DAMAGE_REDUCTION_MODIFIERS.get(getType());
+		logger.trace(this + " modified DamageReduction:\t" + modifiedDamageReduction);
+
+		return modifiedDamageReduction;
 	}
 
 	public ArmyType getType() {
