@@ -9,7 +9,7 @@ import main.java.config.ArmySubType;
 import main.java.config.ArmyType;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
-import main.java.config.UnitStats;
+import main.java.config.ArmyStats;
 import main.java.config.UserInputParameters;
 
 public class WolfCalculationsHelper {
@@ -19,7 +19,7 @@ public class WolfCalculationsHelper {
     public final Map<ArmyType, ArmySubType[]> TYPE_TO_SUBTYPE_MAP;
     public final double CAVALRY_VS_INFANTRY_DAMAGE;
     public final double DISTANCE_VS_INFANTRY_DAMAGE;
-	public final Map<ArmyType, ArrayList<UnitStats>> BASE_UNIT_STATS_PER_ARMYTYPE;
+	public final Map<ArmyType, ArrayList<ArmyStats>> BASE_UNIT_STATS_PER_ARMYTYPE;
 
 
     public WolfCalculationsHelper(UserInputParameters input) {

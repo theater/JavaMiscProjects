@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,16 +39,17 @@ public class Battle {
 	public Battle() throws IOException {
 		JSONParser parser = new JSONParser();
 		UserInputParameters attackerInput = parser.parseUserInput(attackerFile);
-		initializeContent(attacker, attackerInput);
+		initializeArmyCollection(attacker, attackerInput);
 
 		UserInputParameters defenderInput = parser.parseUserInput(defenderFile);
-		initializeContent(defender, defenderInput);
-		initializeContent(attackerLosses);
-		initializeContent(defenderLosses);
+		initializeArmyCollection(defender, defenderInput);
+
+		initializeArmyCollection(attackerLosses);
+		initializeArmyCollection(defenderLosses);
 	}
 
 
-	private void initializeContent(List<Army> armyCollection) {
+	private void initializeArmyCollection(List<Army> armyCollection) {
 		ArmyType[] armyTypes = ArmyType.values();
 		for (ArmyType armyType : armyTypes) {
 			for (int i = 0; i < MAX_TIER; i++) {
@@ -59,9 +59,9 @@ public class Battle {
 		Collections.sort(armyCollection);
 	}
 
-	private void initializeContent(List<Army> armyCollection, UserInputParameters attackerInput) {
+	private void initializeArmyCollection(List<Army> armyCollection, UserInputParameters input) {
 		ArmyType[] armyTypes = ArmyType.values();
-		Map<ArmyType, List<Integer>> army = attackerInput.getArmy();
+		Map<ArmyType, List<Integer>> army = input.getArmy();
 		for (ArmyType armyType : armyTypes) {
 			List<Integer> armyByType = army.get(armyType);
 			for (int i = 0; i < MAX_TIER; i++) {
@@ -69,11 +69,18 @@ public class Battle {
 				if (armyByType != null && armyByType.size() == MAX_TIER) {
 					unitsAmount = armyByType.get(i);
 				}
-				armyCollection.add(new Army(armyType, i, unitsAmount));
+				Army newArmy = new Army(armyType, i, unitsAmount);
+				armyCollection.add(newArmy);
+				addArmyModifiers(newArmy, input);
 			}
 		}
 		Collections.sort(armyCollection);
 	}
+
+	private void addArmyModifiers(Army newArmy, UserInputParameters attackerInput) {
+		//TODO add new fields to Army class and calculate necessary modifiers in this method
+	}
+
 
 	public void fight() {
 		for (int i = 0; i < COUNTER; i++) {

@@ -13,7 +13,6 @@ import main.java.config.ArmyType;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
 import main.java.config.UserInputParameters;
-import main.java.parser.JSONParser;
 
 public class DamageCalculator {
 

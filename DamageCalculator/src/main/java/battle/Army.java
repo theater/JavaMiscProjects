@@ -4,19 +4,21 @@ import main.java.config.ArmySubType;
 import main.java.config.ArmyType;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
+import main.java.config.ArmyStats;
 
 public class Army implements Comparable<Army> {
 	private ArmyType type;
 	private ArmySubType subType;
 	private int tier;
 	private int number;
+	private ArmyStats armyStats;
 
 	public Army(ArmyType type, int tier, int number) {
 		this.type = type;
 		this.tier = tier;
 		this.number = number;
-
 		Configuration configuration = ConfigManager.getInstance().getConfiguration();
+		this.armyStats = configuration.BASE_UNIT_STATS_PER_ARMYTYPE.get(type).get(tier).clone();
 		this.subType = configuration.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
 	}
 
@@ -64,6 +66,14 @@ public class Army implements Comparable<Army> {
 	@Override
 	public String toString() {
 		return "[type=" + type + "[" + (tier + 1) + "], subType=" + subType + ", number=" + number + "]";
+	}
+
+	public ArmyStats getArmyStats() {
+		return armyStats;
+	}
+
+	public void setArmyStats(ArmyStats armyStats) {
+		this.armyStats = armyStats;
 	}
 
 }

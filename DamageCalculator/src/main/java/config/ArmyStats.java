@@ -1,8 +1,9 @@
 package main.java.config;
 
-public class UnitStats {
+import java.util.ArrayList;
 
-	private int tier;
+public class ArmyStats {
+
 	private int attack;
 	private int defense;
 	private int health;
@@ -31,17 +32,18 @@ public class UnitStats {
 		this.health = health;
 	}
 
-	public int getTier() {
-		return tier;
-	}
-
-	public void setTier(int tier) {
-		this.tier = tier;
-	}
-
 	@Override
 	public String toString() {
 		return "UnitStats [attack=" + attack + ", defense=" + defense + ", health=" + health + "]";
+	}
+
+	@Override
+	public ArmyStats clone() {
+		ArmyStats unitStats = new ArmyStats();
+		unitStats.setAttack(attack);
+		unitStats.setDefense(defense);
+		unitStats.setHealth(health);
+		return unitStats;
 	}
 
 }
