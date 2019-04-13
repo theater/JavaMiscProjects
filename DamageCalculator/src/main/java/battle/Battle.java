@@ -161,14 +161,8 @@ public class Battle {
 	public static void main (String ...args) throws JsonGenerationException, JsonMappingException, IOException {
 		logger.info("Entering main");
 
-		Battle battle = new Battle().print();
+		Battle battle = new Battle();
 		battle.fight();
-	}
-
-	private Battle print() throws JsonGenerationException, JsonMappingException, IOException {
-		ArmyInitializationDTO dto = new ArmyInitializationDTO();
-		printInputParams(dto);
-		return this;
 	}
 
 	//Careful - it erases resources\\inputParams.json. Use it only as a template

@@ -3,8 +3,6 @@ package main.java.config;
 import java.util.List;
 import java.util.Map;
 
-import main.java.battle.ArmyInitializationDTO;
-
 public class UserInputParameters {
 
 	private int castleLevel = 30;
