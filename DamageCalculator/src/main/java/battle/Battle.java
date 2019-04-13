@@ -30,7 +30,7 @@ public class Battle {
 	private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
 	private static final int MAX_TIER = CONFIGURATION.ABSOLUTE_MAX_TIER;
 
-	private final static int COUNTER = 5;
+	private final static int ROUNDS_COUNTER = 1;
 	private static final String attackerFile = "attacker.json";
 	private static final String defenderFile = "defender.json";
 
@@ -83,10 +83,11 @@ public class Battle {
 
 	public void fight() {
 		// TODO this will be calculated currently is constant
-		int counter = COUNTER;
+		int counter = ROUNDS_COUNTER;
 		for (int i = 0; i < counter; i++) {
 			doRound();
 		}
+		printResults();
 	}
 
 	private void doRound() {
@@ -148,7 +149,7 @@ public class Battle {
 		double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber())
 				* specificDamageFactor(attackingArmy, defendingArmy)) / defenderStats.getHealth();
 
-		return losses <= defendingArmy.getNumber() ? (int) losses : 0;
+		return losses <= defendingArmy.getNumber() ? (int) Math.floor(losses) : defendingArmy.getNumber();
 	}
 
 	private int specificDamageFactor(Army attackingArmy, Army defendingArmy) {
