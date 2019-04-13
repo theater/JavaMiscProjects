@@ -3,27 +3,32 @@ package main.java.battle;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import main.java.config.ArmyType;
+import main.java.config.ConfigManager;
 import main.java.config.UserInputParameters;
+import main.java.parser.JSONParser;
 
 public class Battle {
 
 	private static Logger logger = LoggerFactory.getLogger(Battle.class);
-//	March attacker = new March();
-//	March defender = new March();
-//
-//	March attackersLosses = new March();
-//	March defenderLosses = new March();
+	private static final int MAX_TIER = ConfigManager.getInstance().getConfiguration().ABSOLUTE_MAX_TIER;
 
 	private final static int COUNTER = 5;
+	private static final String attackerFile = "attacker.json";
+	private static final String defenderFile = "defender.json";
+
 
 	private List<Army> attacker = new ArrayList<>();
 	private List<Army> defender = new ArrayList<>();
@@ -31,11 +36,43 @@ public class Battle {
 	private List<Army> attackerLosses = new ArrayList<>();
 	private List<Army> defenderLosses = new ArrayList<>();
 
-	public Battle() {
-		InitializationUtil.initializeAttacker(attacker);
-		InitializationUtil.initializeAttacker(defender);
-		InitializationUtil.initializeLosses(attackerLosses);
-		InitializationUtil.initializeLosses(defenderLosses);
+
+	public Battle() throws IOException {
+		JSONParser parser = new JSONParser();
+		UserInputParameters attackerInput = parser.parseUserInput(attackerFile);
+		initializeContent(attacker, attackerInput);
+
+		UserInputParameters defenderInput = parser.parseUserInput(defenderFile);
+		initializeContent(defender, defenderInput);
+		initializeContent(attackerLosses);
+		initializeContent(defenderLosses);
+	}
+
+
+	private void initializeContent(List<Army> armyCollection) {
+		ArmyType[] armyTypes = ArmyType.values();
+		for (ArmyType armyType : armyTypes) {
+			for (int i = 0; i < MAX_TIER; i++) {
+				armyCollection.add(new Army(armyType, i, 0));
+			}
+		}
+		Collections.sort(armyCollection);
+	}
+
+	private void initializeContent(List<Army> armyCollection, UserInputParameters attackerInput) {
+		ArmyType[] armyTypes = ArmyType.values();
+		Map<ArmyType, List<Integer>> army = attackerInput.getArmy();
+		for (ArmyType armyType : armyTypes) {
+			List<Integer> armyByType = army.get(armyType);
+			for (int i = 0; i < MAX_TIER; i++) {
+				int unitsAmount = 0;
+				if (armyByType != null && armyByType.size() == MAX_TIER) {
+					unitsAmount = armyByType.get(i);
+				}
+				armyCollection.add(new Army(armyType, i, unitsAmount));
+			}
+		}
+		Collections.sort(armyCollection);
 	}
 
 	public void fight() {
@@ -124,14 +161,21 @@ public class Battle {
 	public static void main (String ...args) throws JsonGenerationException, JsonMappingException, IOException {
 		logger.info("Entering main");
 
-//		Battle battle = new Battle();
-//		battle.fight();
+		Battle battle = new Battle().print();
+		battle.fight();
+	}
+
+	private Battle print() throws JsonGenerationException, JsonMappingException, IOException {
+		ArmyInitializationDTO dto = new ArmyInitializationDTO();
+		printInputParams(dto);
+		return this;
 	}
 
 	//Careful - it erases resources\\inputParams.json. Use it only as a template
-	private static void printInputParams() throws IOException, JsonGenerationException, JsonMappingException {
+	private static void printInputParams(Object object) throws IOException, JsonGenerationException, JsonMappingException {
 		UserInputParameters userInputParameters = new UserInputParameters();
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.writeValue(new File("resources\\inputParams.json"), userInputParameters);
+//		mapper.writeValue(new File("resources\\inputParams.json"), userInputParameters);
+		mapper.writeValue(new File("resources\\inputParams.json"), object);
 	}
 }

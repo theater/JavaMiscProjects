@@ -1,5 +1,10 @@
 package main.java.config;
 
+import java.util.List;
+import java.util.Map;
+
+import main.java.battle.ArmyInitializationDTO;
+
 public class UserInputParameters {
 
 	private int castleLevel = 30;
@@ -50,6 +55,7 @@ public class UserInputParameters {
 	private double infantryVsDistanceDamageReduction;
 	private double infantryVsCavalryDamageReduction;
 	private double infantryVsArtilleryDamageReduction;
+	private Map<ArmyType, List<Integer>> army;
 
 	public int getCastleLevel() {
 		return castleLevel;
@@ -363,6 +369,14 @@ public class UserInputParameters {
 		this.infantryVsArtilleryDamageReduction = infantryVsArtilleryDamageReduction;
 	}
 
+	public Map<ArmyType, List<Integer>> getArmy() {
+		return army;
+	}
+
+	public void setArmy(Map<ArmyType, List<Integer>> army) {
+		this.army = army;
+	}
+
 	@Override
 	public String toString() {
 		return "UserInputParameters [castleLevel=" + castleLevel + ", troopsAmount=" + troopsAmount
@@ -385,7 +399,7 @@ public class UserInputParameters {
 				+ ", cavalryVsArtilleryDamage=" + cavalryVsArtilleryDamage + ", infantryVsDistanceDamageReduction="
 				+ infantryVsDistanceDamageReduction + ", infantryVsCavalryDamageReduction="
 				+ infantryVsCavalryDamageReduction + ", infantryVsArtilleryDamageReduction="
-				+ infantryVsArtilleryDamageReduction + "]";
+				+ infantryVsArtilleryDamageReduction + ", army=" + army + "]";
 	}
 
 }

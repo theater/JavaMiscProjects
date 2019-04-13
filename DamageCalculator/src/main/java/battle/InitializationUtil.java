@@ -7,7 +7,6 @@ import main.java.config.ArmyType;
 
 public class InitializationUtil {
 
-	private static final int MAX_TIER = 12;
 	public static void initializeAttacker(List<Army> army) {
 		army.add(makeDistanceArmy(0, 100));
 		army.add(makeDistanceArmy(1, 100));
@@ -64,15 +63,15 @@ public class InitializationUtil {
 		Collections.sort(army);
 	}
 
-	public static void initializeLosses(List<Army> list) {
-		ArmyType[] armyTypes = ArmyType.values();
-		for (ArmyType armyType : armyTypes) {
-			for (int i = 0; i < MAX_TIER; i++) {
-				list.add(new Army(armyType, i, 0));
-			}
-		}
-		Collections.sort(list);
-	}
+//	public static void initializeLosses(List<Army> list) {
+//		ArmyType[] armyTypes = ArmyType.values();
+//		for (ArmyType armyType : armyTypes) {
+//			for (int i = 0; i < MAX_TIER; i++) {
+//				list.add(new Army(armyType, i, 0));
+//			}
+//		}
+//		Collections.sort(list);
+//	}
 
 	private static Army makeDistanceArmy(int tier, int number) {
 		return new Army(ArmyType.DISTANCE, tier, number);

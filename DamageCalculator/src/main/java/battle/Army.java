@@ -24,7 +24,7 @@ public class Army implements Comparable<Army> {
 	public int compareTo(Army object) {
 		int result = Integer.compare(object.getSubType().getAttackSpeed(), this.getSubType().getAttackSpeed());
 		if (result == 0) {
-			result = Integer.compare(object.getTier(), this.getTier());
+			result = Integer.compare(this.getTier(), object.getTier());
 		}
 		return result;
 	}

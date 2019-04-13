@@ -37,5 +37,63 @@
 	"cavalryVsArtilleryDamage": 0.0,
 	"infantryVsDistanceDamageReduction": 0.0,
 	"infantryVsCavalryDamageReduction": 0.0,
-	"infantryVsArtilleryDamageReduction": 0.0
+	"infantryVsArtilleryDamageReduction": 0.0,
+	"army": {
+		"DISTANCE": [
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100
+		],
+		"INFANTRY": [
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100
+		],
+		"CAVALRY": [
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100
+		],
+		"ARTILLERY": [
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100,
+			100
+		]
+	}
 }
