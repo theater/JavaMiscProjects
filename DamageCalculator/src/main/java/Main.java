@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import main.java.web.Calculate;
+import main.java.web.wolf.Calculate;
 
 
 @SpringBootApplication

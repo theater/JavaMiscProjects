@@ -1,7 +1,10 @@
-package main.java.calculator;
+package main.java.wolf;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import main.java.config.ArmySubType;
+import main.java.config.ArmyType;
 
 public class WolfArmy implements Comparable<WolfArmy> {
 
@@ -16,14 +19,14 @@ public class WolfArmy implements Comparable<WolfArmy> {
     private int baseAttack;
     private double calculatedFinalDamage;
     private int troopsNumber = 0;
-    private CalculationsHelper helper;
+    private WolfCalculationsHelper helper;
 
-    public WolfArmy(ArmyType type, int tier, CalculationsHelper helper) {
+    public WolfArmy(ArmyType type, int tier, WolfCalculationsHelper helper) {
         this.type = type;
         this.tier = tier;
         this.helper = helper;
         subType = helper.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
-        baseAttack = helper.BASE_ATTACK_FACTORS.get(type)[tier];
+        baseAttack = helper.BASE_UNIT_STATS_PER_ARMYTYPE.get(type).get(tier).getAttack();
         attackEfficiency = calculateAttackEfficiency();
         calculatedFinalDamage = calculateDamage();
     }
@@ -31,7 +34,8 @@ public class WolfArmy implements Comparable<WolfArmy> {
     private double calculateAttackEfficiency() {
         double baseEfficiency = subType == ArmySubType.GRENADIERS ? 1.2 : subType == ArmySubType.LIGHT_CAVALRY ? 0.8 : 1;
         double efficiencyModifier = type == ArmyType.CAVALRY ? helper.CAVALRY_VS_INFANTRY_DAMAGE / 100 : type == ArmyType.DISTANCE ? helper.DISTANCE_VS_INFANTRY_DAMAGE / 100 : 0;
-        return Math.min(MAX_EFFICIENCY_FACTOR, baseEfficiency + efficiencyModifier);
+        double reduction = 0;
+		return Math.min(MAX_EFFICIENCY_FACTOR, baseEfficiency + efficiencyModifier - reduction );
     }
 
     private double calculateDamage() {
@@ -43,10 +47,10 @@ public class WolfArmy implements Comparable<WolfArmy> {
 
         int defense = 0;
 
-        double baseDamage = helper.limitArmyDamage ? modifiedAttack * Math.min(0.75, modifiedAttack / (modifiedAttack + defense)) : Math.pow(modifiedAttack, 2) / (modifiedAttack + defense);
+        double baseDamage = modifiedAttack * Math.min(0.75, modifiedAttack / (modifiedAttack + defense));
         logger.trace(this + " base damage:\t\t" + baseDamage);
 
-        double efficiencyFactor = getAttackEfficiency();
+        double efficiencyFactor = attackEfficiency;
         logger.trace(this + " efficiency:\t\t" + efficiencyFactor);
 
         double calculatedDamage = baseDamage * Math.min(1 + (helper.DAMAGE_MODIFIERS.get(getType()) / 100), 3) * efficiencyFactor;
@@ -73,10 +77,6 @@ public class WolfArmy implements Comparable<WolfArmy> {
 
     public int getTier() {
         return tier;
-    }
-
-    public double getAttackEfficiency() {
-        return attackEfficiency;
     }
 
     @Override

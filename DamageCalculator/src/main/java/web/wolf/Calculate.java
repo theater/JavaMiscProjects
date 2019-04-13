@@ -1,4 +1,4 @@
-package main.java.web;
+package main.java.web.wolf;
 
 import java.io.IOException;
 
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import main.java.calculator.DamageCalculator;
-import main.java.calculator.WolfDamageCalculator;
 import main.java.config.UserInputParameters;
+import main.java.wolf.DamageCalculator;
+import main.java.wolf.WolfDamageCalculator;
 
 @RestController
 public class Calculate {

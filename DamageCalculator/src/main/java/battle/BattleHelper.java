@@ -1,7 +1,9 @@
-package main.java.calculator;
+package main.java.battle;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import main.java.config.ArmySubType;
 
 public class BattleHelper {
 	public static Map<ArmySubType, Integer> CHOICE_CRIT = new HashMap<>();

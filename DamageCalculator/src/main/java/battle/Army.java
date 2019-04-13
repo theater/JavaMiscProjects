@@ -1,5 +1,8 @@
-package main.java.calculator;
+package main.java.battle;
 
+import main.java.config.ArmySubType;
+import main.java.config.ArmyType;
+import main.java.config.ConfigManager;
 import main.java.config.Configuration;
 
 public class Army implements Comparable<Army> {
@@ -13,7 +16,7 @@ public class Army implements Comparable<Army> {
 		this.tier = tier;
 		this.number = number;
 
-		Configuration configuration = DamageCalculator.configuration;
+		Configuration configuration = ConfigManager.getInstance().getConfiguration();
 		this.subType = configuration.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
 	}
 

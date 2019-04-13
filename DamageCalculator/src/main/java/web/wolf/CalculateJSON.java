@@ -1,4 +1,4 @@
-package main.java.web;
+package main.java.web.wolf;
 
 import java.io.IOException;
 
@@ -13,9 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import main.java.calculator.DamageCalculator;
-import main.java.calculator.WolfDamageCalculator;
 import main.java.config.UserInputParameters;
+import main.java.wolf.DamageCalculator;
+import main.java.wolf.WolfDamageCalculator;
 
 @RestController
 public class CalculateJSON {
@@ -28,15 +28,15 @@ public class CalculateJSON {
     }
 
     @PostMapping("/calculateJSON")
-    public String submit(@RequestParam String jsonContent1, @RequestParam String jsonContent2) throws IOException {
-        logger.info("JSON Content:" + jsonContent1);
+    public String submit(@RequestParam String jsonContent) throws IOException {
+        logger.info("JSON Content:" + jsonContent);
         ObjectMapper mapper = new ObjectMapper();
-        UserInputParameters userParameters1 = mapper.readValue(jsonContent1, UserInputParameters.class);
+        UserInputParameters userParameters1 = mapper.readValue(jsonContent, UserInputParameters.class);
         DamageCalculator calculator = new WolfDamageCalculator(userParameters1).calculate();
-        
-        
-        
-        
+
+
+
+
         return calculator.printToHTMLTable();
     }
 }

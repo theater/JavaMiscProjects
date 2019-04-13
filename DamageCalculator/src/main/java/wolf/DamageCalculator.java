@@ -1,4 +1,4 @@
-package main.java.calculator;
+package main.java.wolf;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -9,6 +9,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import main.java.config.ArmyType;
+import main.java.config.ConfigManager;
 import main.java.config.Configuration;
 import main.java.config.UserInputParameters;
 import main.java.parser.JSONParser;
@@ -18,32 +20,20 @@ public class DamageCalculator {
     private static Logger logger = LoggerFactory.getLogger(DamageCalculator.class);
 
     private static final String NEW_LINE = "\n\r";
-    private static String configFileName = "Configuration.json";
 
     private static final double SPELL_CAPACITY_BOOST = 0.1;
     private static final double MARCH_CAPACITY_BOOST = 0.25;
     private static final int STEP_UNITS = 1;
-    protected static Configuration configuration;
-    static {
-        try {
-            JSONParser jsonParser = new JSONParser();
-            Configuration parsedConfig = jsonParser.parseConfiguration(configFileName);
-            DamageCalculator.configuration = parsedConfig;
-        } catch (IOException e) {
-            logger.error("Unable to initalize configuration" + e);
-            System.exit(1);
-        }
-    }
 
     protected double totalArmyDamage;
     private int calculatedMarchCapacity;
     private List<WolfArmy> armyDistribution = new ArrayList<>();
     private UserInputParameters inputParameters;
-    private CalculationsHelper helper;
+    private WolfCalculationsHelper helper;
 
     public DamageCalculator(UserInputParameters parameters) throws IOException {
         this.inputParameters = parameters;
-        helper = new CalculationsHelper(inputParameters, DamageCalculator.configuration);
+        helper = new WolfCalculationsHelper(inputParameters);
         calculatedMarchCapacity = calculateCapacity();
         initializeDistribution();
     }
@@ -56,6 +46,8 @@ public class DamageCalculator {
         if (inputParameters.isUseMarchCapacitySpell()) {
             capacityModifier += SPELL_CAPACITY_BOOST;
         }
+
+        Configuration configuration = ConfigManager.getInstance().getConfiguration();
         int baseCapacity = configuration.CASTLE_BASE_MARCH_CAPACITY.get(inputParameters.getCastleLevel());
         return (int) (capacityModifier * baseCapacity + inputParameters.getTroopsAmount());
     }

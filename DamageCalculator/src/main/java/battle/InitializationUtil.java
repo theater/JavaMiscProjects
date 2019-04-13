@@ -1,7 +1,9 @@
-package main.java.calculator;
+package main.java.battle;
 
 import java.util.Collections;
 import java.util.List;
+
+import main.java.config.ArmyType;
 
 public class InitializationUtil {
 

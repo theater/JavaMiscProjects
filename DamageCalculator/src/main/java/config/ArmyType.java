@@ -1,8 +1,7 @@
-package main.java.calculator;
+package main.java.config;
 
 
 public enum ArmyType {
-
     INFANTRY,
     CAVALRY,
     DISTANCE,

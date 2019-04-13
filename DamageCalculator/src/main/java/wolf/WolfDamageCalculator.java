@@ -1,4 +1,4 @@
-package main.java.calculator;
+package main.java.wolf;
 
 import java.io.IOException;
 import java.text.DecimalFormat;

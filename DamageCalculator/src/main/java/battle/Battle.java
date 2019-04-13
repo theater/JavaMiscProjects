@@ -1,10 +1,18 @@
-package main.java.calculator;
+package main.java.battle;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import main.java.config.UserInputParameters;
 
 public class Battle {
 
@@ -22,7 +30,6 @@ public class Battle {
 
 	private List<Army> attackerLosses = new ArrayList<>();
 	private List<Army> defenderLosses = new ArrayList<>();
-
 
 	public Battle() {
 		InitializationUtil.initializeAttacker(attacker);
@@ -70,7 +77,7 @@ public class Battle {
 	}
 
 	private Army getOpponentArmy(Army attackingArmyOfAttacker, List<Army> defender) {
-		Army result = defender.get(defender.size() -1);
+		Army result = defender.get(defender.size() - 1);
 		for (int i = defender.size() - 1; i >= 0; i--) {
 			Army iteratedArmy = defender.get(i);
 			if (iteratedArmy.getNumber() <= 0) {
@@ -114,9 +121,17 @@ public class Battle {
 	}
 
 
-	public static void main (String ...args) {
+	public static void main (String ...args) throws JsonGenerationException, JsonMappingException, IOException {
 		logger.info("Entering main");
-		Battle battle = new Battle();
-		battle.fight();
+
+//		Battle battle = new Battle();
+//		battle.fight();
+	}
+
+	//Careful - it erases resources\\inputParams.json. Use it only as a template
+	private static void printInputParams() throws IOException, JsonGenerationException, JsonMappingException {
+		UserInputParameters userInputParameters = new UserInputParameters();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(new File("resources\\inputParams.json"), userInputParameters);
 	}
 }
