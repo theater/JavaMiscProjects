@@ -25,6 +25,7 @@ import main.java.parser.JSONParser;
 
 public class Battle {
 
+	private static final double RANDOM_FACTOR = 0.85;
 	private static long timer = System.currentTimeMillis();
 	private static Logger logger = LoggerFactory.getLogger(Battle.class);
 
@@ -124,14 +125,32 @@ public class Battle {
 				continue;
 			}
 
-			Integer currentCriteria = BattleHelper.CHOICE_CRIT.get(result.getSubType());
-			Integer iteratedCriteria = BattleHelper.CHOICE_CRIT.get(iteratedArmy.getSubType());
+			int randomChance = calculateRandomChance(attackingArmyOfAttacker.getSubType());
+			//TODO I'm not sure if this is correct ! ! ! Discuss it with Rosen. Currently chosen criteria maybe should not be affected by chance...
+			Integer currentCriteria = BattleHelper.ATTACKER_CHOICE_CRITERIA.get(randomChance).get(result.getSubType());
+			Integer iteratedCriteria = BattleHelper.ATTACKER_CHOICE_CRITERIA.get(randomChance).get(iteratedArmy.getSubType());
 			if (currentCriteria > iteratedCriteria) {
 				result = iteratedArmy;
 			} else if (currentCriteria == iteratedCriteria && (iteratedArmy.getTier() < result.getTier())) {
 				result = iteratedArmy;
 			}
 		}
+		return result;
+	}
+
+	// TODO Improve this. Currently it's not generic at all...
+	private int calculateRandomChance(ArmySubType armySubType) {
+		int result = 1;
+		if (ArmySubType.LIGHT_CAVALRY == armySubType) {
+			if (Math.random() > RANDOM_FACTOR) {
+				result = 3;
+			}
+		} else if (ArmySubType.RIFLEMEN == armySubType) {
+			if (Math.random() > RANDOM_FACTOR) {
+				result = 2;
+			}
+		}
+
 		return result;
 	}
 
@@ -218,7 +237,7 @@ public class Battle {
 	public static void main(String... args) throws JsonGenerationException, JsonMappingException, IOException {
 		logger.info("Entering main");
 
-        long startTime = System.currentTimeMillis();
+		long startTime = System.currentTimeMillis();
 		Battle battle = new Battle();
 		logger.info("Construction of battle object took " + (System.currentTimeMillis() - startTime) + "ms");
 
