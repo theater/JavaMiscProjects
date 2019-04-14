@@ -30,7 +30,7 @@ public class Battle {
 	private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
 	private static final int MAX_TIER = CONFIGURATION.ABSOLUTE_MAX_TIER;
 
-	private final static int ROUNDS_COUNTER = 1;
+	private final static int ROUNDS_COUNTER = 30;
 	private static final String attackerFile = "attacker.json";
 	private static final String defenderFile = "defender.json";
 
@@ -82,7 +82,7 @@ public class Battle {
 	}
 
 	public void fight() {
-		// TODO this will be calculated currently is constant
+		// TODO this will be calculated. Currently is constant
 		int counter = ROUNDS_COUNTER;
 		for (int i = 0; i < counter; i++) {
 			doRound();
