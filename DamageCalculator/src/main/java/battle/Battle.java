@@ -25,6 +25,7 @@ import main.java.parser.JSONParser;
 
 public class Battle {
 
+	private static long timer = System.currentTimeMillis();
 	private static Logger logger = LoggerFactory.getLogger(Battle.class);
 
 	private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
@@ -217,8 +218,13 @@ public class Battle {
 	public static void main(String... args) throws JsonGenerationException, JsonMappingException, IOException {
 		logger.info("Entering main");
 
+        long startTime = System.currentTimeMillis();
 		Battle battle = new Battle();
+		logger.info("Construction of battle object took " + (System.currentTimeMillis() - startTime) + "ms");
+
+		startTime = System.currentTimeMillis();
 		battle.fight();
+		logger.info("Fight calculation took " + (System.currentTimeMillis() - startTime) + "ms");
 
 //		Map<ArmySubType, Map<ArmySubType, Double>> map = new HashMap<>();
 //		Map<ArmySubType, Double> innerMap = new HashMap<>();
@@ -239,6 +245,8 @@ public class Battle {
 //		innerMap.put(ArmySubType.HEAVY_CAVALRY, 1.2);
 //		map.put(ArmySubType.MUSKETEERS, innerMap);
 //		printInputParams(map);
+
+		logger.info("Overall program time is " + (System.currentTimeMillis() - timer) + "ms");
 	}
 
 	public void printResults() {
