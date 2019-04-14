@@ -29,14 +29,14 @@
 	"cavalryDamageReduction": 0.0,
 	"distanceDamageReduction": 0.0,
 	"artilleryDamageReduction": 0.0,
-	"distanceVsInfantryDamage": 0.0,
-	"distanceVsCavalryDamage": 0.0,
+	"distanceVsInfantryDamage": 10.0,
+	"distanceVsCavalryDamage": 15.0,
 	"distanceVsArtilleryDamage": 0.0,
 	"cavalryVsInfantryDamage": 0.0,
 	"cavalryVsDistanceDamage": 0.0,
 	"cavalryVsArtilleryDamage": 0.0,
-	"infantryVsDistanceDamageReduction": 0.0,
-	"infantryVsCavalryDamageReduction": 0.0,
+	"infantryVsDistanceDamageReduction": 3.0,
+	"infantryVsCavalryDamageReduction": 4.0,
 	"infantryVsArtilleryDamageReduction": 0.0,
 	"army": {
 		"DISTANCE": [

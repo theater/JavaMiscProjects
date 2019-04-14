@@ -35,8 +35,8 @@
 	"cavalryVsInfantryDamage": 0.0,
 	"cavalryVsDistanceDamage": 0.0,
 	"cavalryVsArtilleryDamage": 0.0,
-	"infantryVsDistanceDamageReduction": 0.0,
-	"infantryVsCavalryDamageReduction": 0.0,
+	"infantryVsDistanceDamageReduction": 2.0,
+	"infantryVsCavalryDamageReduction": 3.0,
 	"infantryVsArtilleryDamageReduction": 0.0,
 	"army": {
 		"DISTANCE": [

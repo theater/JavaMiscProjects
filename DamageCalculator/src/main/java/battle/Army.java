@@ -1,5 +1,8 @@
 package main.java.battle;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +15,9 @@ import main.java.config.Configuration;
 
 public class Army implements Comparable<Army> {
 	private static Logger logger = LoggerFactory.getLogger(Army.class);
+
+	protected Map<ArmyType, Double> damageVsOthers = new HashMap<>();
+	protected Map<ArmyType, Double> damageReductionVsOthers = new HashMap<>();
 
 	private ArmyType type;
 	private ArmySubType subType;
@@ -38,6 +44,19 @@ public class Army implements Comparable<Army> {
 		double damage = calculateDamage(baseArmyStats, helper);
 		double damageReduction = calculateDamageReduction(baseArmyStats, helper);
 		armyStats = new ArmyStats(attack, defense, health, damage, damageReduction);
+
+		Map<ArmyType, Double> specificEfficienciesMap = helper.SPECIFIC_EFFICIENCY.get(getType());
+		if (specificEfficienciesMap != null && !specificEfficienciesMap.isEmpty()) {
+			if(ArmyType.INFANTRY == getType()) {
+				damageReductionVsOthers.putAll(specificEfficienciesMap);
+			} else {
+				damageVsOthers.putAll(specificEfficienciesMap);
+			}
+		}
+
+	}
+
+	public void addDamageVsOthers (CalculationsHelper helper) {
 	}
 
 	@Override
@@ -132,6 +151,14 @@ public class Army implements Comparable<Army> {
 
 	public ArmyStats getArmyStats() {
 		return armyStats;
+	}
+
+	public Map<ArmyType, Double> getDamageVsOthers() {
+		return damageVsOthers;
+	}
+
+	public Map<ArmyType, Double> getDamageReductionVsOthers() {
+		return damageReductionVsOthers;
 	}
 
 }

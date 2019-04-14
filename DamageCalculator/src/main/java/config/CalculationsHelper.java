@@ -16,6 +16,7 @@ public class CalculationsHelper {
     public final double CAVALRY_VS_INFANTRY_DAMAGE;
     public final double DISTANCE_VS_INFANTRY_DAMAGE;
 	public final Map<ArmyType, ArrayList<ArmyStats>> BASE_UNIT_STATS_PER_ARMYTYPE;
+	public final Map<ArmyType, Map<ArmyType, Double>> SPECIFIC_EFFICIENCY;
 
 
     public CalculationsHelper(UserInputParameters input) {
@@ -64,6 +65,27 @@ public class CalculationsHelper {
             tempMap.put(ArmyType.INFANTRY, input.getTroopDamageReduction() + input.getInfantryDamageReduction());
             tempMap.put(ArmyType.ARTILLERY, input.getTroopDamageReduction() + input.getArtilleryDamageReduction());
             DAMAGE_REDUCTION_MODIFIERS = Collections.unmodifiableMap(tempMap);
+        }
+        {
+        	Map<ArmyType, Map<ArmyType, Double>> specificEfficiency = new HashMap<>();
+        	Map<ArmyType, Double> tempMap = new HashMap<>();
+        	tempMap.put(ArmyType.INFANTRY, input.getDistanceVsInfantryDamage());
+        	tempMap.put(ArmyType.CAVALRY, input.getDistanceVsCavalryDamage());
+        	tempMap.put(ArmyType.ARTILLERY, input.getDistanceVsArtilleryDamage());
+        	specificEfficiency.put(ArmyType.DISTANCE, tempMap);
+
+        	tempMap = new HashMap<>();
+        	tempMap.put(ArmyType.INFANTRY, input.getCavalryVsInfantryDamage());
+        	tempMap.put(ArmyType.DISTANCE, input.getCavalryVsDistanceDamage());
+        	tempMap.put(ArmyType.ARTILLERY, input.getCavalryVsArtilleryDamage());
+        	specificEfficiency.put(ArmyType.CAVALRY, tempMap);
+
+        	tempMap = new HashMap<>();
+        	tempMap.put(ArmyType.ARTILLERY, input.getInfantryVsArtilleryDamageReduction());
+        	tempMap.put(ArmyType.DISTANCE, input.getInfantryVsDistanceDamageReduction());
+        	tempMap.put(ArmyType.CAVALRY, input.getInfantryVsCavalryDamageReduction());
+        	specificEfficiency.put(ArmyType.INFANTRY, tempMap);
+        	SPECIFIC_EFFICIENCY = Collections.unmodifiableMap(specificEfficiency);
         }
 
     }

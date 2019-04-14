@@ -136,31 +136,52 @@ public class Battle {
 		double defense = defenderStats.getDefense();
 		double modifiedAttack = attackerStats.getAttack();
 		double baseDamage = calculateBaseDamage(defense, modifiedAttack);
-		logger.trace(this + " base damage:\t\t" + baseDamage);
-
-		double efficiencyFactor = calculateEfficiency(attackingArmy.getSubType(), defendingArmy.getSubType());
-		logger.trace(this + " efficiency:\t\t" + efficiencyFactor);
 
 		double damageModifiers = Math.min(1 + ((attackerStats.getDamage() - defenderStats.getDamageReduction()) / 100),
 				3);
-		logger.trace(this + " damageModifiers:\t\t" + damageModifiers);
-		double calculatedDamage = baseDamage * damageModifiers * efficiencyFactor;
+		logger.info("Damage modifier = " + damageModifiers);
 
-		double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber())
-				* specificDamageFactor(attackingArmy, defendingArmy)) / defenderStats.getHealth();
+		double efficiencyFactor = calculateEfficiencyFactor(attackingArmy, defendingArmy);
+		logger.info("Calculated efficiency = " + efficiencyFactor);
+
+		double calculatedDamage = baseDamage * damageModifiers * efficiencyFactor ;
+		logger.info("Calculated damage = " + calculatedDamage);
+
+		double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber())) / defenderStats.getHealth();
+		logger.info("Losses = " + losses);
 
 		return losses <= defendingArmy.getNumber() ? (int) Math.floor(losses) : defendingArmy.getNumber();
-	}
-
-	private int specificDamageFactor(Army attackingArmy, Army defendingArmy) {
-		return 1;
 	}
 
 	private double calculateBaseDamage(double defense, double modifiedAttack) {
 		return modifiedAttack * Math.max(0.3, Math.min(0.75, modifiedAttack / (modifiedAttack + defense)));
 	}
 
-	private double calculateEfficiency(ArmySubType attackerSubType, ArmySubType defenderSubType) {
+	private double calculateEfficiencyFactor(Army attackingArmy, Army defendingArmy) {
+		double staticEfficiency = retrieveStaticEfficiency(attackingArmy.getSubType(), defendingArmy.getSubType());
+		logger.trace(this + " efficiency:\t\t" + staticEfficiency);
+
+		double dynamicEfficiency = calculateDynamicEfficiency(attackingArmy, defendingArmy);
+		return staticEfficiency + dynamicEfficiency;
+	}
+
+	private double calculateDynamicEfficiency(Army attackingArmy, Army defendingArmy) {
+		double specificDamage = 0, specificReduction = 0;
+
+		Map<ArmyType, Double> specificDamageMap = attackingArmy.getDamageVsOthers();
+		Map<ArmyType, Double> specificReductionMap = defendingArmy.getDamageReductionVsOthers();
+		if(ArmyType.INFANTRY != attackingArmy.getType()) {
+			specificDamage =specificDamageMap.getOrDefault(defendingArmy.getType(), 0.0);
+		}
+		if(ArmyType.INFANTRY == defendingArmy.getType()) {
+			specificReduction =specificReductionMap.getOrDefault(attackingArmy.getType(), 0.0);
+		}
+
+		// this is percentage
+		return (specificDamage - specificReduction) / 100;
+	}
+
+	private double retrieveStaticEfficiency(ArmySubType attackerSubType, ArmySubType defenderSubType) {
 		Map<ArmySubType, Double> staticEfficiency = CONFIGURATION.STATIC_EFFICIENCY.get(attackerSubType);
 		if (staticEfficiency == null) {
 			return 1;
