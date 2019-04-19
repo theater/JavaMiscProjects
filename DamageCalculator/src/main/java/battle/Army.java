@@ -23,8 +23,10 @@ public class Army implements Comparable<Army> {
 	private ArmySubType subType;
 	private int tier;
 	private int number;
+	private int totalLosses = 0;
 	private ArmyStats armyStats;
-	private int losses = 0;
+
+	private int temporaryLosses = 0;
 
 	public Army(ArmyType type, int tier, int number) {
 		this.type = type;
@@ -68,10 +70,11 @@ public class Army implements Comparable<Army> {
 		}
 		return result;
 	}
-	
+
 	public void updateLosses() {
-		number -= losses;
-		losses = 0;
+		number -= temporaryLosses;
+		totalLosses += temporaryLosses;
+		temporaryLosses = 0;
 	}
 
 	private double calculateAttack(ArmyStats armyStats, CalculationsHelper helper) {
@@ -152,7 +155,7 @@ public class Army implements Comparable<Army> {
 
 	@Override
 	public String toString() {
-		return "[type=" + type + "[" + (tier + 1) + "], subType=" + subType + ", number=" + number + "]";
+		return "[type=" + type + "[" + (tier + 1) + "], subType=" + subType + ", number=" + number + ", losses=" + totalLosses + "]";
 	}
 
 	public ArmyStats getArmyStats() {
@@ -167,12 +170,16 @@ public class Army implements Comparable<Army> {
 		return damageReductionVsOthers;
 	}
 
-	public int getLosses() {
-		return losses;
+	public void addLosses(int losses) {
+		this.temporaryLosses += losses;
 	}
 
-	public void addLosses(int losses) {
-		this.losses += losses;
+	public int getTotalLosses() {
+		return totalLosses;
+	}
+
+	public String getTypeForPrinting() {
+		return type + "[" + tier + "]=";
 	}
 
 }

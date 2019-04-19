@@ -43,9 +43,6 @@ public class Battle {
     private List<Army> attacker = new ArrayList<>();
     private List<Army> defender = new ArrayList<>();
 
-    private List<Army> attackerLosses = new ArrayList<>();
-    private List<Army> defenderLosses = new ArrayList<>();
-
     public Battle() throws IOException {
         JSONParser parser = new JSONParser();
         UserInputParameters attackerInput = parser.parseUserInput(attackerFile);
@@ -53,19 +50,6 @@ public class Battle {
 
         UserInputParameters defenderInput = parser.parseUserInput(defenderFile);
         initializeArmyCollection(defender, defenderInput);
-
-        initializeArmyCollection(attackerLosses);
-        initializeArmyCollection(defenderLosses);
-    }
-
-    private void initializeArmyCollection(List<Army> armyCollection) {
-        ArmyType[] armyTypes = ArmyType.values();
-        for (ArmyType armyType : armyTypes) {
-            for (int i = 0; i < MAX_TIER; i++) {
-                armyCollection.add(new Army(armyType, i, 0));
-            }
-        }
-        Collections.sort(armyCollection);
     }
 
     private void initializeArmyCollection(List<Army> armyCollection, UserInputParameters input) {
@@ -104,7 +88,7 @@ public class Battle {
                 int currentDefenderArmyLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
                 defenderDefendingArmy.addLosses(currentDefenderArmyLosses);
             }
-            
+
 
             Army attackingArmyOfDefender = defender.get(i);
             Army attackerDefendingArmy = getOpponentArmy(attackingArmyOfDefender, attacker);
@@ -115,36 +99,15 @@ public class Battle {
 
         }
 
-        updateLosses(attacker, attackerLosses);
-        updateLosses(defender, defenderLosses);
+        updateLosses(attacker);
+        updateLosses(defender);
     }
 
-    private void updateLosses(List<Army> armiesToUpdate, List<Army> lossesToUpdate) {
+    private void updateLosses(List<Army> armiesToUpdate) {
         for (int i = 0; i < armiesToUpdate.size(); i++) {
-            Army army = armiesToUpdate.get(i);
-            Army lossesArmy = lossesToUpdate.get(i);
-			lossesArmy.setNumber(lossesArmy.getNumber() + army.getLosses());
-            army.updateLosses();
-        }
-        
-
-    }
-
-    private void updateLosses(int defenderLossesNumber, Army defendingArmy, boolean isForDefender) {
-        List<Army> lossesToUpdate = isForDefender ? defenderLosses : attackerLosses;
-        List<Army> armyToUpdate = isForDefender ? defender : attacker;
-        for (int i = 0; i < armyToUpdate.size(); i++) {
-            Army army = armyToUpdate.get(i);
-            if (army.getTier() == defendingArmy.getTier() && army.getType() == defendingArmy.getType()) {
-                int value = army.getNumber() - defenderLossesNumber;
-                army.setNumber(Math.max(0, value));
-
-                Army losses = lossesToUpdate.get(i);
-                losses.setNumber(losses.getNumber() + defenderLossesNumber);
-            }
+            armiesToUpdate.get(i).updateLosses();
         }
     }
-
 
     private Army getOpponentArmy(Army attackingArmyOfAttacker, List<Army> defender) {
         int randomChance = calculateRandomChance(attackingArmyOfAttacker.getSubType());
@@ -286,26 +249,23 @@ public class Battle {
         logger.info("Overall program time is " + (System.currentTimeMillis() - timer) + "ms");
     }
 
-    public void printResults() {
-        for (Army army : attacker) {
-            logger.info("ArmyOfAtackerFinal:" + army);
-        }
-        for (Army army : defender) {
-            logger.info("ArmyOfDefenderFinal:" + army);
-        }
-        for (Army army : attackerLosses) {
-            if (army.getNumber() > 0) {
-                logger.info("Attacker losses:" + army);
-            }
-        }
-        for (Army army : defenderLosses) {
-            if (army.getNumber() > 0) {
-                logger.info("Defender losses:" + army);
-            }
-        }
-    }
+	public void printResults() {
+		logger.info("Attacker resulting army:");
+		attacker.stream().forEach(army -> logger.info(army.toString()));
 
-    // Careful - it erases resources\\inputParams.json. Use it only as a template
+		logger.info("Defender resulting army:");
+		defender.stream().forEach(army -> logger.info(army.toString()));
+
+		logger.info("Attacker losses:");
+		attacker.stream().filter(army -> army.getTotalLosses() > 0)
+				.forEach(army -> logger.info("Losses for " + army.getTypeForPrinting() + army.getTotalLosses()));
+
+		logger.info("Defender losses:");
+		defender.stream().filter(army -> army.getTotalLosses() > 0)
+				.forEach(army -> logger.info("Losses for " + army.getTypeForPrinting() + army.getTotalLosses()));
+	}
+
+    // Careful - it erases resources\\inputParams.json. Use it only as a template to generate JSON file from particular object
     private static void printInputParams(Object object)
             throws IOException, JsonGenerationException, JsonMappingException {
         ObjectMapper mapper = new ObjectMapper();
