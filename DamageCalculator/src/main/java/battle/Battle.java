@@ -25,9 +25,13 @@ import main.java.parser.JSONParser;
 
 public class Battle {
 
-    private static final double RANDOM_FACTOR = 0.85;
-    private static long timer = System.currentTimeMillis();
     private static Logger logger = LoggerFactory.getLogger(Battle.class);
+
+    private static final String ATACKER = "ATACKER";
+    private static final String DEFENDER = "DEFENDER";
+    private static final double RANDOM_FACTOR = 0.85;
+
+    private static long timer = System.currentTimeMillis();
 
     private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
     private static final int MAX_TIER = CONFIGURATION.ABSOLUTE_MAX_TIER;
@@ -93,25 +97,59 @@ public class Battle {
     }
 
     private void doRound() {
+        ArrayList<Integer> calculatedAttackerLosses = new ArrayList<Integer>();
+        ArrayList<Integer> calculatedDefenderLosses = new ArrayList<Integer>();
         for (int i = 0; i < attacker.size(); i++) {
             Army attackingArmyOfAttacker = attacker.get(i);
             Army defenderDefendingArmy = getOpponentArmy(attackingArmyOfAttacker, defender);
-            int defenderLosses = 0;
+            int currentDefenderArmyLosses = 0;
             if (attackingArmyOfAttacker.getNumber() > 0 && defenderDefendingArmy.getNumber() > 0) {
-                defenderLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
+                currentDefenderArmyLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
             }
+            calculatedDefenderLosses.add(i, currentDefenderArmyLosses);
 
             Army attackingArmyOfDefender = defender.get(i);
             Army attackerDefendingArmy = getOpponentArmy(attackingArmyOfDefender, attacker);
-            int attackerLosses = 0;
+            int currentAttackerArmyLosses = 0;
             if (attackingArmyOfDefender.getNumber() > 0 && attackerDefendingArmy.getNumber() > 0) {
-                attackerLosses = calculateDefenderLosses(attackingArmyOfDefender, attackerDefendingArmy);
+                currentAttackerArmyLosses = calculateDefenderLosses(attackingArmyOfDefender, attackerDefendingArmy);
             }
+            calculatedAttackerLosses.add(i, currentAttackerArmyLosses);
 
-            updateLosses(defenderLosses, defenderDefendingArmy, true);
-            updateLosses(attackerLosses, attackerDefendingArmy, false);
+        }
+
+        updateLosses(attacker, attackerLosses, calculatedAttackerLosses);
+        updateLosses(defender, defenderLosses, calculatedDefenderLosses);
+    }
+
+    private void updateLosses(List<Army> armiesToUpdate, List<Army> lossesToUpdate, List<Integer> calculatedLosses) {
+        for (int i = 0; i < armiesToUpdate.size(); i++) {
+            Army army = armiesToUpdate.get(i);
+            Integer calculatedLossesNumber = calculatedLosses.get(i);
+            int value = army.getNumber() - calculatedLossesNumber;
+            army.setNumber(Math.max(0, value));
+
+            Army losses = lossesToUpdate.get(i);
+            losses.setNumber(losses.getNumber() + calculatedLossesNumber);
+        }
+
+    }
+
+    private void updateLosses(int defenderLossesNumber, Army defendingArmy, boolean isForDefender) {
+        List<Army> lossesToUpdate = isForDefender ? defenderLosses : attackerLosses;
+        List<Army> armyToUpdate = isForDefender ? defender : attacker;
+        for (int i = 0; i < armyToUpdate.size(); i++) {
+            Army army = armyToUpdate.get(i);
+            if (army.getTier() == defendingArmy.getTier() && army.getType() == defendingArmy.getType()) {
+                int value = army.getNumber() - defenderLossesNumber;
+                army.setNumber(Math.max(0, value));
+
+                Army losses = lossesToUpdate.get(i);
+                losses.setNumber(losses.getNumber() + defenderLossesNumber);
+            }
         }
     }
+
 
     private Army getOpponentArmy(Army attackingArmyOfAttacker, List<Army> defender) {
         int randomChance = calculateRandomChance(attackingArmyOfAttacker.getSubType());
@@ -187,7 +225,7 @@ public class Battle {
 
     private double calculateEfficiencyFactor(Army attackingArmy, Army defendingArmy) {
         double staticEfficiency = retrieveStaticEfficiency(attackingArmy.getSubType(), defendingArmy.getSubType());
-        logger.trace(this + " static efficiency:\t\t" + staticEfficiency);
+        logger.trace("Static efficiency:\t\t" + staticEfficiency);
 
         double dynamicEfficiency = calculateDynamicEfficiency(attackingArmy, defendingArmy);
         return staticEfficiency + dynamicEfficiency;
@@ -217,21 +255,6 @@ public class Battle {
         Double efficiency = staticEfficiency.get(defenderSubType);
         logger.info("Efficiency: " + efficiency);
         return efficiency == null || efficiency == 0 ? 1 : efficiency;
-    }
-
-    private void updateLosses(int defenderLossesNumber, Army defendingArmy, boolean isForDefender) {
-        List<Army> lossesToUpdate = isForDefender ? defenderLosses : attackerLosses;
-        List<Army> armyToUpdate = isForDefender ? defender : attacker;
-        for (int i = 0; i < armyToUpdate.size(); i++) {
-            Army army = armyToUpdate.get(i);
-            if (army.getTier() == defendingArmy.getTier() && army.getType() == defendingArmy.getType()) {
-                int value = army.getNumber() - defenderLossesNumber;
-                army.setNumber(Math.max(0, value));
-
-                Army losses = lossesToUpdate.get(i);
-                losses.setNumber(losses.getNumber() + defenderLossesNumber);
-            }
-        }
     }
 
     public static void main(String... args) throws JsonGenerationException, JsonMappingException, IOException {
