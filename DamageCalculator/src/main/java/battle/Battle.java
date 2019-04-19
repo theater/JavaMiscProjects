@@ -27,9 +27,7 @@ public class Battle {
 
 	private static Logger logger = LoggerFactory.getLogger(Battle.class);
 
-	private static final String ATACKER = "ATACKER";
-	private static final String DEFENDER = "DEFENDER";
-	private static final double RANDOM_FACTOR = 0.85;
+	private static final double RANDOM_FACTOR = 0.89;
 
 	private static long timer = System.currentTimeMillis();
 
@@ -77,7 +75,6 @@ public class Battle {
 		for (int i = 0; i < counter; i++) {
 			doRound();
 		}
-		printResults();
 	}
 
 	private void doRound() {
@@ -223,27 +220,11 @@ public class Battle {
 
 		startTime = System.currentTimeMillis();
 		battle.fight();
+		logger.info("##########################################################################");
 		logger.info("Fight calculation took " + (System.currentTimeMillis() - startTime) + "ms");
+		logger.info("##########################################################################");
 
-		// Map<ArmySubType, Map<ArmySubType, Double>> map = new HashMap<>();
-		// Map<ArmySubType, Double> innerMap = new HashMap<>();
-		// innerMap.put(ArmySubType.PIKEMEN, 1.0);
-		// innerMap.put(ArmySubType.MUSKETEERS, 1.0);
-		// innerMap.put(ArmySubType.RIFLEMEN, 1.0);
-		// innerMap.put(ArmySubType.GRENADIERS, 1.0);
-		// innerMap.put(ArmySubType.LIGHT_CAVALRY, 1.0);
-		// innerMap.put(ArmySubType.HEAVY_CAVALRY, 1.0);
-		// map.put(ArmySubType.PIKEMEN, innerMap);
-		//
-		// innerMap = new HashMap<>();
-		// innerMap.put(ArmySubType.PIKEMEN, 1.0);
-		// innerMap.put(ArmySubType.MUSKETEERS, 1.0);
-		// innerMap.put(ArmySubType.RIFLEMEN, 1.0);
-		// innerMap.put(ArmySubType.GRENADIERS, 1.0);
-		// innerMap.put(ArmySubType.LIGHT_CAVALRY, 1.2);
-		// innerMap.put(ArmySubType.HEAVY_CAVALRY, 1.2);
-		// map.put(ArmySubType.MUSKETEERS, innerMap);
-		// printInputParams(map);
+		battle.printResults();
 
 		logger.info("Overall program time is " + (System.currentTimeMillis() - timer) + "ms");
 	}
@@ -258,10 +239,14 @@ public class Battle {
 		logger.info("Attacker losses:");
 		attacker.stream().filter(army -> army.getTotalLosses() > 0)
 				.forEach(army -> logger.info("Losses for " + army.getTypeForPrinting() + army.getTotalLosses()));
+		int sum = attacker.stream().mapToInt(army -> army.getTotalLosses()).sum();
+		logger.info("Total attacker losses: " + sum);
 
 		logger.info("Defender losses:");
 		defender.stream().filter(army -> army.getTotalLosses() > 0)
 				.forEach(army -> logger.info("Losses for " + army.getTypeForPrinting() + army.getTotalLosses()));
+		sum = defender.stream().mapToInt(army -> army.getTotalLosses()).sum();
+		logger.info("Total defender losses: " + sum);
 	}
 
 	// Careful - it erases resources\\inputParams.json. Use it only as a template to

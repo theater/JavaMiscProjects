@@ -72,8 +72,8 @@ public class Army implements Comparable<Army> {
 	}
 
 	public void updateLosses() {
-		number -= temporaryLosses;
-		totalLosses += temporaryLosses;
+		totalLosses += number - temporaryLosses >= 0 ? temporaryLosses : number;
+		number = Math.max(0, number - temporaryLosses);
 		temporaryLosses = 0;
 	}
 
