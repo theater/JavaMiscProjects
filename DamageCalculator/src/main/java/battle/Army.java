@@ -24,6 +24,7 @@ public class Army implements Comparable<Army> {
 	private int tier;
 	private int number;
 	private ArmyStats armyStats;
+	private int losses = 0;
 
 	public Army(ArmyType type, int tier, int number) {
 		this.type = type;
@@ -66,6 +67,11 @@ public class Army implements Comparable<Army> {
 			result = Integer.compare(this.getTier(), object.getTier());
 		}
 		return result;
+	}
+	
+	public void updateLosses() {
+		number -= losses;
+		losses = 0;
 	}
 
 	private double calculateAttack(ArmyStats armyStats, CalculationsHelper helper) {
@@ -159,6 +165,14 @@ public class Army implements Comparable<Army> {
 
 	public Map<ArmyType, Double> getDamageReductionVsOthers() {
 		return damageReductionVsOthers;
+	}
+
+	public int getLosses() {
+		return losses;
+	}
+
+	public void addLosses(int losses) {
+		this.losses += losses;
 	}
 
 }

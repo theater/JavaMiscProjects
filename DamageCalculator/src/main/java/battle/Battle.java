@@ -97,41 +97,36 @@ public class Battle {
     }
 
     private void doRound() {
-        ArrayList<Integer> calculatedAttackerLosses = new ArrayList<Integer>();
-        ArrayList<Integer> calculatedDefenderLosses = new ArrayList<Integer>();
         for (int i = 0; i < attacker.size(); i++) {
-            Army attackingArmyOfAttacker = attacker.get(i);
+        	Army attackingArmyOfAttacker = attacker.get(i);
             Army defenderDefendingArmy = getOpponentArmy(attackingArmyOfAttacker, defender);
-            int currentDefenderArmyLosses = 0;
             if (attackingArmyOfAttacker.getNumber() > 0 && defenderDefendingArmy.getNumber() > 0) {
-                currentDefenderArmyLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
+                int currentDefenderArmyLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
+                defenderDefendingArmy.addLosses(currentDefenderArmyLosses);
             }
-            calculatedDefenderLosses.add(i, currentDefenderArmyLosses);
+            
 
             Army attackingArmyOfDefender = defender.get(i);
             Army attackerDefendingArmy = getOpponentArmy(attackingArmyOfDefender, attacker);
-            int currentAttackerArmyLosses = 0;
             if (attackingArmyOfDefender.getNumber() > 0 && attackerDefendingArmy.getNumber() > 0) {
-                currentAttackerArmyLosses = calculateDefenderLosses(attackingArmyOfDefender, attackerDefendingArmy);
+                int currentAttackerArmyLosses = calculateDefenderLosses(attackingArmyOfDefender, attackerDefendingArmy);
+                attackerDefendingArmy.addLosses(currentAttackerArmyLosses);
             }
-            calculatedAttackerLosses.add(i, currentAttackerArmyLosses);
 
         }
 
-        updateLosses(attacker, attackerLosses, calculatedAttackerLosses);
-        updateLosses(defender, defenderLosses, calculatedDefenderLosses);
+        updateLosses(attacker, attackerLosses);
+        updateLosses(defender, defenderLosses);
     }
 
-    private void updateLosses(List<Army> armiesToUpdate, List<Army> lossesToUpdate, List<Integer> calculatedLosses) {
+    private void updateLosses(List<Army> armiesToUpdate, List<Army> lossesToUpdate) {
         for (int i = 0; i < armiesToUpdate.size(); i++) {
             Army army = armiesToUpdate.get(i);
-            Integer calculatedLossesNumber = calculatedLosses.get(i);
-            int value = army.getNumber() - calculatedLossesNumber;
-            army.setNumber(Math.max(0, value));
-
-            Army losses = lossesToUpdate.get(i);
-            losses.setNumber(losses.getNumber() + calculatedLossesNumber);
+            Army lossesArmy = lossesToUpdate.get(i);
+			lossesArmy.setNumber(lossesArmy.getNumber() + army.getLosses());
+            army.updateLosses();
         }
+        
 
     }
 
