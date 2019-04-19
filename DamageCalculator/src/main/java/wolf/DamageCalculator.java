@@ -22,7 +22,7 @@ public class DamageCalculator {
     private static final String NEW_LINE = "\n\r";
 
     private static final double SPELL_CAPACITY_BOOST = 0.1;
-    private static final double MARCH_CAPACITY_BOOST = 0.25;
+    private static final double MARCH_CAPACITY_BOOST = 0.65;
     private static final int STEP_UNITS = 1;
 
     protected double totalArmyDamage;

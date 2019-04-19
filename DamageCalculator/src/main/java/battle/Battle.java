@@ -32,7 +32,7 @@ public class Battle {
     private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
     private static final int MAX_TIER = CONFIGURATION.ABSOLUTE_MAX_TIER;
 
-    private final static int ROUNDS_COUNTER = 30;
+    private final static int ROUNDS_COUNTER = 100;
     private static final String attackerFile = "attacker.json";
     private static final String defenderFile = "defender.json";
 
@@ -162,14 +162,14 @@ public class Battle {
         double defense = defenderStats.getDefense();
         double modifiedAttack = attackerStats.getAttack();
         double baseDamage = calculateBaseDamage(defense, modifiedAttack);
-
+        logger.info("Rosen: def" + defense + "\tattack: " + modifiedAttack + "\tdamage: " + baseDamage + "\tA/(A+D): " + modifiedAttack / (modifiedAttack + defense));
         // Must be >= 0
-        double damageModifiers = Math.max(0,
+        double damageModifiers = Math.max(0.3,
             Math.min(1 + ((attackerStats.getDamage() - defenderStats.getDamageReduction()) / 100), 3));
         logger.info("Damage modifier = " + damageModifiers);
 
         // Must be >= 0
-        double efficiencyFactor = Math.max(0, calculateEfficiencyFactor(attackingArmy, defendingArmy));
+        double efficiencyFactor = Math.max(0.3, Math.min(calculateEfficiencyFactor(attackingArmy, defendingArmy), 3));
         logger.info("Calculated efficiency = " + efficiencyFactor);
 
         double calculatedDamage = baseDamage * damageModifiers * efficiencyFactor;
@@ -178,7 +178,7 @@ public class Battle {
         double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber())) / defenderStats.getHealth();
         logger.info("Losses = " + losses);
 
-        return losses <= defendingArmy.getNumber() ? (int) Math.floor(losses) : defendingArmy.getNumber();
+        return losses < defendingArmy.getNumber() ? (int) Math.floor(losses) : defendingArmy.getNumber();
     }
 
     private double calculateBaseDamage(double defense, double modifiedAttack) {

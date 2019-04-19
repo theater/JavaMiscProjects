@@ -46,15 +46,15 @@ public class WolfArmy implements Comparable<WolfArmy> {
         double modifiedAttack = baseAttack * (1 + (helper.ATTACK_MODIFIERS.get(getType())) / 100);
         logger.trace(this + " modified attack:\t" + modifiedAttack);
 
-        double defense = 0;
+        double defense = 7615;
 
-        double baseDamage = modifiedAttack * Math.min(0.75, modifiedAttack / (modifiedAttack + defense));
+        double baseDamage = modifiedAttack * Math.min(0.75, Math.max(modifiedAttack / (modifiedAttack + defense), 0.3));
         logger.trace(this + " base damage:\t\t" + baseDamage);
 
-        double efficiencyFactor = attackEfficiency;
+        double efficiencyFactor = Math.min(Math.max(attackEfficiency - 1.0, 0.3), 3);
         logger.trace(this + " efficiency:\t\t" + efficiencyFactor);
 
-        double calculatedDamage = baseDamage * Math.min(1 + (helper.DAMAGE_MODIFIERS.get(getType()) / 100), 3) * efficiencyFactor;
+        double calculatedDamage = baseDamage * Math.min(Math.max(1 + (helper.DAMAGE_MODIFIERS.get(getType()) / 100) - 3, 0.3), 3) * efficiencyFactor;
         logger.trace(this + " calculated damage:\t" + calculatedDamage);
 
         return calculatedDamage;
