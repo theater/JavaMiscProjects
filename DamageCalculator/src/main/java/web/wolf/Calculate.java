@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import main.java.config.UserInputParameters;
+import main.java.web.dto.UserInputParameters;
 import main.java.wolf.DamageCalculator;
 import main.java.wolf.WolfDamageCalculator;
 

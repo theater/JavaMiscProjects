@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import main.java.Util;
-import main.java.config.UserInputParameters;
 import main.java.parser.JSONParser;
+import main.java.web.dto.UserInputParameters;
 
 public class MainForBattles {
 
@@ -19,7 +19,6 @@ public class MainForBattles {
 
 	private static long timer = System.currentTimeMillis();
 
-	@SuppressWarnings("unchecked")
 	public static void main(String ... args) throws IOException {
 		logger.info("Entering main");
 
@@ -29,15 +28,16 @@ public class MainForBattles {
 		initializeArmies(attacker, defender);
 
 		BattleFactory factory = new BattleFactory();
-		List<Army> clonedAttacker = Util.cloneArmy(attacker);
-		List<Army> clonedDefender = Util.cloneArmy(defender);
-		IBattle battle = factory.getBattle(BattleTypes.AVERAGE_LOSSES, clonedAttacker, clonedDefender);
+		BattleTypes[] values = BattleTypes.values();
+		for (BattleTypes type : values) {
+			List<Army> clonedAttacker = Util.cloneArmy(attacker);
+			List<Army> clonedDefender = Util.cloneArmy(defender);
+			logger.info("Starting battle type: " + type);
+			IBattle battle = factory.getBattle(type, clonedAttacker, clonedDefender);
+			battle.fight();
+			battle.printResults();
+		}
 
-		battle.fight();
-
-		battle.printResults();
-
-		battleAndPrintResults(battle);
 		logger.info("Overall program time is " + (System.currentTimeMillis() - timer) + "ms");
 	}
 

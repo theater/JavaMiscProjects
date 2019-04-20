@@ -15,7 +15,7 @@ import main.java.battle.Army;
 import main.java.config.ArmyType;
 import main.java.config.CalculationsHelper;
 import main.java.config.ConfigManager;
-import main.java.config.UserInputParameters;
+import main.java.web.dto.UserInputParameters;
 
 public class Util {
 

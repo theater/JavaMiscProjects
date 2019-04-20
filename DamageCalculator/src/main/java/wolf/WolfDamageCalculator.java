@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.config.UserInputParameters;
+import main.java.web.dto.UserInputParameters;
 
 
 public class WolfDamageCalculator extends DamageCalculator {

@@ -14,8 +14,8 @@ import main.java.config.ArmySubType;
 import main.java.config.ArmyType;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
-import main.java.config.UserInputParameters;
 import main.java.parser.JSONParser;
+import main.java.web.dto.UserInputParameters;
 
 public class Battle implements IBattle {
 

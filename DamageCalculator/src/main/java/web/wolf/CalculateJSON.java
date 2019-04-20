@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import main.java.config.UserInputParameters;
+import main.java.web.dto.UserInputParameters;
 import main.java.wolf.DamageCalculator;
 import main.java.wolf.WolfDamageCalculator;
 

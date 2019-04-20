@@ -1,7 +1,9 @@
-package main.java.config;
+package main.java.web.dto;
 
 import java.util.List;
 import java.util.Map;
+
+import main.java.config.ArmyType;
 
 public class UserInputParameters {
 

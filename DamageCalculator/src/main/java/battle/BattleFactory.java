@@ -14,7 +14,7 @@ public class BattleFactory {
 	}
 
 	public IBattle getBattle(BattleTypes type, List<Army> attacker, List<Army> defender) {
-		logger.info("Creating new battle with type: ", type);
+		logger.info("Creating new battle with type: " + type);
 		switch (type) {
 		case STRICT_CHANCE:
 			return new BattleWithStrictChance(attacker, defender);

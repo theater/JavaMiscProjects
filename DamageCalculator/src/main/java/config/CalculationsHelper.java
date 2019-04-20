@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import main.java.web.dto.UserInputParameters;
+
 public class CalculationsHelper {
 
     public final Map<ArmyType, Double> ATTACK_MODIFIERS;

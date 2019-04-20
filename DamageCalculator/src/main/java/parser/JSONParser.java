@@ -10,7 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import main.java.config.Configuration;
-import main.java.config.UserInputParameters;
+import main.java.web.dto.UserInputParameters;
 
 public class JSONParser {
 
