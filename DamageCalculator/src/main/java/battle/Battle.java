@@ -1,16 +1,12 @@
 package main.java.battle;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import main.java.Util;
 import main.java.config.ArmyStats;
@@ -23,7 +19,7 @@ import main.java.parser.JSONParser;
 
 public class Battle implements IBattle {
 
-	private static Logger logger = LoggerFactory.getLogger(Battle.class);
+	private static final Logger logger = LoggerFactory.getLogger(Battle.class);
 
 	protected static final double RANDOM_FACTOR = 0.89;
 
@@ -33,8 +29,11 @@ public class Battle implements IBattle {
 	private static final String attackerFile = "attacker.json";
 	private static final String defenderFile = "defender.json";
 
-	private List<Army> attacker;
-	private List<Army> defender;
+	protected List<Army> attacker;
+	protected List<Army> defender;
+
+	private int attackerTotalLosses;
+	private int defenderTotalLosses;
 
 	public Battle(List<Army> attacker, List<Army> defender) {
 		this.attacker = attacker;
@@ -58,6 +57,10 @@ public class Battle implements IBattle {
 		for (int i = 0; i < counter; i++) {
 			doRound();
 		}
+		attackerTotalLosses = attacker.stream().mapToInt(army -> army.getTotalLosses()).sum();
+		defenderTotalLosses = defender.stream().mapToInt(army -> army.getTotalLosses()).sum();
+
+
 		logger.info("##########################################################################");
 		logger.info("Fight calculation took " + (System.currentTimeMillis() - startTime) + "ms");
 		logger.info("##########################################################################");
@@ -208,16 +211,23 @@ public class Battle implements IBattle {
 		logger.info("Defender resulting army:");
 		defender.stream().forEach(army -> logger.info(army.toString()));
 
-		logger.info("Attacker losses:");
+		logger.info("Attacker detailed losses:");
 		attacker.stream().filter(army -> army.getTotalLosses() > 0)
 				.forEach(army -> logger.info("Losses for " + army.getTypeForPrinting() + army.getTotalLosses()));
-		int sum = attacker.stream().mapToInt(army -> army.getTotalLosses()).sum();
-		logger.info("Total attacker losses: " + sum);
 
-		logger.info("Defender losses:");
+		logger.info("Defender detailed losses:");
 		defender.stream().filter(army -> army.getTotalLosses() > 0)
 				.forEach(army -> logger.info("Losses for " + army.getTypeForPrinting() + army.getTotalLosses()));
-		sum = defender.stream().mapToInt(army -> army.getTotalLosses()).sum();
-		logger.info("Total defender losses: " + sum);
+
+		logger.info("Total attacker losses: " + attackerTotalLosses);
+		logger.info("Total defender losses: " + defenderTotalLosses);
+	}
+
+	public int getAttackerTotalLosses() {
+		return attackerTotalLosses;
+	}
+
+	public int getDefenderTotalLosses() {
+		return defenderTotalLosses;
 	}
 }

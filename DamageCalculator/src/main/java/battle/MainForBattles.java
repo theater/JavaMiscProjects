@@ -27,11 +27,11 @@ public class MainForBattles {
 		ArrayList<Army> defender = new ArrayList<Army>();
 
 		initializeArmies(attacker, defender);
-		ArrayList<Army> clonedAttacker = (ArrayList<Army>) attacker.clone();
-		ArrayList<Army> clonedDefender = (ArrayList<Army>) defender.clone();
 
 		BattleFactory factory = new BattleFactory();
-		IBattle battle = factory.getBattle(BattleTypes.STRICT_CHANCE, clonedAttacker, clonedDefender);
+		List<Army> clonedAttacker = Util.cloneArmy(attacker);
+		List<Army> clonedDefender = Util.cloneArmy(defender);
+		IBattle battle = factory.getBattle(BattleTypes.AVERAGE_LOSSES, clonedAttacker, clonedDefender);
 
 		battle.fight();
 

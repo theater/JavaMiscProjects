@@ -22,6 +22,8 @@ public class BattleFactory {
 			return new BattleWithZeroChance(attacker, defender);
 		case FULL_CHANCE:
 			return new BattleWithBestChance(attacker, defender);
+		case AVERAGE_LOSSES:
+			return new BattleIterations(attacker, defender);
 		case NORMAL:
 		default:
 			return new Battle(attacker, defender);

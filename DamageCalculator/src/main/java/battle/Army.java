@@ -162,6 +162,18 @@ public class Army implements Comparable<Army> {
 		return armyStats;
 	}
 
+	public void setDamageVsOthers(Map<ArmyType, Double> damageVsOthers) {
+		this.damageVsOthers = damageVsOthers;
+	}
+
+	public void setDamageReductionVsOthers(Map<ArmyType, Double> damageReductionVsOthers) {
+		this.damageReductionVsOthers = damageReductionVsOthers;
+	}
+
+	public void setArmyStats(ArmyStats armyStats) {
+		this.armyStats = armyStats;
+	}
+
 	public Map<ArmyType, Double> getDamageVsOthers() {
 		return damageVsOthers;
 	}
@@ -179,12 +191,16 @@ public class Army implements Comparable<Army> {
 	}
 
 	public String getTypeForPrinting() {
-		return type + "[" + tier + "]=";
+		return type + "[" + (tier + 1) + "]=";
 	}
 
 	@Override
 	public Army clone() {
-		return new Army(type, tier, number);
+		Army army = new Army(type, tier, number);
+		army.setArmyStats(armyStats);
+		army.setDamageReductionVsOthers(damageReductionVsOthers);
+		army.setDamageVsOthers(damageVsOthers);
+		return army;
 	}
 
 }

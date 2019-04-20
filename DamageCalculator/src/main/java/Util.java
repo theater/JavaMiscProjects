@@ -69,4 +69,13 @@ public class Util {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.writeValue(new File("resources\\inputParams.json"), object);
 	}
+
+	@SuppressWarnings("unchecked")
+	public static List<Army> cloneArmy(List<Army> armies) {
+		List<Army> newList = new ArrayList<>(armies.size());
+		for (Army army : armies) {
+			newList.add(army.clone());
+		}
+		return newList;
+	}
 }
