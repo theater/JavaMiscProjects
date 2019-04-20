@@ -1,9 +1,15 @@
 package main.java;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import main.java.battle.Army;
 import main.java.config.ArmyType;
@@ -44,5 +50,23 @@ public class Util {
 			}
 		}
 		Collections.sort(armyCollection);
+	}
+
+	/**
+	 * @param object
+	 * @throws IOException
+	 * @throws JsonGenerationException
+	 * @throws JsonMappingException
+	 *
+	 *                                 This method can be used to easily export
+	 *                                 complex object in JSON file. Careful - it
+	 *                                 erases resources\\inputParams.json. Use it
+	 *                                 only as a template to generate JSON file from
+	 *                                 particular object
+	 */
+	public static void printInputParams(Object object)
+			throws IOException, JsonGenerationException, JsonMappingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(new File("resources\\inputParams.json"), object);
 	}
 }

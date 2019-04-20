@@ -27,8 +27,6 @@ public class Battle implements IBattle {
 
 	protected static final double RANDOM_FACTOR = 0.89;
 
-	private static long timer = System.currentTimeMillis();
-
 	private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
 
 	private final static int ROUNDS_COUNTER = 30;
@@ -53,11 +51,16 @@ public class Battle implements IBattle {
 	}
 
 	public void fight() {
+		long startTime = System.currentTimeMillis();
+
 		// TODO this will be calculated. Currently is constant
 		int counter = ROUNDS_COUNTER;
 		for (int i = 0; i < counter; i++) {
 			doRound();
 		}
+		logger.info("##########################################################################");
+		logger.info("Fight calculation took " + (System.currentTimeMillis() - startTime) + "ms");
+		logger.info("##########################################################################");
 	}
 
 	private void doRound() {
@@ -198,24 +201,6 @@ public class Battle implements IBattle {
 		return efficiency == null || efficiency == 0 ? 1 : efficiency;
 	}
 
-	public static void main(String... args) throws JsonGenerationException, JsonMappingException, IOException {
-		logger.info("Entering main");
-
-		long startTime = System.currentTimeMillis();
-		Battle battle = new Battle();
-		logger.info("Construction of battle object took " + (System.currentTimeMillis() - startTime) + "ms");
-
-		startTime = System.currentTimeMillis();
-		battle.fight();
-		logger.info("##########################################################################");
-		logger.info("Fight calculation took " + (System.currentTimeMillis() - startTime) + "ms");
-		logger.info("##########################################################################");
-
-		battle.printResults();
-
-		logger.info("Overall program time is " + (System.currentTimeMillis() - timer) + "ms");
-	}
-
 	public void printResults() {
 		logger.info("Attacker resulting army:");
 		attacker.stream().forEach(army -> logger.info(army.toString()));
@@ -234,13 +219,5 @@ public class Battle implements IBattle {
 				.forEach(army -> logger.info("Losses for " + army.getTypeForPrinting() + army.getTotalLosses()));
 		sum = defender.stream().mapToInt(army -> army.getTotalLosses()).sum();
 		logger.info("Total defender losses: " + sum);
-	}
-
-	// Careful - it erases resources\\inputParams.json. Use it only as a template to
-	// generate JSON file from particular object
-	private static void printInputParams(Object object)
-			throws IOException, JsonGenerationException, JsonMappingException {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.writeValue(new File("resources\\inputParams.json"), object);
 	}
 }
