@@ -151,17 +151,17 @@ public class Battle implements IBattle {
 		// Must be >= 0
 		double damageModifiers = Math.max(0,
 				Math.min(1 + ((attackerStats.getDamage() - defenderStats.getDamageReduction()) / 100), 3));
-		logger.info("Damage modifier = " + damageModifiers);
+		logger.debug("Damage modifier = " + damageModifiers);
 
 		// Must be >= 0
 		double efficiencyFactor = Math.max(0, calculateEfficiencyFactor(attackingArmy, defendingArmy));
-		logger.info("Calculated efficiency = " + efficiencyFactor);
+		logger.debug("Calculated efficiency = " + efficiencyFactor);
 
 		double calculatedDamage = baseDamage * damageModifiers * efficiencyFactor;
-		logger.info("Calculated damage = " + calculatedDamage);
+		logger.debug("Calculated damage = " + calculatedDamage);
 
 		double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber())) / defenderStats.getHealth();
-		logger.info("Losses = " + losses);
+		logger.debug("Losses = " + losses);
 
 		return losses <= defendingArmy.getNumber() ? (int) Math.floor(losses) : defendingArmy.getNumber();
 	}
@@ -200,7 +200,7 @@ public class Battle implements IBattle {
 			return 1;
 		}
 		Double efficiency = staticEfficiency.get(defenderSubType);
-		logger.info("Efficiency: " + efficiency);
+		logger.debug("Efficiency: " + efficiency);
 		return efficiency == null || efficiency == 0 ? 1 : efficiency;
 	}
 

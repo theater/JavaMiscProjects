@@ -10,7 +10,7 @@ import main.java.Util;
 public class BattleIterations extends Battle {
 
 	private static final Logger logger = LoggerFactory.getLogger(Battle.class);
-	private static final int ITERATIONS = 200;
+	private static final int ITERATIONS = 10;
 
 	private int attackerAverageLosses = 0;
 	private int defenderAverageLosses = 0;
