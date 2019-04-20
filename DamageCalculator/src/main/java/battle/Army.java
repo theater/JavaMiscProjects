@@ -182,4 +182,9 @@ public class Army implements Comparable<Army> {
 		return type + "[" + tier + "]=";
 	}
 
+	@Override
+	public Army clone() {
+		return new Army(type, tier, number);
+	}
+
 }

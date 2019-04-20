@@ -2,8 +2,6 @@ package main.java.battle;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -14,59 +12,44 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import main.java.Util;
 import main.java.config.ArmyStats;
 import main.java.config.ArmySubType;
 import main.java.config.ArmyType;
-import main.java.config.CalculationsHelper;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
 import main.java.config.UserInputParameters;
 import main.java.parser.JSONParser;
 
-public class Battle {
+public class Battle implements IBattle {
 
 	private static Logger logger = LoggerFactory.getLogger(Battle.class);
 
-	private static final double RANDOM_FACTOR = 0.89;
+	protected static final double RANDOM_FACTOR = 0.89;
 
 	private static long timer = System.currentTimeMillis();
 
 	private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
-	private static final int MAX_TIER = CONFIGURATION.ABSOLUTE_MAX_TIER;
 
 	private final static int ROUNDS_COUNTER = 30;
 	private static final String attackerFile = "attacker.json";
 	private static final String defenderFile = "defender.json";
 
-	private List<Army> attacker = new ArrayList<>();
-	private List<Army> defender = new ArrayList<>();
+	private List<Army> attacker;
+	private List<Army> defender;
+
+	public Battle(List<Army> attacker, List<Army> defender) {
+		this.attacker = attacker;
+		this.defender = defender;
+	}
 
 	public Battle() throws IOException {
 		JSONParser parser = new JSONParser();
 		UserInputParameters attackerInput = parser.parseUserInput(attackerFile);
-		initializeArmyCollection(attacker, attackerInput);
+		Util.initializeArmyCollection(attacker, attackerInput);
 
 		UserInputParameters defenderInput = parser.parseUserInput(defenderFile);
-		initializeArmyCollection(defender, defenderInput);
-	}
-
-	private void initializeArmyCollection(List<Army> armyCollection, UserInputParameters input) {
-		ArmyType[] armyTypes = ArmyType.values();
-		Map<ArmyType, List<Integer>> army = input.getArmy();
-		CalculationsHelper calculationsHelper = new CalculationsHelper(input);
-		for (ArmyType armyType : armyTypes) {
-			List<Integer> armyByType = army.get(armyType);
-			for (int i = 0; i < MAX_TIER; i++) {
-				int unitsAmount = 0;
-				if (armyByType != null && armyByType.size() == MAX_TIER) {
-					unitsAmount = armyByType.get(i);
-				}
-				Army newArmy = new Army(armyType, i, unitsAmount);
-				armyCollection.add(newArmy);
-				newArmy.addModifiedArmyStats(calculationsHelper);
-			}
-		}
-		Collections.sort(armyCollection);
+		Util.initializeArmyCollection(defender, defenderInput);
 	}
 
 	public void fight() {
@@ -131,19 +114,23 @@ public class Battle {
 	}
 
 	// TODO Improve this. Currently it's not generic at all...
-	private int calculateRandomChance(ArmySubType armySubType) {
+	protected int calculateRandomChance(ArmySubType armySubType) {
 		int result = 1;
 		if (ArmySubType.LIGHT_CAVALRY == armySubType) {
-			if (Math.random() > RANDOM_FACTOR) {
+			if (isHighChance()) {
 				result = 3;
 			}
 		} else if (ArmySubType.RIFLEMEN == armySubType) {
-			if (Math.random() > RANDOM_FACTOR) {
+			if (isHighChance()) {
 				result = 2;
 			}
 		}
 
 		return result;
+	}
+
+	protected boolean isHighChance() {
+		return Math.random() > RANDOM_FACTOR;
 	}
 
 	private int calculateDefenderLosses(Army attackingArmy, Army defendingArmy) {
