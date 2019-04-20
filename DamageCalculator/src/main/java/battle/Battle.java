@@ -61,9 +61,9 @@ public class Battle implements IBattle {
 		defenderTotalLosses = defender.stream().mapToInt(army -> army.getTotalLosses()).sum();
 
 
-		logger.info("##########################################################################");
-		logger.info("Fight calculation took " + (System.currentTimeMillis() - startTime) + "ms");
-		logger.info("##########################################################################");
+		logger.debug("##########################################################################");
+		logger.debug("Fight calculation took " + (System.currentTimeMillis() - startTime) + "ms");
+		logger.debug("##########################################################################");
 	}
 
 	private void doRound() {
@@ -140,7 +140,7 @@ public class Battle implements IBattle {
 	}
 
 	private int calculateDefenderLosses(Army attackingArmy, Army defendingArmy) {
-		logger.info("Attacking army: " + attackingArmy + "\tDefendingArmy: " + defendingArmy);
+		logger.debug("Attacking army: " + attackingArmy + "\tDefendingArmy: " + defendingArmy);
 		ArmyStats attackerStats = attackingArmy.getArmyStats();
 		ArmyStats defenderStats = defendingArmy.getArmyStats();
 
@@ -172,7 +172,7 @@ public class Battle implements IBattle {
 
 	private double calculateEfficiencyFactor(Army attackingArmy, Army defendingArmy) {
 		double staticEfficiency = retrieveStaticEfficiency(attackingArmy.getSubType(), defendingArmy.getSubType());
-		logger.trace("Static efficiency:\t\t" + staticEfficiency);
+		logger.debug("Static efficiency:\t\t" + staticEfficiency);
 
 		double dynamicEfficiency = calculateDynamicEfficiency(attackingArmy, defendingArmy);
 		return staticEfficiency + dynamicEfficiency;
