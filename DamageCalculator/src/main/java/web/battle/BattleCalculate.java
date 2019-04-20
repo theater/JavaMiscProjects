@@ -37,10 +37,11 @@ public class BattleCalculate {
 	}
 
 	 @RequestMapping(value = "/battle", method = RequestMethod.POST)
-	    public String submit(@Valid @ModelAttribute("userInput") List<UserInputParameters> userInput,
+	    public String submit(@Valid @ModelAttribute("userInput") ArrayList<UserInputParameters> userInput,
 	            BindingResult result, ModelMap model) throws IOException {
 		 	for (UserInputParameters userInputParameters : userInput) {
-				logger.info("Castle level=" + userInputParameters.getCastleLevel());
+		 		String description = userInputParameters.getDescription();
+				logger.info(description + "Castle level=" + userInputParameters.getCastleLevel());
 			}
 	        return "OK";
 	    }

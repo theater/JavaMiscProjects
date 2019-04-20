@@ -1,17 +1,18 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html>
 <head>
+<meta charset="utf-8">
+<title>Damage calculator</title>
+<script id="sap-ui-bootstrap" type="text/javascript"
+	src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+	data-sap-ui-theme="sap_belize"
+	data-sap-ui-libs="sap.m"
+	data-sap-ui-compatVersion="edge"
+	data-sap-ui-async="true"
+	data-sap-ui-resourceroots='{"DamageCalculator": "./"}'
+	data-sap-ui-onInit="module:DamageCalculator/index"
+	>
+</script>
 </head>
-<body>
-    <h2>Damage calculator landing page</h2>
-    <br>
-    <form action="#" th:action="@{/wolf/calculate}" method="get">
-        <input type="submit" value="Navigate to input fields calculator" />
-    </form>
-     <form action="#" th:action="@{/wolf/calculateJSON}" method="get">
-        <input type="submit" value="Navigate to JSON calculator" />
-    </form>
-     <form action="#" th:action="@{/battle}" method="get">
-        <input type="submit" value="Navigate to Battle calculator UI" />
-    </form>
-</body>
+<body class="sapUiBody" id="content"></body>
 </html>

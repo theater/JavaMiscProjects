@@ -3,33 +3,36 @@
 </head>
 <body>
 	<h3>User input</h3>
-	<form action="#" th:action="@{/battle/calculate}"
-		th:each="inputData : ${battleInputData}" method="post">
-		<table th:object="${inputData}" border=1 style="float: left">
-			<tr><th th:text="*{description}"/></tr>
-			<tr>
-				<td><label>"Troops amount"</label></td>
-				<td><input type="text" th:value="*{troopsAmount}" /></td>
-			</tr>
-			<tr>
-				<td><label>"Castle level"</label></td>
-				<td><input type="text" th:value="*{castleLevel}" /></td>
-			</tr>
-			<tr/>
-			<tr>
-				<td><label>"Troops attack"</label></td>
-				<td><input type="text" th:value="*{troopAttack}" /></td>
-			</tr>
-			<tr>
-				<td><label>"Troops defense"</label></td>
-				<td><input type="text" th:value="*{troopDefense}" /></td>
-			</tr>
-			<tr>
-				<td><label>"Troops health"</label></td>
-				<td><input type="text" th:value="*{troopHealth}" /></td>
-			</tr>
-		</table>
+	<form action="#" th:action="@{/battle}" method="post">
+		<div th:each="inputData : ${battleInputData}">
+			<table th:object="${inputData}" border=1 style="float: left">
+				<tr>
+					<th th:text="*{description}" />
+				</tr>
+				<tr>
+					<td><label>"Troops amount"</label></td>
+					<td><input type="text" th:value="*{troopsAmount}" /></td>
+				</tr>
+				<tr>
+					<td><label>"Castle level"</label></td>
+					<td><input type="text" th:value="*{castleLevel}" /></td>
+				</tr>
+				<tr />
+				<tr>
+					<td><label>"Troops attack"</label></td>
+					<td><input type="text" th:value="*{troopAttack}" /></td>
+				</tr>
+				<tr>
+					<td><label>"Troops defense"</label></td>
+					<td><input type="text" th:value="*{troopDefense}" /></td>
+				</tr>
+				<tr>
+					<td><label>"Troops health"</label></td>
+					<td><input type="text" th:value="*{troopHealth}" /></td>
+				</tr>
+			</table>
+		</div>
+		<br> <input type="submit" value="Submit" />
 	</form>
-	<br> <input type="submit" value="Submit" />
 </body>
 </html>

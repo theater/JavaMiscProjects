@@ -1,0 +1,13 @@
+<mvc:View
+	controllerName="DamageCalculator.App"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+	<App>
+		<Page title="Damage calculator">
+			<Button	text="Wolf Calculator" press=".wolfCalcPress" type="Emphasized"	class="sapUiSmallMargin"/>
+			<Button	text="Wolf Calculator JSON" press=".wolfCalcJsonPress" type="Emphasized"	class="sapUiSmallMargin"/>
+			<Button	text="Battle Calculator" press=".battleCalcPress" type="Emphasized"	class="sapUiSmallMargin"/>
+		</Page>
+	</App>
+</mvc:View>

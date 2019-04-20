@@ -10,6 +10,6 @@ public class LandingPage {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView showIndex() {
-        return new ModelAndView("index");
+        return new ModelAndView("index_old");
     }
 }
