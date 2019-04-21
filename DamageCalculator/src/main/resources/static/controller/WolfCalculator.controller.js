@@ -28,7 +28,22 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 		},
 
 		onCalculatePress : function() {
-			// TODO add the REST call here
+			var postBody = this.getView().getModel().getJSON();
+			console.log("BODY:" + postBody);
+			var aData = jQuery.ajax({
+				type: "POST",
+				data: postBody,
+				contentType: "application/json",
+				url: "/rest/wolf/calculate",
+				dataType: "json",
+				async: false,
+				success: function(data, textStatus, jqXHR) {
+
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
 		},
 
 		onHomePress : function() {
