@@ -27,7 +27,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 			this.getView().setModel(oModel);
 		},
 
-		onSubmitPress : function() {
+		onCalculatePress : function() {
 			// TODO add the REST call here
 		},
 

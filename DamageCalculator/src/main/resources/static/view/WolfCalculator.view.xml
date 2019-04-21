@@ -1,8 +1,7 @@
 <mvc:View
 	controllerName="DamageCalculator.controller.WolfCalculator"
 	displayBlock="true" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
-	<Page title="Wolf damage calculator">
-		<Button	text="Home page" press=".onHomePress" type="Emphasized"	class="sapUiSmallMargin"/>
+	<Page title="Wolf damage calculator" class="sapUiSmallMarginBegin">
 		<HBox>
 			<Label text="{i18n>castleLevel}"
 				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
@@ -84,6 +83,7 @@
 			<Input value="{/cavalryVsInfantryDamage}" type="Number" />
 		</HBox>
 
-		<Button	text="Submit" press=".onSubmitPress" type="Emphasized"	class="sapUiSmallMargin"/>
+		<Button	text="Calculate" press=".onCalculatePress" type="Emphasized"	class="sapUiSmallMargin"/>
+		<Button	text="Back to Home page" press=".onHomePress" type="Emphasized"	class="sapUiSmallMargin"/>
 	</Page>
 </mvc:View>
