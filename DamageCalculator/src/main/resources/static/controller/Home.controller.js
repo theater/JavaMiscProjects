@@ -4,7 +4,6 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/m/MessageToast" ], function(
 
 	return Controller.extend("DamageCalculator.controller.Home", {
 		wolfCalcPress : function() {
-			MessageToast.show("Handle go to Wolfie here...");
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("wolf");
 		},

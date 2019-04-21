@@ -27,6 +27,15 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 			this.getView().setModel(oModel);
 		},
 
+		onSubmitPress : function() {
+			// TODO add the REST call here
+		},
+
+		onHomePress : function() {
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("home");
+		}
+
 	});
 
 });

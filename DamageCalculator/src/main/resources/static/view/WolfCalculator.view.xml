@@ -2,10 +2,88 @@
 	controllerName="DamageCalculator.controller.WolfCalculator"
 	displayBlock="true" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
 	<Page title="Wolf damage calculator">
+		<Button	text="Home page" press=".onHomePress" type="Emphasized"	class="sapUiSmallMargin"/>
 		<HBox>
 			<Label text="{i18n>castleLevel}"
 				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-			<Input value="{input/castleLevel}" type="Number" />
+			<Input value="{/castleLevel}" type="Number" />
 		</HBox>
+		<HBox>
+			<Label text="{i18n>troopsAmount}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/troopsAmount}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>useMarchCapacityBoost}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<CheckBox selected="{/useMarchCapacityBoost}"/>
+		</HBox>
+		<HBox>
+			<Label text="{i18n>useMarchCapacitySpell}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<CheckBox selected="{/useMarchCapacitySpell}"/>
+		</HBox>
+		<HBox>
+			<Label text="{i18n>maxTier}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/maxTier}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>troopAttack}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/troopAttack}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>cavalryAttack}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/cavalryAttack}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>distanceAttack}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/distanceAttack}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>artilleryAttack}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/artilleryAttack}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>troopDamage}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/troopDamage}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>infantryDamage}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/infantryDamage}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>cavalryDamage}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/cavalryDamage}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>distanceDamage}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/distanceDamage}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>artilleryDamage}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/artilleryDamage}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>distanceVsInfantryDamage}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/distanceVsInfantryDamage}" type="Number" />
+		</HBox>
+		<HBox>
+			<Label text="{i18n>cavalryVsInfantryDamage}"
+				class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+			<Input value="{/cavalryVsInfantryDamage}" type="Number" />
+		</HBox>
+
+		<Button	text="Submit" press=".onSubmitPress" type="Emphasized"	class="sapUiSmallMargin"/>
 	</Page>
 </mvc:View>
