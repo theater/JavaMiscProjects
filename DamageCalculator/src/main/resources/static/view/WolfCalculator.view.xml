@@ -1,0 +1,6 @@
+<mvc:View
+	controllerName="DamageCalculator.controller.WolfCalculator"
+	displayBlock="true" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
+	<Page title="Wolf damage calculator">
+	</Page>
+</mvc:View>

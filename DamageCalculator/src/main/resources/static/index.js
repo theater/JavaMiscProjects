@@ -1,15 +1,14 @@
 sap.ui.define([
-	"sap/m/Button",
-	"sap/m/MessageToast"
-], function (Button, MessageToast) {
+	"sap/ui/core/ComponentContainer"
+], function (ComponentContainer) {
 	"use strict";
 
-	sap.ui.require([
-		"sap/ui/core/mvc/XMLView"
-	], function (XMLView) {
-		XMLView.create({viewName: "DamageCalculator.App"}).then(function (oView) {
-			oView.placeAt("content");
-		});
-	});
-
+	new ComponentContainer({
+		name: "DamageCalculator",
+		settings : {
+			id : "calculator"
+		},
+		async: true
+	}).placeAt("content");
 });
+
