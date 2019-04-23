@@ -38,7 +38,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 				dataType: "json",
 				async: false,
 				success: function(data, textStatus, jqXHR) {
-					model.setProperty("/armies", JSON.stringify(data.armies));
+					model.setProperty("/armies", data.armies);
 				},
 				error: function(error) {
 					console.log(error);
@@ -49,6 +49,11 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 		onHomePress : function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("home");
+		},
+		
+		huio : function (data) {
+			var data1=data;
+			console.log(data);
 		}
 
 	});
