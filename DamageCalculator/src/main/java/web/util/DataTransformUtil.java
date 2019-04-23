@@ -15,7 +15,7 @@ public class DataTransformUtil {
             WolfArmyDto dto = new WolfArmyDto();
             dto.setType(army.getType().name());
             dto.setSubType(army.getSubType().name());
-            dto.setTier(army.getTier());
+            dto.setTier(army.getTier() + 1);
             dto.setNumber(army.getTroopsNumber());
             resultDistribution.add(dto);
         }
