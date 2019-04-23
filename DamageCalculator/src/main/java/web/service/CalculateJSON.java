@@ -1,4 +1,4 @@
-package main.java.web.wolf;
+package main.java.web.service;
 
 import java.io.IOException;
 

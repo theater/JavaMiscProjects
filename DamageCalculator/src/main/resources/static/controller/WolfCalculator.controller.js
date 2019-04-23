@@ -24,12 +24,12 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 					"cavalryVsInfantryDamage" : 8
 				};
 			var oModel = new JSONModel(oData);
-			this.getView().setModel(oModel);
+			this.getView().setModel(oModel, "wolf");
 		},
 
 		onCalculatePress : function() {
-			var postBody = this.getView().getModel().getJSON();
-			console.log("BODY:" + postBody);
+			var model = this.getView().getModel("wolf");
+			var postBody = model.getJSON();
 			var aData = jQuery.ajax({
 				type: "POST",
 				data: postBody,
@@ -38,7 +38,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 				dataType: "json",
 				async: false,
 				success: function(data, textStatus, jqXHR) {
-
+					model.setProperty("/armies", JSON.stringify(data.armies));
 				},
 				error: function(error) {
 					console.log(error);

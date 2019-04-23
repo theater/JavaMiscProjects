@@ -1,4 +1,4 @@
-package main.java.web.battle;
+package main.java.web.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
