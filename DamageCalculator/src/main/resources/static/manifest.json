@@ -65,6 +65,11 @@
 					"target": "wolf"
 				},
 				{
+					"pattern": "wolfJson",
+					"name": "wolfJson",
+					"target": "wolfJson"
+				},
+				{
 					"pattern": "battle",
 					"name": "battle",
 					"target": "battle"
@@ -78,6 +83,10 @@
 				"wolf": {
 					"viewId": "wolf",
 					"viewName": "WolfCalculator"
+				},
+				"wolfJson": {
+					"viewId": "wolfJson",
+					"viewName": "WolfJson"
 				},
 				"battle": {
 					"viewId": "battle",

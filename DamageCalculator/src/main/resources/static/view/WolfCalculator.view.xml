@@ -12,67 +12,67 @@
 			<items>
 				<ColumnListItem>
 					<Label text="{i18n>castleLevel}" />
-					<Input value="{wolf>/castleLevel}" type="Number" />
+					<Input value="{wolf>/input/castleLevel}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>troopsAmount}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/troopsAmount}" type="Number" />
+					<Input value="{wolf>/input/troopsAmount}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>useMarchCapacityBoost}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<CheckBox selected="{wolf>/useMarchCapacityBoost}" />
+					<CheckBox selected="{wolf>/input/useMarchCapacityBoost}" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>useMarchCapacitySpell}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<CheckBox selected="{wolf>/useMarchCapacitySpell}" />
+					<CheckBox selected="{wolf>/input/useMarchCapacitySpell}" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>maxTier}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/maxTier}" type="Number" />
+					<Input value="{wolf>/input/maxTier}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>troopAttack}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/troopAttack}" type="Number" />
+					<Input value="{wolf>/input/troopAttack}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>cavalryAttack}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/cavalryAttack}" type="Number" />
+					<Input value="{wolf>/input/cavalryAttack}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>distanceAttack}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/distanceAttack}" type="Number" />
+					<Input value="{wolf>/input/distanceAttack}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>artilleryAttack}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/artilleryAttack}" type="Number" />
+					<Input value="{wolf>/input/artilleryAttack}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>troopDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/troopDamage}" type="Number" />
+					<Input value="{wolf>/input/troopDamage}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>infantryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/infantryDamage}" type="Number" />
+					<Input value="{wolf>/input/infantryDamage}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>cavalryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/cavalryDamage}" type="Number" />
+					<Input value="{wolf>/input/cavalryDamage}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>distanceDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/distanceDamage}" type="Number" />
+					<Input value="{wolf>/input/distanceDamage}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>artilleryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/artilleryDamage}" type="Number" />
+					<Input value="{wolf>/input/artilleryDamage}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>distanceVsInfantryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/distanceVsInfantryDamage}" type="Number" />
+					<Input value="{wolf>/input/distanceVsInfantryDamage}" type="Number" />
 				</ColumnListItem>
 				<ColumnListItem>
 					<Label text="{i18n>cavalryVsInfantryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-					<Input value="{wolf>/cavalryVsInfantryDamage}" type="Number" />
+					<Input value="{wolf>/input/cavalryVsInfantryDamage}" type="Number" />
 				</ColumnListItem>
 			</items>
 		</Table>

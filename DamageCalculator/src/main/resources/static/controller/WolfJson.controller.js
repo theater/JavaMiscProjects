@@ -47,16 +47,21 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 			});
 		},
 
+		formatInputAsJSON : function(data) {
+			return JSON.stringify(data, undefined, 2);
+		},
+
 		onHomePress : function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("home");
 		},
 
-		huio : function (data) {
-			var data1=data;
-			console.log(data);
+		onCodeEditorChange : function(event) {
+			var valueAsString = event.getSource().getValue();
+			var dataValue = JSON.parse(valueAsString);
+			var model = this.getView().getModel("wolf");
+			model.setProperty("/input", dataValue);
 		}
-
 	});
 
 });
