@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import main.java.Util;
 
-public class BattleIterations extends Battle {
+public class BattleWithMultipleExecutions extends Battle {
 
 	private static final Logger logger = LoggerFactory.getLogger(Battle.class);
 	private static final int ITERATIONS = 20;
@@ -17,7 +17,7 @@ public class BattleIterations extends Battle {
 	private int defenderAverageLosses = 0;
 
 
-	public BattleIterations(List<Army> attacker, List<Army> defender) {
+	public BattleWithMultipleExecutions(List<Army> attacker, List<Army> defender) {
 		super(attacker, defender);
 	}
 
