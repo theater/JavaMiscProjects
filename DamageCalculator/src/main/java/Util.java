@@ -49,7 +49,6 @@ public class Util {
 				newArmy.addModifiedArmyStats(calculationsHelper);
 			}
 		}
-		Collections.sort(armyCollection);
 	}
 
 	/**

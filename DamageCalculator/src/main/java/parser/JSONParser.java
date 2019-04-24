@@ -22,7 +22,7 @@ public class JSONParser {
 		try (InputStream is = new ClassPathResource(file).getInputStream()) {
 			Configuration config = mapper.readValue(is, Configuration.class);
 
-			logger.info("Parsed configuration from JSON: " + config);
+			logger.info("Parsed static configuration from JSON: " + config);
 			return config;
 		}
 	}
@@ -31,7 +31,7 @@ public class JSONParser {
 		try (InputStream is = new ClassPathResource(file).getInputStream()) {
 			UserInputParameters userInput = mapper.readValue(is, UserInputParameters.class);
 
-			logger.info("Parsed configuration from JSON: " + userInput);
+			logger.info("Parsed User Input from JSON: " + userInput);
 			return userInput;
 		}
 	}

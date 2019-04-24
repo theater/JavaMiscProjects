@@ -64,10 +64,12 @@ public class Army implements Comparable<Army> {
 
 	@Override
 	public int compareTo(Army object) {
-		int result = Integer.compare(object.getSubType().getAttackSpeed(), this.getSubType().getAttackSpeed());
+		int result = this.getType().compareTo(object.getType());
+
 		if (result == 0) {
-			result = Integer.compare(this.getTier(), object.getTier());
+			result = Integer.compare(this.getTier(), this.getTier());
 		}
+
 		return result;
 	}
 

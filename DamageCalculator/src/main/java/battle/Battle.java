@@ -1,21 +1,17 @@
 package main.java.battle;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.Util;
 import main.java.config.ArmyStats;
 import main.java.config.ArmySubType;
 import main.java.config.ArmyType;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
-import main.java.parser.JSONParser;
-import main.java.web.dto.UserInputParameters;
 
 public class Battle implements IBattle {
 
@@ -26,8 +22,6 @@ public class Battle implements IBattle {
 	private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
 
 	private final static int ROUNDS_COUNTER = 30;
-	private static final String attackerFile = "attacker.json";
-	private static final String defenderFile = "defender.json";
 
 	protected List<Army> attacker;
 	protected List<Army> defender;
@@ -36,17 +30,31 @@ public class Battle implements IBattle {
 	private int defenderTotalLosses;
 
 	public Battle(List<Army> attacker, List<Army> defender) {
+		sortAttacker(attacker);
 		this.attacker = attacker;
+
+		sortDefender(defender);
 		this.defender = defender;
 	}
 
-	public Battle() throws IOException {
-		JSONParser parser = new JSONParser();
-		UserInputParameters attackerInput = parser.parseUserInput(attackerFile);
-		Util.initializeArmyCollection(attacker, attackerInput);
+	private void sortDefender(List<Army> defender) {
+		Collections.sort(defender, (army1, army2) -> {
+			int result = Integer.compare(army2.getSubType().getAttackSpeed(), army1.getSubType().getAttackSpeed());
+			if (result == 0) {
+				result = Integer.compare(army1.getTier(), army2.getTier());
+			}
+			return result;
+		});
+	}
 
-		UserInputParameters defenderInput = parser.parseUserInput(defenderFile);
-		Util.initializeArmyCollection(defender, defenderInput);
+	private void sortAttacker(List<Army> defender) {
+		Collections.sort(defender, (army1, army2) -> {
+			int result = Integer.compare(army2.getSubType().getAttackSpeed(), army1.getSubType().getAttackSpeed());
+			if (result == 0) {
+				result = Integer.compare(army2.getTier(), army1.getTier());
+			}
+			return result;
+		});
 	}
 
 	public void fight() {
@@ -55,11 +63,13 @@ public class Battle implements IBattle {
 		// TODO this will be calculated. Currently is constant
 		int counter = ROUNDS_COUNTER;
 		for (int i = 0; i < counter; i++) {
+			logger.info("#######################################");
+			logger.info("##### Round = " + (i + 1));
+			logger.info("#######################################");
 			doRound();
 		}
 		attackerTotalLosses = attacker.stream().mapToInt(army -> army.getTotalLosses()).sum();
 		defenderTotalLosses = defender.stream().mapToInt(army -> army.getTotalLosses()).sum();
-
 
 		logger.debug("##########################################################################");
 		logger.debug("Fight calculation took " + (System.currentTimeMillis() - startTime) + "ms");
@@ -67,19 +77,34 @@ public class Battle implements IBattle {
 	}
 
 	private void doRound() {
-		for (int i = 0; i < attacker.size(); i++) {
-			Army attackingArmyOfAttacker = attacker.get(i);
-			Army defenderDefendingArmy = getOpponentArmy(attackingArmyOfAttacker, defender);
-			if (attackingArmyOfAttacker.getNumber() > 0 && defenderDefendingArmy.getNumber() > 0) {
-				int currentDefenderArmyLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
-				defenderDefendingArmy.addLosses(currentDefenderArmyLosses);
+		for (int i = 0, j = 0; i < attacker.size() || j < defender.size();) {
+			if (i < attacker.size()) {
+				Army attackingArmyOfAttacker;
+				do {
+					attackingArmyOfAttacker = attacker.get(i++);
+				} while (attackingArmyOfAttacker.getNumber() <= 0 && i < attacker.size());
+
+				Army defenderDefendingArmy = getOpponentArmy(attackingArmyOfAttacker, defender);
+				if (attackingArmyOfAttacker.getNumber() > 0 && defenderDefendingArmy.getNumber() > 0) {
+					logger.debug("### Attacker attacks hare...");
+					int currentDefenderArmyLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
+					defenderDefendingArmy.addLosses(currentDefenderArmyLosses);
+				}
 			}
 
-			Army attackingArmyOfDefender = defender.get(i);
-			Army attackerDefendingArmy = getOpponentArmy(attackingArmyOfDefender, attacker);
-			if (attackingArmyOfDefender.getNumber() > 0 && attackerDefendingArmy.getNumber() > 0) {
-				int currentAttackerArmyLosses = calculateDefenderLosses(attackingArmyOfDefender, attackerDefendingArmy);
-				attackerDefendingArmy.addLosses(currentAttackerArmyLosses);
+
+			if(j < defender.size()) {
+				Army attackingArmyOfDefender;
+				do {
+					attackingArmyOfDefender = defender.get(j++);
+				} while (attackingArmyOfDefender.getNumber() <= 0 && j < defender.size());
+
+				Army attackerDefendingArmy = getOpponentArmy(attackingArmyOfDefender, attacker);
+				if (attackingArmyOfDefender.getNumber() > 0 && attackerDefendingArmy.getNumber() > 0) {
+					logger.debug("*** Defender attacks hare...");
+					int currentAttackerArmyLosses = calculateDefenderLosses(attackingArmyOfDefender, attackerDefendingArmy);
+					attackerDefendingArmy.addLosses(currentAttackerArmyLosses);
+				}
 			}
 		}
 

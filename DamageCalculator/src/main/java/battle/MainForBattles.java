@@ -29,14 +29,14 @@ public class MainForBattles {
 
 		BattleFactory factory = new BattleFactory();
 		BattleTypes[] values = BattleTypes.values();
-		for (BattleTypes type : values) {
-			List<Army> clonedAttacker = Util.cloneArmy(attacker);
-			List<Army> clonedDefender = Util.cloneArmy(defender);
-			logger.info("Starting battle type: " + type);
-			IBattle battle = factory.getBattle(type, clonedAttacker, clonedDefender);
-			battle.fight();
-			battle.printResults();
-		}
+//		for (BattleTypes type : values) {
+//		}
+//		logger.info("Starting battle type: " + type);
+		List<Army> clonedAttacker = Util.cloneArmy(attacker);
+		List<Army> clonedDefender = Util.cloneArmy(defender);
+		IBattle battle = factory.getBattle(clonedAttacker, clonedDefender);
+		battle.fight();
+		battle.printResults();
 
 		logger.info("Overall program time is " + (System.currentTimeMillis() - timer) + "ms");
 	}
