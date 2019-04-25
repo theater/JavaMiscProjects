@@ -57,6 +57,8 @@ public class UserInputParameters {
 	private double infantryVsArtilleryDamageReduction;
 	private Map<ArmyType, List<Integer>> army;
 
+	private String description = "HUI";
+
 	public int getCastleLevel() {
 		return castleLevel;
 	}
@@ -400,6 +402,14 @@ public class UserInputParameters {
 				+ infantryVsDistanceDamageReduction + ", infantryVsCavalryDamageReduction="
 				+ infantryVsCavalryDamageReduction + ", infantryVsArtilleryDamageReduction="
 				+ infantryVsArtilleryDamageReduction + ", army=" + army + "]";
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

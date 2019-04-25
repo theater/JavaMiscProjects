@@ -1,0 +1,98 @@
+{
+	"_version": "1.12.0",
+	"sap.app": {
+		"id": "DamageCalculator",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"title": "Damage calculator",
+		"description": "Damage calculator",
+		"applicationVersion": {
+			"version": "1.0.0"
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "DamageCalculator.view.App",
+			"type": "XML",
+			"async": true,
+			"id": "app"
+		},
+		"dependencies": {
+			"minUI5Version": "1.30",
+			"libs": {
+				"sap.m": {
+
+				},
+				"sap.ui.core": {
+
+				}
+			}
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "DamageCalculator.i18n.i18n"
+				}
+			}
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "DamageCalculator.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"async": true
+			},
+			"routes": [
+				{
+					"pattern": "",
+					"name": "home",
+					"target": "home"
+				},
+				{
+					"pattern": "wolf",
+					"name": "wolf",
+					"target": "wolf"
+				},
+				{
+					"pattern": "wolfJson",
+					"name": "wolfJson",
+					"target": "wolfJson"
+				},
+				{
+					"pattern": "battle",
+					"name": "battle",
+					"target": "battle"
+				}
+			],
+			"targets": {
+				"home": {
+					"viewId": "Home",
+					"viewName": "Home"
+				},
+				"wolf": {
+					"viewId": "wolf",
+					"viewName": "WolfCalculator"
+				},
+				"wolfJson": {
+					"viewId": "wolfJson",
+					"viewName": "WolfJson"
+				},
+				"battle": {
+					"viewId": "battle",
+					"viewName": "BattleCalculator"
+				}
+			}
+		}
+	}
+}

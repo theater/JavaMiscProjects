@@ -62,10 +62,9 @@ public class DamageCalculator {
         Collections.sort(armyDistribution);
     }
 
-    public DamageCalculator calculate() {
+    public void calculate() {
         calculateDistribution();
         calculateTotalDamage();
-        return this;
     }
 
     private DamageCalculator calculateDistribution() {
@@ -113,35 +112,6 @@ public class DamageCalculator {
         }
         sb.append(totalDamageToString());
         logger.info(sb.toString());
-        return sb.toString();
-    }
-
-    public String printToHTMLTable() {
-        final String LINE_SEPARATOR = "<BR>";
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("<h3>Calculations</h3>");
-        sb.append("Initial capacity: " + getInputParameters().getTroopsAmount() + LINE_SEPARATOR);
-        sb.append("Calculated capacity: " + getCalculatedMarchCapacity() + LINE_SEPARATOR);
-        sb.append(totalDamageToString());
-
-        sb.append("<h3>WolfArmy Distribution</h3>");
-        sb.append("<FORM>");
-        sb.append("<TABLE border=1>");
-        sb.append("<TR>");
-        sb.append("<TH>WolfArmy type</TH>");
-        sb.append("<TH>Tier</TH>");
-        sb.append("<TH>Troops to send</TH>");
-        sb.append("</TR>");
-        for (WolfArmy army : getArmyDistribution()) {
-            sb.append("<TR>");
-            sb.append("<TD>").append(army.getType()).append("</TD>");
-            sb.append("<TD>").append(army.getTier() + 1).append("</TD>");
-            sb.append("<TD>").append(army.getTroopsNumber()).append("</TD>");
-            sb.append("</TR>");
-        }
-        sb.append("</TABLE>");
-        sb.append("</FORM>");
         return sb.toString();
     }
 
