@@ -49,15 +49,16 @@
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
 				"viewPath": "DamageCalculator.view",
-				"controlId": "app",
-				"controlAggregation": "pages",
-				"async": true
+				"controlId": "mainContent",
+				"controlAggregation": "content",
+				"async": true,
+				"clearControlAggregation": true
 			},
 			"routes": [
 				{
 					"pattern": "",
-					"name": "home",
-					"target": "home"
+					"name": "wolf",
+					"target": "wolf"
 				},
 				{
 					"pattern": "wolf",
