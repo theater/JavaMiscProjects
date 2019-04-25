@@ -7,13 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import main.java.web.service.Calculate;
-
 
 @SpringBootApplication
 public class Main {
 
-    private static Logger logger = LoggerFactory.getLogger(Calculate.class);
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException {
         SpringApplication.run(Main.class, args);

@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-public class UiFive {
+public class LandingPageUi5 {
 
-    private static final Logger logger = LoggerFactory.getLogger(UiFive.class);
+    private static final Logger logger = LoggerFactory.getLogger(LandingPageUi5.class);
 
-    @RequestMapping(value = "/ui", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView showIndex() {
         return new ModelAndView("index");
     }

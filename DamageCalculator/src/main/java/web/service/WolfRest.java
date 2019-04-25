@@ -26,7 +26,8 @@ public class WolfRest {
     public WolfArmyResultDto submit(@RequestBody UserInputParameters inputData,
             BindingResult result, ModelMap model) throws IOException {
         logger.info(inputData.toString());
-        DamageCalculator calculator = new WolfDamageCalculator(inputData).calculate();
+        DamageCalculator calculator = new WolfDamageCalculator(inputData);
+        calculator.calculate();
         return DataTransformUtil.convertWolfDistributionToDTO(calculator.getArmyDistribution());
     }
 }
