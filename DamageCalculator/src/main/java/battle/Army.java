@@ -14,195 +14,201 @@ import main.java.config.ConfigManager;
 import main.java.config.Configuration;
 
 public class Army implements Comparable<Army> {
-	private static Logger logger = LoggerFactory.getLogger(Army.class);
 
-	protected Map<ArmyType, Double> damageVsOthers = new HashMap<>();
-	protected Map<ArmyType, Double> damageReductionVsOthers = new HashMap<>();
+    private static Logger logger = LoggerFactory.getLogger(Army.class);
 
-	private ArmyType type;
-	private ArmySubType subType;
-	private int tier;
-	private int number;
-	private int totalLosses = 0;
-	private ArmyStats armyStats;
+    protected Map<ArmyType, Double> damageVsOthers = new HashMap<>();
+    protected Map<ArmyType, Double> damageReductionVsOthers = new HashMap<>();
 
-	private int temporaryLosses = 0;
+    private ArmyType type;
+    private ArmySubType subType;
+    private int tier;
+    private int number;
+    private int totalLosses = 0;
+    private ArmyStats armyStats;
 
-	public Army(ArmyType type, int tier, int number) {
-		this.type = type;
-		this.tier = tier;
-		this.number = number;
+    private int temporaryLosses = 0;
 
-		Configuration configuration = ConfigManager.getInstance().getConfiguration();
-		this.subType = configuration.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
-	}
+    public Army(ArmyType type, int tier, int number) {
+        this.type = type;
+        this.tier = tier;
+        this.number = number;
 
-	public void addModifiedArmyStats(CalculationsHelper helper) {
-		Configuration configuration = ConfigManager.getInstance().getConfiguration();
-		ArmyStats baseArmyStats = configuration.BASE_UNIT_STATS_PER_ARMYTYPE.get(type).get(tier);
+        Configuration configuration = ConfigManager.getInstance().getConfiguration();
+        this.subType = configuration.TYPE_TO_SUBTYPE_MAP.get(type)[tier];
+    }
 
-		double attack = calculateAttack(baseArmyStats, helper);
-		double defense = calculateDefense(baseArmyStats, helper);
-		double health = calculateHealth(baseArmyStats, helper);
-		double damage = calculateDamage(baseArmyStats, helper);
-		double damageReduction = calculateDamageReduction(baseArmyStats, helper);
-		armyStats = new ArmyStats(attack, defense, health, damage, damageReduction);
+    public void addModifiedArmyStats(CalculationsHelper helper) {
+        Configuration configuration = ConfigManager.getInstance().getConfiguration();
+        ArmyStats baseArmyStats = configuration.BASE_UNIT_STATS_PER_ARMYTYPE.get(type).get(tier);
 
-		Map<ArmyType, Double> specificEfficienciesMap = helper.SPECIFIC_EFFICIENCY.get(getType());
-		if (specificEfficienciesMap != null && !specificEfficienciesMap.isEmpty()) {
-			if(ArmyType.INFANTRY == getType()) {
-				damageReductionVsOthers.putAll(specificEfficienciesMap);
-			} else {
-				damageVsOthers.putAll(specificEfficienciesMap);
-			}
-		}
+        double attack = calculateAttack(baseArmyStats, helper);
+        double defense = calculateDefense(baseArmyStats, helper);
+        double health = calculateHealth(baseArmyStats, helper);
+        double damage = calculateDamage(baseArmyStats, helper);
+        double damageReduction = calculateDamageReduction(baseArmyStats, helper);
+        armyStats = new ArmyStats(attack, defense, health, damage, damageReduction);
 
-	}
+        Map<ArmyType, Double> specificEfficienciesMap = helper.SPECIFIC_EFFICIENCY.get(getType());
+        if (specificEfficienciesMap != null && !specificEfficienciesMap.isEmpty()) {
+            if (ArmyType.INFANTRY == getType()) {
+                damageReductionVsOthers.putAll(specificEfficienciesMap);
+            } else {
+                damageVsOthers.putAll(specificEfficienciesMap);
+            }
+        }
 
-	public void addDamageVsOthers (CalculationsHelper helper) {
-	}
+    }
 
-	@Override
-	public int compareTo(Army object) {
-		int result = this.getType().compareTo(object.getType());
+    public void addDamageVsOthers(CalculationsHelper helper) {
+    }
 
-		if (result == 0) {
-			result = Integer.compare(this.getTier(), this.getTier());
-		}
+    @Override
+    public int compareTo(Army object) {
+        int result = this.getType().compareTo(object.getType());
 
-		return result;
-	}
+        if (result == 0) {
+            result = Integer.compare(this.getTier(), this.getTier());
+        }
 
-	public void updateLosses() {
-		totalLosses += number - temporaryLosses >= 0 ? temporaryLosses : number;
-		number = Math.max(0, number - temporaryLosses);
-		temporaryLosses = 0;
-	}
+        return result;
+    }
 
-	private double calculateAttack(ArmyStats armyStats, CalculationsHelper helper) {
-		double baseAttack = armyStats.getAttack();
-		logger.trace(this + " base attack:\t\t" + baseAttack);
+    public void updateLosses() {
+        totalLosses += number - temporaryLosses >= 0 ? temporaryLosses : number;
+        number = Math.max(0, number - temporaryLosses);
+        temporaryLosses = 0;
+    }
 
-		double modifiedAttack = baseAttack * (1 + (helper.ATTACK_MODIFIERS.get(getType())) / 100);
-		logger.trace(this + " modified attack:\t" + modifiedAttack);
+    private double calculateAttack(ArmyStats armyStats, CalculationsHelper helper) {
+        double baseAttack = armyStats.getAttack();
+        logger.trace(this + " base attack:\t\t" + baseAttack);
 
-		return modifiedAttack;
-	}
+        double modifiedAttack = baseAttack * (1 + (helper.ATTACK_MODIFIERS.get(getType())) / 100);
+        logger.trace(this + " modified attack:\t" + modifiedAttack);
 
-	private double calculateDefense(ArmyStats armyStats, CalculationsHelper helper) {
-		double baseDefense = armyStats.getDefense();
-		logger.trace(this + " base defense:\t\t" + baseDefense);
+        return modifiedAttack;
+    }
 
-		double modifiedDefense = baseDefense * (1 + (helper.DEFENSE_MODIFIERS.get(getType())) / 100);
-		logger.trace(this + " modified defense:\t" + modifiedDefense);
+    private double calculateDefense(ArmyStats armyStats, CalculationsHelper helper) {
+        double baseDefense = armyStats.getDefense();
+        logger.trace(this + " base defense:\t\t" + baseDefense);
 
-		return modifiedDefense;
-	}
+        double modifiedDefense = baseDefense * (1 + (helper.DEFENSE_MODIFIERS.get(getType())) / 100);
+        logger.trace(this + " modified defense:\t" + modifiedDefense);
 
-	private double calculateHealth(ArmyStats armyStats, CalculationsHelper helper) {
-		double baseHealth = armyStats.getHealth();
-		logger.trace(this + " base defense:\t\t" + baseHealth);
+        return modifiedDefense;
+    }
 
-		double modifiedHealth = baseHealth * (1 + (helper.HEALTH_MODIFIERS.get(getType())) / 100);
-		logger.trace(this + " modified defense:\t" + modifiedHealth);
+    private double calculateHealth(ArmyStats armyStats, CalculationsHelper helper) {
+        double baseHealth = armyStats.getHealth();
+        logger.trace(this + " base defense:\t\t" + baseHealth);
 
-		return modifiedHealth;
-	}
+        double modifiedHealth = baseHealth * (1 + (helper.HEALTH_MODIFIERS.get(getType())) / 100);
+        logger.trace(this + " modified defense:\t" + modifiedHealth);
 
-	private double calculateDamage(ArmyStats armyStats, CalculationsHelper helper) {
-		double modifiedDamage = helper.DAMAGE_MODIFIERS.get(getType());
-		logger.trace(this + " modified damage:\t" + modifiedDamage);
+        return modifiedHealth;
+    }
 
-		return modifiedDamage;
-	}
+    private double calculateDamage(ArmyStats armyStats, CalculationsHelper helper) {
+        double modifiedDamage = helper.DAMAGE_MODIFIERS.get(getType());
+        logger.trace(this + " modified damage:\t" + modifiedDamage);
 
-	private double calculateDamageReduction(ArmyStats armyStats, CalculationsHelper helper) {
-		double modifiedDamageReduction = helper.DAMAGE_REDUCTION_MODIFIERS.get(getType());
-		logger.trace(this + " modified DamageReduction:\t" + modifiedDamageReduction);
+        return modifiedDamage;
+    }
 
-		return modifiedDamageReduction;
-	}
+    private double calculateDamageReduction(ArmyStats armyStats, CalculationsHelper helper) {
+        double modifiedDamageReduction = helper.DAMAGE_REDUCTION_MODIFIERS.get(getType());
+        logger.trace(this + " modified DamageReduction:\t" + modifiedDamageReduction);
 
-	public ArmyType getType() {
-		return type;
-	}
+        return modifiedDamageReduction;
+    }
 
-	public void setType(ArmyType type) {
-		this.type = type;
-	}
+    public ArmyType getType() {
+        return type;
+    }
 
-	public int getTier() {
-		return tier;
-	}
+    public void setType(ArmyType type) {
+        this.type = type;
+    }
 
-	public void setTier(int tier) {
-		this.tier = tier;
-	}
+    public int getTier() {
+        return tier;
+    }
 
-	public int getNumber() {
-		return number;
-	}
+    public void setTier(int tier) {
+        this.tier = tier;
+    }
 
-	public void setNumber(int number) {
-		this.number = number;
-	}
+    public int getNumber() {
+        return number;
+    }
 
-	public ArmySubType getSubType() {
-		return subType;
-	}
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
-	public void setSubType(ArmySubType subType) {
-		this.subType = subType;
-	}
+    public ArmySubType getSubType() {
+        return subType;
+    }
 
-	@Override
-	public String toString() {
-		return "[type=" + type + "[" + (tier + 1) + "], subType=" + subType + ", number=" + number + ", losses=" + totalLosses + "]";
-	}
+    public void setSubType(ArmySubType subType) {
+        this.subType = subType;
+    }
 
-	public ArmyStats getArmyStats() {
-		return armyStats;
-	}
+    @Override
+    public String toString() {
+        return "[type=" + type + "[" + (tier + 1) + "], subType=" + subType + ", number=" + number + ", losses=" + totalLosses + "]";
+    }
 
-	public void setDamageVsOthers(Map<ArmyType, Double> damageVsOthers) {
-		this.damageVsOthers = damageVsOthers;
-	}
+    public ArmyStats getArmyStats() {
+        return armyStats;
+    }
 
-	public void setDamageReductionVsOthers(Map<ArmyType, Double> damageReductionVsOthers) {
-		this.damageReductionVsOthers = damageReductionVsOthers;
-	}
+    public void setDamageVsOthers(Map<ArmyType, Double> damageVsOthers) {
+        this.damageVsOthers = damageVsOthers;
+    }
 
-	public void setArmyStats(ArmyStats armyStats) {
-		this.armyStats = armyStats;
-	}
+    public void setDamageReductionVsOthers(Map<ArmyType, Double> damageReductionVsOthers) {
+        this.damageReductionVsOthers = damageReductionVsOthers;
+    }
 
-	public Map<ArmyType, Double> getDamageVsOthers() {
-		return damageVsOthers;
-	}
+    public void setArmyStats(ArmyStats armyStats) {
+        this.armyStats = armyStats;
+    }
 
-	public Map<ArmyType, Double> getDamageReductionVsOthers() {
-		return damageReductionVsOthers;
-	}
+    public Map<ArmyType, Double> getDamageVsOthers() {
+        return damageVsOthers;
+    }
 
-	public void addLosses(int losses) {
-		this.temporaryLosses += losses;
-	}
+    public Map<ArmyType, Double> getDamageReductionVsOthers() {
+        return damageReductionVsOthers;
+    }
 
-	public int getTotalLosses() {
-		return totalLosses;
-	}
+    public void addLosses(int losses) {
+        this.temporaryLosses += losses;
+    }
 
-	public String getTypeForPrinting() {
-		return type + "[" + (tier + 1) + "]=";
-	}
+    public int getTotalLosses() {
+        return totalLosses;
+    }
 
-	@Override
-	public Army clone() {
-		Army army = new Army(type, tier, number);
-		army.setArmyStats(armyStats);
-		army.setDamageReductionVsOthers(damageReductionVsOthers);
-		army.setDamageVsOthers(damageVsOthers);
-		return army;
-	}
+    public int getTemporaryLosses() {
+        return temporaryLosses;
+    }
+
+
+    public String getTypeForPrinting() {
+        return type + "[" + (tier + 1) + "]=";
+    }
+
+    @Override
+    public Army clone() {
+        Army army = new Army(type, tier, number);
+        army.setArmyStats(armyStats);
+        army.setDamageReductionVsOthers(damageReductionVsOthers);
+        army.setDamageVsOthers(damageVsOthers);
+        return army;
+    }
 
 }
