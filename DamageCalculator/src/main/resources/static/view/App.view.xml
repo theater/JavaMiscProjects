@@ -16,6 +16,7 @@
 							</tnt:NavigationListItem>
 							<tnt:NavigationListItem text="Battle">
 								<tnt:NavigationListItem text="Battle Calculator" select=".battleCalcPress" />
+								<tnt:NavigationListItem text="Battle Calculator JSON" select=".battleCalcJsonPress" />
 							</tnt:NavigationListItem>
 						</tnt:NavigationList>
 					</tnt:SideNavigation>

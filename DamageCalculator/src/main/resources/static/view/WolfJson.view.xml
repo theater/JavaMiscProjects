@@ -5,7 +5,7 @@
 			<ce:CodeEditor value="{path: 'wolf>/input', formatter:'.formatInputAsJSON'}" height="50%" width="40%" type="json"
 				change="onCodeEditorChange" lineNumbers="false"/>
 
-			<Button text="Calculate" press=".onCalculatePress" type="Emphasized" class="sapUiSmallMargin" />
+			<Button text="Calculate" press=".onCalculatePress" class="sapUiSmallMargin" />
 		</content>
 	</Page>
 </mvc:View>

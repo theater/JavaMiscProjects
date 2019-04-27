@@ -29,6 +29,11 @@ sap.ui.define([ "sap/ui/core/mvc/Controller" ], function(
 		battleCalcPress : function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("battle");
+		},
+		
+		battleCalcJsonPress : function() {
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("battleJson");
 		}
 	});
 

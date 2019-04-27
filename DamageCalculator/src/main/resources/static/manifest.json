@@ -76,6 +76,11 @@
 					"target": "battle"
 				},
 				{
+					"pattern": "battleJson",
+					"name": "battleJson",
+					"target": "battleJson"
+				},
+				{
 					"pattern": "wolfResult",
 					"name": "wolfResult",
 					"target": "wolfResult"
