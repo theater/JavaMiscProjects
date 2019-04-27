@@ -1,29 +1,26 @@
-<mvc:View height="100%" controllerName="DamageCalculator.controller.App"
-	displayBlock="true" xmlns="sap.m" xmlns:tnt="sap.tnt"
+<mvc:View height="100%" controllerName="DamageCalculator.controller.App" displayBlock="true" xmlns="sap.m" xmlns:tnt="sap.tnt"
 	xmlns:mvc="sap.ui.core.mvc">
 	<Shell>
 		<App id="app">
-			<tnt:ToolPage>
+			<tnt:ToolPage id="mainToolPage">
 				<tnt:header>
 				</tnt:header>
 				<tnt:sideContent>
 					<tnt:SideNavigation id="sideNavigation">
 						<tnt:NavigationList>
-							<tnt:NavigationListItem
-								text="Wolf Calculator" id="wolfCalculator"
-								select=".wolfCalcPress" />
-							<tnt:NavigationListItem
-								text="Wolf Calculator JSON" id="wolfCalculatorJson"
-								select=".wolfCalcJsonPress" />
-							<tnt:NavigationListItem
-								text="Battle Calculator" id="battleCalculator"
-								select=".battleCalcPress" />
+							<tnt:NavigationListItem text="Wolfie">
+								<tnt:NavigationListItem text="Wolf Calculator" select=".wolfCalcPress" />
+								<tnt:NavigationListItem text="Wolf Calculator JSON" select=".wolfCalcJsonPress" />
+								<tnt:NavigationListItem text="WolfCalculatorResult" select=".wolfResultPress"
+									visible="{sharedModel>/visibilityWolfResult}" />
+							</tnt:NavigationListItem>
+							<tnt:NavigationListItem text="Battle">
+								<tnt:NavigationListItem text="Battle Calculator" select=".battleCalcPress" />
+							</tnt:NavigationListItem>
 						</tnt:NavigationList>
 					</tnt:SideNavigation>
 				</tnt:sideContent>
 				<tnt:mainContents height="100%">
-					<Page id="mainContent" showHeader="false">
-					</Page>
 				</tnt:mainContents>
 			</tnt:ToolPage>
 		</App>

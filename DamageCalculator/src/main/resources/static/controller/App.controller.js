@@ -1,18 +1,34 @@
-sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/m/MessageToast" ], function(
+sap.ui.define([ "sap/ui/core/mvc/Controller" ], function(
 		Controller, MessageToast) {
 	"use strict";
 
 	return Controller.extend("DamageCalculator.controller.App", {
+		
+		onInit : function() {
+			var sharedModel = this.getOwnerComponent().getModel("sharedModel");
+			sharedModel.setProperty("/visibilityWolfResult", false);
+
+			this.getView().setModel(sharedModel, "sharedModel");
+		},
+		
 		wolfCalcPress : function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("wolf");
 		},
+		
 		wolfCalcJsonPress : function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("wolfJson");
 		},
+
+		wolfResultPress : function() {
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("wolfResult");
+		},
+		
 		battleCalcPress : function() {
-			MessageToast.show("Handle go to Battle calculator here...");
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("battle");
 		}
 	});
 

@@ -49,8 +49,8 @@
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
 				"viewPath": "DamageCalculator.view",
-				"controlId": "mainContent",
-				"controlAggregation": "content",
+				"controlId": "mainToolPage",
+				"controlAggregation": "mainContents",
 				"async": true,
 				"clearControlAggregation": true
 			},
@@ -74,25 +74,32 @@
 					"pattern": "battle",
 					"name": "battle",
 					"target": "battle"
+				},
+				{
+					"pattern": "wolfResult",
+					"name": "wolfResult",
+					"target": "wolfResult"
 				}
 			],
 			"targets": {
 				"home": {
-					"viewId": "Home",
 					"viewName": "Home"
 				},
 				"wolf": {
-					"viewId": "wolf",
 					"viewName": "WolfCalculator"
 				},
 				"wolfJson": {
-					"viewId": "wolfJson",
 					"viewName": "WolfJson"
 				},
+				"wolfResult": {
+					"viewName": "WolfResult"
+				},
 				"battle": {
-					"viewId": "battle",
-					"viewName": "BattleCalculator"
-				}
+					"viewName": "Battle"
+				},
+				"battleJson": {
+                    "viewName": "BattleJson"
+                }
 			}
 		}
 	}

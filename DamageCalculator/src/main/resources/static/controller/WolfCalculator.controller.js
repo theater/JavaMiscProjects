@@ -31,6 +31,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 		onCalculatePress : function() {
 			var model = this.getView().getModel("wolf");
 			var postBody = model.getProperty("/input");
+			var that = this;
 			var aData = jQuery.ajax({
 				type: "POST",
 				data: JSON.stringify(postBody),
@@ -39,7 +40,10 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 				dataType: "json",
 				async: false,
 				success: function(data, textStatus, jqXHR) {
-					model.setProperty("/armies", data.armies);
+					var sharedModel = that.getOwnerComponent().getModel("sharedModel");
+					sharedModel.setProperty("/armies", data.armies);
+					sharedModel.setProperty("/visibilityWolfResult", true);
+					sap.ui.core.UIComponent.getRouterFor(that).navTo("wolfResult");
 				},
 				error: function(error) {
 					console.log(error);
@@ -51,10 +55,16 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("home");
 		},
+		
+		formatInputAsJSON : function(data) {
+			return JSON.stringify(data, undefined, 2);
+		},
 
-		huio : function (data) {
-			var data1=data;
-			console.log(data);
+		onCodeEditorChange : function(event) {
+			var valueAsString = event.getSource().getValue();
+			var dataValue = JSON.parse(valueAsString);
+			var model = this.getView().getModel("wolf");
+			model.setProperty("/input", dataValue);
 		}
 
 	});

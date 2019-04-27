@@ -1,42 +1,11 @@
-<mvc:View controllerName="DamageCalculator.controller.WolfJson"
-	displayBlock="true" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
-	xmlns:ce="sap.ui.codeeditor">
+<mvc:View controllerName="DamageCalculator.controller.WolfCalculator" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:ce="sap.ui.codeeditor" height="100%">
 	<Page title="Wolf damage calculator JSON View">
 		<content>
-			<ce:CodeEditor
-				value="{path: 'wolf>/input', formatter:'.formatInputAsJSON'}"
-				height="50%" width="40%" type="json" change="onCodeEditorChange" />
+			<ce:CodeEditor value="{path: 'wolf>/input', formatter:'.formatInputAsJSON'}" height="50%" width="40%" type="json"
+				change="onCodeEditorChange" lineNumbers="false"/>
 
-			<Button text="Calculate" press=".onCalculatePress"
-				type="Emphasized" class="sapUiSmallMargin" />
-			<Button text="Back to Home page" press=".onHomePress"
-				type="Emphasized" class="sapUiSmallMargin" />
-			<Table items="{wolf>/armies}">
-				<columns>
-					<Column>
-						<Text text="Type" />
-					</Column>
-					<Column>
-						<Text text="Subtype" />
-					</Column>
-					<Column>
-						<Text text="Tier" />
-					</Column>
-					<Column>
-						<Text text="Number" />
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem>
-						<cells>
-							<Text text="{wolf>type}" />
-							<Text text="{wolf>subType}" />
-							<Text text="{wolf>tier}" />
-							<Text text="{wolf>number}" />
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
+			<Button text="Calculate" press=".onCalculatePress" type="Emphasized" class="sapUiSmallMargin" />
 		</content>
 	</Page>
 </mvc:View>

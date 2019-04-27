@@ -1,0 +1,33 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
+	<Table items="{sharedModel>/armies}" alternateRowColors="true" sticky="HeaderToolbar" id="wolfResult">
+        <headerToolbar>
+            <OverflowToolbar>
+                <Title text="Result" level="H2" />
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column>
+                <Text text="Type" />
+            </Column>
+            <Column>
+                <Text text="Subtype" />
+            </Column>
+            <Column>
+                <Text text="Tier" />
+            </Column>
+            <Column>
+                <Text text="Number" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <Text text="{sharedModel>type}" />
+                    <Text text="{sharedModel>subType}" />
+                    <Text text="{sharedModel>tier}" />
+                    <Text text="{sharedModel>number}" />
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition> 

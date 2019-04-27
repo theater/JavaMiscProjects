@@ -1,9 +1,7 @@
-<mvc:View
-	controllerName="DamageCalculator.controller.WolfCalculator"
-	displayBlock="true" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
+<mvc:View controllerName="DamageCalculator.controller.WolfCalculator" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core" height="100%">
 	<Page title="Wolf damage calculator">
 		<content>
-			<Table alternateRowColors="true">
+			<Table alternateRowColors="true" sticky="HeaderToolbar">
 				<columns>
 					<Column>
 						<Text text="Label" />
@@ -12,119 +10,77 @@
 						<Text text="value" />
 					</Column>
 				</columns>
+				<headerToolbar>
+					<OverflowToolbar>
+					    <Title text="Input data" level="H2"/>
+					    <ToolbarSpacer/>
+						<Button text="Calculate" press=".onCalculatePress" type="Transparent" class="sapUiSmallMargin" />
+					</OverflowToolbar>
+				</headerToolbar>
 				<items>
 					<ColumnListItem>
-						<Label text="{i18n>castleLevel}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>castleLevel}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/castleLevel}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>troopsAmount}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>troopsAmount}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/troopsAmount}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>useMarchCapacityBoost}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>useMarchCapacityBoost}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<CheckBox selected="{wolf>/input/useMarchCapacityBoost}" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>useMarchCapacitySpell}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>useMarchCapacitySpell}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<CheckBox selected="{wolf>/input/useMarchCapacitySpell}" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>maxTier}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>maxTier}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/maxTier}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>troopAttack}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>troopAttack}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/troopAttack}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>cavalryAttack}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>cavalryAttack}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/cavalryAttack}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>distanceAttack}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>distanceAttack}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/distanceAttack}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>artilleryAttack}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>artilleryAttack}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/artilleryAttack}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>troopDamage}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>troopDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/troopDamage}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>infantryDamage}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>infantryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/infantryDamage}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>cavalryDamage}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>cavalryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/cavalryDamage}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>distanceDamage}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>distanceDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/distanceDamage}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>artilleryDamage}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Label text="{i18n>artilleryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
 						<Input value="{wolf>/input/artilleryDamage}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>distanceVsInfantryDamage}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-						<Input value="{wolf>/input/distanceVsInfantryDamage}"
-							type="Number" />
+						<Label text="{i18n>distanceVsInfantryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Input value="{wolf>/input/distanceVsInfantryDamage}" type="Number" />
 					</ColumnListItem>
 					<ColumnListItem>
-						<Label text="{i18n>cavalryVsInfantryDamage}"
-							class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
-						<Input value="{wolf>/input/cavalryVsInfantryDamage}"
-							type="Number" />
-					</ColumnListItem>
-				</items>
-			</Table>
-
-			<Button text="Calculate" press=".onCalculatePress"
-				type="Emphasized" class="sapUiSmallMargin" />
-			<Button text="Back to Home page" press=".onHomePress"
-				type="Emphasized" class="sapUiSmallMargin" />
-			<Table items="{wolf>/armies}" alternateRowColors="true">
-				<columns>
-					<Column>
-						<Text text="Type" />
-					</Column>
-					<Column>
-						<Text text="Subtype" />
-					</Column>
-					<Column>
-						<Text text="Tier" />
-					</Column>
-					<Column>
-						<Text text="Number" />
-					</Column>
-				</columns>
-				<items>
-					<ColumnListItem>
-						<cells>
-							<Text text="{wolf>type}" />
-							<Text text="{wolf>subType}" />
-							<Text text="{wolf>tier}" />
-							<Text text="{wolf>number}" />
-						</cells>
+						<Label text="{i18n>cavalryVsInfantryDamage}" class="sapUiSmallMarginTop sapUiTinyMarginEnd" />
+						<Input value="{wolf>/input/cavalryVsInfantryDamage}" type="Number" />
 					</ColumnListItem>
 				</items>
 			</Table>

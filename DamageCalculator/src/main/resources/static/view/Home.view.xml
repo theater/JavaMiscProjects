@@ -1,4 +1,0 @@
-<mvc:View controllerName="DamageCalculator.controller.Home"
-	displayBlock="true" xmlns="sap.m" xmlns:tnt="sap.tnt"
-	xmlns:mvc="sap.ui.core.mvc">
-</mvc:View>
