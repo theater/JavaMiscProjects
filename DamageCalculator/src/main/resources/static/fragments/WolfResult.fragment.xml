@@ -1,10 +1,5 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
 	<Table items="{sharedModel>/armies}" alternateRowColors="true" sticky="HeaderToolbar" id="wolfResult">
-        <headerToolbar>
-            <OverflowToolbar>
-                <Title text="Result" level="H2" />
-            </OverflowToolbar>
-        </headerToolbar>
         <columns>
             <Column>
                 <Text text="Type" />
