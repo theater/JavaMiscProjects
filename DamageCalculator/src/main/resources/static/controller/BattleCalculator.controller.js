@@ -22,9 +22,9 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 				async: false,
 				success: function(data, textStatus, jqXHR) {
 					var sharedModel = that.getOwnerComponent().getModel("sharedModel");
-					sharedModel.setProperty("/armies", data.armies);
-					sharedModel.setProperty("/visibilityWolfResult", true);
-					sap.ui.core.UIComponent.getRouterFor(that).navTo("wolfResult");
+					sharedModel.setProperty("/battleResult", data);
+					sharedModel.setProperty("/visibilityBattleResult", true);
+					sap.ui.core.UIComponent.getRouterFor(that).navTo("battleResult");
 				},
 				error: function(error) {
 					console.log(error);
@@ -32,11 +32,6 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 			});
 		},
 
-		onHomePress : function() {
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("home");
-		},
-		
 		formatInputAsJSON : function(data) {
 			return JSON.stringify(data, undefined, 2);
 		},

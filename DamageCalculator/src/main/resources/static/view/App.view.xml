@@ -11,12 +11,14 @@
 							<tnt:NavigationListItem text="Wolfie">
 								<tnt:NavigationListItem text="Wolf Calculator" select=".wolfCalcPress" />
 								<tnt:NavigationListItem text="Wolf Calculator JSON" select=".wolfCalcJsonPress" />
-								<tnt:NavigationListItem text="WolfCalculatorResult" select=".wolfResultPress"
+								<tnt:NavigationListItem text="Wolf Calculator Result" select=".wolfResultPress"
 									visible="{sharedModel>/visibilityWolfResult}" />
 							</tnt:NavigationListItem>
 							<tnt:NavigationListItem text="Battle">
 								<tnt:NavigationListItem text="Battle Calculator" select=".battleCalcPress" />
 								<tnt:NavigationListItem text="Battle Calculator JSON" select=".battleCalcJsonPress" />
+								<tnt:NavigationListItem text="Battle Result" select=".battleResultPress"
+									visible="{sharedModel>/visibilityBattleResult}" />
 							</tnt:NavigationListItem>
 						</tnt:NavigationList>
 					</tnt:SideNavigation>

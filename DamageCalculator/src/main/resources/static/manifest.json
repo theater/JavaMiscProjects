@@ -71,20 +71,25 @@
 					"target": "wolfJson"
 				},
 				{
-					"pattern": "battle",
-					"name": "battle",
-					"target": "battle"
-				},
-				{
-					"pattern": "battleJson",
-					"name": "battleJson",
-					"target": "battleJson"
-				},
-				{
 					"pattern": "wolfResult",
 					"name": "wolfResult",
 					"target": "wolfResult"
-				}
+				},
+				{
+                    "pattern": "battle",
+                    "name": "battle",
+                    "target": "battle"
+                },
+                {
+                    "pattern": "battleJson",
+                    "name": "battleJson",
+                    "target": "battleJson"
+                },
+                {
+                    "pattern": "battleResult",
+                    "name": "battleResult",
+                    "target": "battleResult"
+                }
 			],
 			"targets": {
 				"home": {
@@ -104,6 +109,9 @@
 				},
 				"battleJson": {
                     "viewName": "BattleJson"
+                },
+				"battleResult": {
+                    "viewName": "BattleResult"
                 }
 			}
 		}

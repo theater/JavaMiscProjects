@@ -1,0 +1,29 @@
+<mvc:View controllerName="DamageCalculator.controller.BattleResult" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core" height="100%">
+	<Page title="Battle results">
+		<content>
+			<Table items="{sharedModel>/battleResult}" alternateRowColors="true" sticky="HeaderToolbar">
+			<columns>
+				<Column>
+					<Text text="Type" />
+				</Column>
+				<Column>
+					<Text text="Attacker losses" />
+				</Column>
+				<Column>
+					<Text text="Defender losses" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem>
+					<cells>
+						<Text text="{path: 'sharedModel>battleType', formatter:'.formatBattleType'} " />
+						<Text text="{sharedModel>attackerLosses}" />
+						<Text text="{sharedModel>defenderLosses}" />
+					</cells>
+				</ColumnListItem>
+			</items> 
+			</Table>
+		</content>
+	</Page>
+</mvc:View>

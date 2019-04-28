@@ -2,33 +2,42 @@ package main.java.web.dto;
 
 public class BattleResultDto {
 
-	private int attackerLosses;
-	private int defenderLosses;
-	private String battleDetails;
+    private int attackerLosses;
+    private int defenderLosses;
+    private String battleType;
 
+    public BattleResultDto() {
 
-	public int getAttackerLosses() {
-		return attackerLosses;
-	}
+    }
 
-	public void setAttackerLosses(int attackerLosses) {
-		this.attackerLosses = attackerLosses;
-	}
+    public BattleResultDto(int attackerLosses, int defenderLosses, String battleType) {
+        this.attackerLosses = attackerLosses;
+        this.defenderLosses = defenderLosses;
+        this.battleType = battleType;
+    }
 
-	public int getDefenderLosses() {
-		return defenderLosses;
-	}
+    public int getAttackerLosses() {
+        return attackerLosses;
+    }
 
-	public void setDefenderLosses(int defenderLosses) {
-		this.defenderLosses = defenderLosses;
-	}
+    public void setAttackerLosses(int attackerLosses) {
+        this.attackerLosses = attackerLosses;
+    }
 
-	public String getBattleDetails() {
-		return battleDetails;
-	}
+    public int getDefenderLosses() {
+        return defenderLosses;
+    }
 
-	public void setBattleDetails(String battleDetails) {
-		this.battleDetails = battleDetails;
-	}
+    public void setDefenderLosses(int defenderLosses) {
+        this.defenderLosses = defenderLosses;
+    }
+
+    public String getBattleType() {
+        return battleType;
+    }
+
+    public void setBattleType(String battleDetails) {
+        this.battleType = battleDetails;
+    }
 
 }

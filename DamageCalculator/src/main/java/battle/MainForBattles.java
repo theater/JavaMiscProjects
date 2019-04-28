@@ -13,47 +13,46 @@ import main.java.web.dto.UserInputParameters;
 
 public class MainForBattles {
 
-	private static final Logger logger = LoggerFactory.getLogger(Battle.class);
-	private static final String attackerFile = "attacker.json";
-	private static final String defenderFile = "defender.json";
+    private static final Logger logger = LoggerFactory.getLogger(Battle.class);
+    private static final String attackerFile = "attacker.json";
+    private static final String defenderFile = "defender.json";
 
-	private static long timer = System.currentTimeMillis();
+    private static long timer = System.currentTimeMillis();
 
-	public static void main(String ... args) throws IOException {
-		logger.info("Entering main");
+    public static void main(String... args) throws IOException {
+        logger.info("Entering main");
 
-		ArrayList<Army> attacker = new ArrayList<Army>();
-		ArrayList<Army> defender = new ArrayList<Army>();
+        ArrayList<Army> attacker = new ArrayList<Army>();
+        ArrayList<Army> defender = new ArrayList<Army>();
 
-		initializeArmies(attacker, defender);
+        initializeArmies(attacker, defender);
 
-		BattleFactory factory = new BattleFactory();
-		BattleTypes[] values = BattleTypes.values();
-//		for (BattleTypes type : values) {
-//		}
-//		logger.info("Starting battle type: " + type);
-		List<Army> clonedAttacker = Util.cloneArmy(attacker);
-		List<Army> clonedDefender = Util.cloneArmy(defender);
-		IBattle battle = factory.getBattle(clonedAttacker, clonedDefender);
-		battle.fight();
-		battle.printResults();
+        BattleFactory factory = new BattleFactory();
+        BattleType[] values = BattleType.values();
+        for (BattleType type : values) {
+            logger.info("Starting battle type: " + type);
+            List<Army> clonedAttacker = Util.cloneArmy(attacker);
+            List<Army> clonedDefender = Util.cloneArmy(defender);
+            IBattle battle = factory.getBattle(clonedAttacker, clonedDefender);
+            battle.fight();
+        }
 
-		logger.info("Overall program time is " + (System.currentTimeMillis() - timer) + "ms");
-	}
-
-
-	public static void battleAndPrintResults(IBattle battle) {
-		battle.fight();
-		battle.printResults();
-	}
+        logger.info("Overall program time is " + (System.currentTimeMillis() - timer) + "ms");
+    }
 
 
-	private static void initializeArmies(List<Army> attacker, List<Army> defender) throws IOException {
-		JSONParser parser = new JSONParser();
-		UserInputParameters attackerInput = parser.parseUserInput(attackerFile);
-		Util.initializeArmyCollection(attacker, attackerInput);
+    public static void battleAndPrintResults(IBattle battle) {
+        battle.fight();
+        battle.printResults();
+    }
 
-		UserInputParameters defenderInput = parser.parseUserInput(defenderFile);
-		Util.initializeArmyCollection(defender, defenderInput);
-	}
+
+    private static void initializeArmies(List<Army> attacker, List<Army> defender) throws IOException {
+        JSONParser parser = new JSONParser();
+        UserInputParameters attackerInput = parser.parseUserInput(attackerFile);
+        Util.initializeArmyCollection(attacker, attackerInput);
+
+        UserInputParameters defenderInput = parser.parseUserInput(defenderFile);
+        Util.initializeArmyCollection(defender, defenderInput);
+    }
 }

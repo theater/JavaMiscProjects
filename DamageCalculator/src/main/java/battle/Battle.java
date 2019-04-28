@@ -28,6 +28,7 @@ public class Battle implements IBattle {
 
     private int attackerTotalLosses;
     private int defenderTotalLosses;
+    protected BattleType type;
 
     public Battle(List<Army> attacker, List<Army> defender) {
         sortAttacker(attacker);
@@ -35,6 +36,8 @@ public class Battle implements IBattle {
 
         sortDefender(defender);
         this.defender = defender;
+
+        this.type = BattleType.NORMAL;
     }
 
     private void sortDefender(List<Army> defender) {
@@ -238,11 +241,18 @@ public class Battle implements IBattle {
         logger.info("Total defender losses: " + defenderTotalLosses);
     }
 
+    @Override
     public int getAttackerTotalLosses() {
         return attackerTotalLosses;
     }
 
+    @Override
     public int getDefenderTotalLosses() {
         return defenderTotalLosses;
+    }
+
+    @Override
+    public BattleType getType() {
+        return type;
     }
 }

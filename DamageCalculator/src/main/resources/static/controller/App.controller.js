@@ -7,6 +7,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller" ], function(
 		onInit : function() {
 			var sharedModel = this.getOwnerComponent().getModel("sharedModel");
 			sharedModel.setProperty("/visibilityWolfResult", false);
+			sharedModel.setProperty("/visibilityBattleResult", false);
 
 			this.getView().setModel(sharedModel, "sharedModel");
 		},
@@ -34,6 +35,11 @@ sap.ui.define([ "sap/ui/core/mvc/Controller" ], function(
 		battleCalcJsonPress : function() {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("battleJson");
+		},
+		
+		battleResultPress : function() {
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			oRouter.navTo("battleResult");
 		}
 	});
 

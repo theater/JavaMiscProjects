@@ -7,26 +7,26 @@ import org.slf4j.LoggerFactory;
 
 public class BattleFactory {
 
-	private static Logger logger = LoggerFactory.getLogger(BattleFactory.class);
+    private static Logger logger = LoggerFactory.getLogger(BattleFactory.class);
 
-	public IBattle getBattle(List<Army> attacker, List<Army> defender) {
-		return getBattle(BattleTypes.NORMAL, attacker, defender);
-	}
+    public IBattle getBattle(List<Army> attacker, List<Army> defender) {
+        return getBattle(BattleType.NORMAL, attacker, defender);
+    }
 
-	public IBattle getBattle(BattleTypes type, List<Army> attacker, List<Army> defender) {
-		logger.info("Creating new battle with type: " + type);
-		switch (type) {
-		case STRICT_CHANCE:
-			return new BattleWithStrictChance(attacker, defender);
-		case ZERO_CHANCE:
-			return new BattleWithZeroChance(attacker, defender);
-		case FULL_CHANCE:
-			return new BattleWithBestChance(attacker, defender);
-		case AVERAGE_LOSSES:
-			return new BattleWithMultipleExecutions(attacker, defender);
-		case NORMAL:
-		default:
-			return new Battle(attacker, defender);
-		}
-	}
+    public IBattle getBattle(BattleType type, List<Army> attacker, List<Army> defender) {
+        logger.info("Creating new battle with type: " + type);
+        switch (type) {
+            case STRICT_CHANCE:
+                return new BattleWithStrictChance(attacker, defender);
+            case ZERO_CHANCE:
+                return new BattleWithZeroChance(attacker, defender);
+            case FULL_CHANCE:
+                return new BattleWithBestChance(attacker, defender);
+            case AVERAGE_LOSSES:
+                return new BattleWithMultipleExecutions(attacker, defender);
+            case NORMAL:
+            default:
+                return new Battle(attacker, defender);
+        }
+    }
 }
