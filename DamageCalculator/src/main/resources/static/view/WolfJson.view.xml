@@ -1,11 +1,16 @@
-<mvc:View controllerName="DamageCalculator.controller.WolfCalculator" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
-	xmlns:ce="sap.ui.codeeditor" height="100%">
+<mvc:View controllerName="DamageCalculator.controller.WolfCalculator" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core" xmlns:ce="sap.ui.codeeditor" height="100%">
 	<Page title="Wolf damage calculator JSON View">
 		<content>
-			<ce:CodeEditor value="{path: 'wolf>/input', formatter:'.formatInputAsJSON'}" height="50%" width="40%" type="json"
-				change="onCodeEditorChange" lineNumbers="false"/>
+			<OverflowToolbar>
+				<Title text="Wolf Input Data" level="H2" />
+				<ToolbarSpacer />
+				<Button text="Calculate" press=".onCalculatePress" class="sapUiSmallMargin" type="Transparent" />
+			</OverflowToolbar>
+			<ce:CodeEditor value="{path: 'wolf>/input', formatter:'.formatInputAsJSON'}" height="100%" width="100%" type="json"
+				change="onCodeEditorChange" lineNumbers="false" />
 
-			<Button text="Calculate" press=".onCalculatePress" class="sapUiSmallMargin" />
+
 		</content>
 	</Page>
 </mvc:View>
