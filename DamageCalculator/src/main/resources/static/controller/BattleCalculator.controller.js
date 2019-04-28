@@ -5,13 +5,13 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 	return Controller.extend("DamageCalculator.controller.BattleCalculator", {
 		onInit : function() {
 			var oModel = new JSONModel();
-			oModel.setProperty("/", this.oData);
+			oModel.setProperty("/input", this.oData);
 			this.getView().setModel(oModel, "battle");
 		},
 
 		onCalculatePress : function() {
 			var model = this.getView().getModel("battle");
-			var postBody = model.getProperty("/");
+			var postBody = model.getProperty("/input");
 			var that = this;
 			var aData = jQuery.ajax({
 				type: "POST",
@@ -37,10 +37,13 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 		},
 
 		onCodeEditorChange : function(event) {
-			var valueAsString = event.getSource().getValue();
-			var dataValue = JSON.parse(valueAsString);
-			var model = this.getView().getModel("battle");
-			model.setProperty("/input", dataValue);
+			let eventSource = event.getSource();
+			let id = eventSource.getIdForLabel().split("--")[1];
+			let modifiedField = "attackerEditor" === id ? "attacker" : "defender";
+			let valueAsString = eventSource.getValue();
+			let dataValue = JSON.parse(valueAsString);
+			let model = this.getView().getModel("battle");
+			model.setProperty("/input/" +modifiedField, dataValue);
 		},
 		
 		oData : {

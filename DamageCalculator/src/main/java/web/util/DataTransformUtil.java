@@ -7,7 +7,10 @@ import main.java.web.dto.WolfArmyDto;
 import main.java.web.dto.WolfArmyResultDto;
 import main.java.wolf.WolfArmy;
 
-public class DataTransformUtil {
+public final class DataTransformUtil {
+
+    private DataTransformUtil() {
+    }
 
     public static WolfArmyResultDto convertWolfDistributionToDTO(List<WolfArmy> distribution) {
         List<WolfArmyDto> resultDistribution = new ArrayList<>();

@@ -12,13 +12,13 @@
 				<l:PaneContainer>
 					<l:SplitPane requiredParentWidth="400" id="default">
 						<Panel headerText="Attacker" height="100%">
-							<ce:CodeEditor value="{path: 'battle>/attacker', formatter:'.formatInputAsJSON'}" height="100%" width="100%"
+							<ce:CodeEditor value="{path: 'battle>/input/attacker', formatter:'.formatInputAsJSON'}" height="100%" width="100%"
 								type="json" change="onCodeEditorChange" lineNumbers="false" id="attackerEditor" />
 						</Panel>
 					</l:SplitPane>
 					<l:SplitPane requiredParentWidth="400" id="second">
 						<Panel headerText="Defender" height="100%">
-							<ce:CodeEditor value="{path: 'battle>/defender', formatter:'.formatInputAsJSON'}" height="100%" width="100%"
+							<ce:CodeEditor value="{path: 'battle>/input/defender', formatter:'.formatInputAsJSON'}" height="100%" width="100%"
 								type="json" change="onCodeEditorChange" lineNumbers="false" id="defenderEditor" />
 						</Panel>
 					</l:SplitPane>

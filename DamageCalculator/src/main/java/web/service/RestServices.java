@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import main.java.Util;
 import main.java.battle.Army;
 import main.java.battle.BattleFactory;
 import main.java.battle.BattleType;
 import main.java.battle.IBattle;
+import main.java.battle.Util;
 import main.java.web.dto.BattleInputParameters;
 import main.java.web.dto.BattleResultDto;
 import main.java.web.dto.UserInputParameters;
