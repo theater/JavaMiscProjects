@@ -4,7 +4,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 
 	return Controller.extend("DamageCalculator.controller.WolfCalculator", {
 		onInit : function() {
-			var oData = {
+			let oData = {
 					"castleLevel" : 31,
 					"troopsAmount" : 222730,
 					"useMarchCapacityBoost" : true,
@@ -23,16 +23,16 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 					"distanceVsInfantryDamage" : 12.5,
 					"cavalryVsInfantryDamage" : 8
 				};
-			var oModel = new JSONModel();
+			let oModel = new JSONModel();
 			oModel.setProperty("/input", oData);
 			this.getView().setModel(oModel, "wolf");
 		},
 
 		onCalculatePress : function() {
-			var model = this.getView().getModel("wolf");
-			var postBody = model.getProperty("/input");
-			var that = this;
-			var aData = jQuery.ajax({
+			let model = this.getView().getModel("wolf");
+			let postBody = model.getProperty("/input");
+			let that = this;
+			let aData = jQuery.ajax({
 				type: "POST",
 				data: JSON.stringify(postBody),
 				contentType: "application/json",
@@ -40,7 +40,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 				dataType: "json",
 				async: false,
 				success: function(data, textStatus, jqXHR) {
-					var sharedModel = that.getOwnerComponent().getModel("sharedModel");
+					let sharedModel = that.getOwnerComponent().getModel("sharedModel");
 					sharedModel.setProperty("/armies", data.armies);
 					sharedModel.setProperty("/visibilityWolfResult", true);
 					sap.ui.core.UIComponent.getRouterFor(that).navTo("wolfResult");
@@ -52,7 +52,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 		},
 
 		onHomePress : function() {
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+			let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("home");
 		},
 		
@@ -61,9 +61,9 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 		},
 
 		onCodeEditorChange : function(event) {
-			var valueAsString = event.getSource().getValue();
-			var dataValue = JSON.parse(valueAsString);
-			var model = this.getView().getModel("wolf");
+			let valueAsString = event.getSource().getValue();
+			let dataValue = JSON.parse(valueAsString);
+			let model = this.getView().getModel("wolf");
 			model.setProperty("/input", dataValue);
 		}
 

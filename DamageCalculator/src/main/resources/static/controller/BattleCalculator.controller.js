@@ -4,16 +4,16 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 
 	return Controller.extend("DamageCalculator.controller.BattleCalculator", {
 		onInit : function() {
-			var oModel = new JSONModel();
+			let oModel = new JSONModel();
 			oModel.setProperty("/input", this.oData);
 			this.getView().setModel(oModel, "battle");
 		},
 
 		onCalculatePress : function() {
-			var model = this.getView().getModel("battle");
-			var postBody = model.getProperty("/input");
-			var that = this;
-			var aData = jQuery.ajax({
+			let model = this.getView().getModel("battle");
+			let postBody = model.getProperty("/input");
+			let that = this;
+			let aData = jQuery.ajax({
 				type: "POST",
 				data: JSON.stringify(postBody),
 				contentType: "application/json",
@@ -21,7 +21,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel" ], f
 				dataType: "json",
 				async: false,
 				success: function(data, textStatus, jqXHR) {
-					var sharedModel = that.getOwnerComponent().getModel("sharedModel");
+					let sharedModel = that.getOwnerComponent().getModel("sharedModel");
 					sharedModel.setProperty("/battleResult", data);
 					sharedModel.setProperty("/visibilityBattleResult", true);
 					sap.ui.core.UIComponent.getRouterFor(that).navTo("battleResult");

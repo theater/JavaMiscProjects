@@ -15,12 +15,12 @@ sap.ui.define([ "sap/ui/core/UIComponent",
 			// create the views based on the url/hash
 			this.getRouter().initialize();
 
-			var i18nModel = new ResourceModel({
+			let i18nModel = new ResourceModel({
 				bundleName : "DamageCalculator.i18n.i18n"
 			});
 			sap.ui.getCore().setModel(i18nModel, "i18n");
 			
-			var sharedModel = new JSONModel();
+			let sharedModel = new JSONModel();
 			this.setModel(sharedModel, "sharedModel");
 		}
 	});
