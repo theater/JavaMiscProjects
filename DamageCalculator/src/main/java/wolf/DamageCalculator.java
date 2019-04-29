@@ -32,7 +32,7 @@ public class DamageCalculator {
     private CalculationsHelper helper;
 
     public DamageCalculator(UserInputParameters parameters) throws IOException {
-        this.inputParameters = parameters;
+        inputParameters = parameters;
         helper = new CalculationsHelper(inputParameters);
         calculatedMarchCapacity = calculateCapacity();
         initializeDistribution();

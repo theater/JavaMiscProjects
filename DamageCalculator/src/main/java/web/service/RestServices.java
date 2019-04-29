@@ -18,6 +18,7 @@ import main.java.battle.BattleFactory;
 import main.java.battle.BattleType;
 import main.java.battle.IBattle;
 import main.java.battle.Util;
+import main.java.parser.JSONParser;
 import main.java.web.dto.BattleInputParameters;
 import main.java.web.dto.BattleResultDto;
 import main.java.web.dto.UserInputParameters;
@@ -75,5 +76,27 @@ public class RestServices {
         }
 
         return result;
+    }
+
+    @RequestMapping(value = "/rest/battle/defaultValues", method = RequestMethod.GET, produces = "application/json")
+    public BattleInputParameters provideBattleDefaultValues() throws IOException {
+        final String attackerFile = "attacker.json";
+        final String defenderFile = "defender.json";
+
+        JSONParser parser = new JSONParser();
+        UserInputParameters attackerInput = parser.parseUserInput(attackerFile);
+        UserInputParameters defenderInput = parser.parseUserInput(defenderFile);
+
+        return new BattleInputParameters(attackerInput, defenderInput);
+    }
+
+    @RequestMapping(value = "/rest/wolf/defaultValues", method = RequestMethod.GET, produces = "application/json")
+    public UserInputParameters provideWolfDefaultValues() throws IOException {
+        final String attackerFile = "wolfInput.json";
+
+        JSONParser parser = new JSONParser();
+        UserInputParameters wolfInput = parser.parseUserInput(attackerFile);
+
+        return wolfInput;
     }
 }

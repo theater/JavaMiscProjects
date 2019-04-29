@@ -57,7 +57,7 @@
 			"routes": [
 				{
 					"pattern": "",
-					"name": "wolf",
+					"name": "home",
 					"target": "wolf"
 				},
 				{

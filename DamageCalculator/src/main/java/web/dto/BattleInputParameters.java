@@ -6,6 +6,14 @@ public class BattleInputParameters {
     private UserInputParameters attacker;
     private UserInputParameters defender;
 
+    public BattleInputParameters(UserInputParameters attacker, UserInputParameters defender) {
+        this.attacker = attacker;
+        this.defender = defender;
+    }
+
+    public BattleInputParameters() {
+    }
+
     public UserInputParameters getAttacker() {
         return attacker;
     }
