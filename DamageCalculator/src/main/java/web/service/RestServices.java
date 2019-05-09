@@ -46,7 +46,6 @@ public class RestServices {
             BindingResult bindingResult, ModelMap model) throws IOException {
         logger.info(battleInput.toString());
 
-
         UserInputParameters attackerInput = battleInput.getAttacker();
         UserInputParameters defenderInput = battleInput.getDefender();
 

@@ -11,4 +11,6 @@ public interface IBattle {
     int getDefenderTotalLosses();
 
     public BattleType getType();
+
+    void setRounds(int rounds);
 }

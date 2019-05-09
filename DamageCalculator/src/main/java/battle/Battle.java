@@ -21,7 +21,7 @@ public class Battle implements IBattle {
 
     private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
 
-    private final static int ROUNDS_COUNTER = 30;
+    private int rounds = 85;
 
     protected List<Army> attacker;
     protected List<Army> defender;
@@ -65,7 +65,7 @@ public class Battle implements IBattle {
         long startTime = System.currentTimeMillis();
 
         // TODO this will be calculated. Currently is constant
-        int counter = ROUNDS_COUNTER;
+        int counter = rounds;
         for (int i = 0; i < counter; i++) {
             logger.info("#######################################");
             logger.info("##### Round = " + (i + 1));
@@ -255,4 +255,10 @@ public class Battle implements IBattle {
     public BattleType getType() {
         return type;
     }
+
+    @Override
+    public void setRounds(int rounds) {
+        this.rounds = rounds;
+    }
+
 }

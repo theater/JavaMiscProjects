@@ -1,4 +1,5 @@
 {
+    "rounds": 85,
     "castleLevel": 30,
     "troopsAmount": 200000,
     "useMarchCapacityBoost": true,
