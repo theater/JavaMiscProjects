@@ -24,11 +24,16 @@ public class BattleWithMultipleExecutions extends Battle {
         type = BattleType.AVERAGE_LOSSES;
     }
 
+    public BattleWithMultipleExecutions(List<Army> attacker, List<Army> defender, int rounds) {
+        super(attacker, defender, rounds);
+        type = BattleType.AVERAGE_LOSSES;
+    }
+
     @Override
     public void fight() {
         List<Battle> battles = new ArrayList<>();
         for (int i = 0; i < ITERATIONS; i++) {
-            logger.debug("Creating battle #", i + 1);
+            logger.debug("Creating battle {} from {}", i + 1, type);
             battles.add(new Battle(attacker, defender));
         }
         if (IS_PARALLEL_COMPUTING) {

@@ -33,7 +33,7 @@ public class MainForBattles {
             logger.info("Starting battle type: " + type);
             List<Army> clonedAttacker = Util.cloneArmy(attacker);
             List<Army> clonedDefender = Util.cloneArmy(defender);
-            IBattle battle = factory.getBattle(type, clonedAttacker, clonedDefender);
+            IBattle battle = factory.getBattle(type, clonedAttacker, clonedDefender, 85);
             battle.setRounds(rounds);
             battle.fight();
         }

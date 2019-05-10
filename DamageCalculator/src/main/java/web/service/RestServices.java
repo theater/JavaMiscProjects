@@ -69,9 +69,9 @@ public class RestServices {
         Map<BattleType, Long> battleTimes = new HashMap<>();
         for (BattleType type : values) {
             final long BATTLE_START_TIME_MILLIS = System.currentTimeMillis();
-            logger.info("Starting battle type: " + type);
+            logger.debug("Starting battle type: " + type);
 
-            IBattle battle = factory.getBattle(type, attacker, defender);
+            IBattle battle = factory.getBattle(type, attacker, defender, attackerInput.getRounds());
             battle.fight();
 
             BattleResultDto dto = new BattleResultDto(battle.getAttackerTotalLosses(), battle.getDefenderTotalLosses(), battle.getType().name());

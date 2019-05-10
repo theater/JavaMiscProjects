@@ -16,6 +16,11 @@ public class BattleWithStrictChance extends Battle {
         type = BattleType.STRICT_CHANCE;
     }
 
+    public BattleWithStrictChance(List<Army> attacker, List<Army> defender, int rounds) {
+        super(attacker, defender, rounds);
+        type = BattleType.STRICT_CHANCE;
+    }
+
     @Override
     protected int calculateRandomChance(ArmySubType armySubType) {
         int result = 1;

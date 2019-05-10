@@ -9,6 +9,11 @@ public class BattleWithZeroChance extends Battle {
         type = BattleType.ZERO_CHANCE;
     }
 
+    public BattleWithZeroChance(List<Army> attacker, List<Army> defender, int rounds) {
+        super(attacker, defender, rounds);
+        type = BattleType.ZERO_CHANCE;
+    }
+
     @Override
     protected boolean isHighChance() {
         return false;
