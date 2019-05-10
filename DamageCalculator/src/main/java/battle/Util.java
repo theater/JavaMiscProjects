@@ -33,7 +33,7 @@ public final class Util {
         final int MAX_TIER = ConfigManager.getInstance().getConfiguration().ABSOLUTE_MAX_TIER;
 
         if (armyCollection == null) {
-            armyCollection = new ArrayList<Army>();
+            armyCollection = new ArrayList<Army>(MAX_TIER * 4);
         }
 
         ArmyType[] armyTypes = ArmyType.values();

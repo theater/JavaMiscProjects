@@ -31,11 +31,13 @@ public class Battle implements IBattle {
     protected BattleType type;
 
     public Battle(List<Army> attacker, List<Army> defender) {
-        sortAttacker(attacker);
-        this.attacker = attacker;
+        List<Army> clonedAttacker = Util.cloneArmy(attacker);
+        sortAttacker(clonedAttacker);
+        this.attacker = clonedAttacker;
 
-        sortDefender(defender);
-        this.defender = defender;
+        List<Army> clonedDefender = Util.cloneArmy(defender);
+        sortDefender(clonedDefender);
+        this.defender = clonedDefender;
 
         this.type = BattleType.NORMAL;
     }
