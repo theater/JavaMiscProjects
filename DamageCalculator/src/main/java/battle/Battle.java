@@ -26,8 +26,8 @@ public class Battle implements IBattle {
     protected List<Army> attacker;
     protected List<Army> defender;
 
-    private int attackerTotalLosses;
-    private int defenderTotalLosses;
+    protected int attackerTotalLosses;
+    protected int defenderTotalLosses;
     protected BattleType type;
 
     public Battle(List<Army> attacker, List<Army> defender) {

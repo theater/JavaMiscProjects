@@ -6,7 +6,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import main.java.config.ConfigManager;
+
 public class BattleWithMultipleExecutions extends Battle {
+
+    private static final boolean IS_PARALLEL_COMPUTING = ConfigManager.getInstance().getConfiguration().IS_PARALLEL;
 
     private static final Logger logger = LoggerFactory.getLogger(Battle.class);
     private static final int ITERATIONS = 20;
@@ -22,25 +26,23 @@ public class BattleWithMultipleExecutions extends Battle {
 
     @Override
     public void fight() {
-        List<Integer> attackerLossesForEachRound = new ArrayList<Integer>(ITERATIONS);
-        List<Integer> defenderLossesForEachRound = new ArrayList<Integer>(ITERATIONS);
-
-        List<Army> attackerClone = Util.cloneArmy(attacker);
-        List<Army> defenderClone = Util.cloneArmy(defender);
+        List<Battle> battles = new ArrayList<>();
         for (int i = 0; i < ITERATIONS; i++) {
-            logger.debug("Starting fight=" + (i + 1));
-            super.fight();
-
-            attackerLossesForEachRound.add(i, getAttackerTotalLosses());
-            defenderLossesForEachRound.add(i, getDefenderTotalLosses());
-
-            attacker = Util.cloneArmy(attackerClone);
-            defender = Util.cloneArmy(defenderClone);
-            logger.debug("Ending fight iteration for fight=" + (i + 1));
+            logger.debug("Creating battle #", i + 1);
+            battles.add(new Battle(attacker, defender));
+        }
+        if (IS_PARALLEL_COMPUTING) {
+            battles.parallelStream().forEach(battle -> {
+                battle.fight();
+            });
+        } else {
+            battles.stream().forEach(battle -> {
+                battle.fight();
+            });
         }
 
-        attackerAverageLosses = (int) Math.floor(attackerLossesForEachRound.stream().mapToDouble(a -> a).average().getAsDouble());
-        defenderAverageLosses = (int) Math.floor(defenderLossesForEachRound.stream().mapToDouble(a -> a).average().getAsDouble());
+        attackerTotalLosses = (int) Math.floor(battles.stream().mapToDouble(battle -> battle.getAttackerTotalLosses()).average().getAsDouble());
+        defenderTotalLosses = (int) Math.floor(battles.stream().mapToDouble(battle -> battle.getDefenderTotalLosses()).average().getAsDouble());
     }
 
     @Override
