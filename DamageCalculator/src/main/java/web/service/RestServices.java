@@ -73,6 +73,7 @@ public class RestServices {
 
             IBattle battle = factory.getBattle(type, attacker, defender, attackerInput.getRounds());
             battle.fight();
+            logger.info("Attacker losses={}, \tDefender losses={}, \tBattle type={}", battle.getAttackerTotalLosses(), battle.getDefenderTotalLosses(), battle.getType());
 
             BattleResultDto dto = new BattleResultDto(battle.getAttackerTotalLosses(), battle.getDefenderTotalLosses(), battle.getType().name());
             result.add(dto);
@@ -80,6 +81,7 @@ public class RestServices {
         }
 
         battleTimes.entrySet().stream().forEach(entry -> logger.info("Simulation for battleType {} finished for {} ms", entry.getKey(), entry.getValue()));
+
         logger.info("Total simulation time = {} ms", System.currentTimeMillis() - START_TIME_MILLIS);
         return result;
     }
