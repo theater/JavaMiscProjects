@@ -1,4 +1,9 @@
 {
+    "rounds":85,
+	"castleLevel": 32,
+	"troopsAmount": 253330,
+	"useMarchCapacityBoost": false,
+	"useMarchCapacitySpell": false,
 	"maxTier": 10,
 	"troopAttack":740.44,
 	"troopDefense": 771.73,

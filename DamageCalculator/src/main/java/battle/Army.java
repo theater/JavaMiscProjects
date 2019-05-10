@@ -205,7 +205,7 @@ public class Army implements Comparable<Army> {
     @Override
     public Army clone() {
         Army army = new Army(type, tier, number);
-        army.setArmyStats(armyStats);
+        army.setArmyStats(armyStats.clone());
         army.setDamageReductionVsOthers(damageReductionVsOthers);
         army.setDamageVsOthers(damageVsOthers);
         return army;

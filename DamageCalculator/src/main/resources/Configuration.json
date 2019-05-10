@@ -1,4 +1,5 @@
 {
+    "IS_PARALLEL" : true,
 	"ABSOLUTE_MAX_TIER": 12,
 	"CASTLE_BASE_MARCH_CAPACITY": {
 		"1": 2000,

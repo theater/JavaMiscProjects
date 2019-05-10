@@ -17,6 +17,7 @@ public class MainForBattles {
     private static final String defenderFile = "defender.json";
 
     private static long timer = System.currentTimeMillis();
+    private static int rounds;
 
     public static void main(String... args) throws IOException {
         logger.info("Entering main");
@@ -32,7 +33,8 @@ public class MainForBattles {
             logger.info("Starting battle type: " + type);
             List<Army> clonedAttacker = Util.cloneArmy(attacker);
             List<Army> clonedDefender = Util.cloneArmy(defender);
-            IBattle battle = factory.getBattle(clonedAttacker, clonedDefender);
+            IBattle battle = factory.getBattle(type, clonedAttacker, clonedDefender, 85);
+            battle.setRounds(rounds);
             battle.fight();
         }
 
@@ -50,6 +52,7 @@ public class MainForBattles {
         JSONParser parser = new JSONParser();
         UserInputParameters attackerInput = parser.parseUserInput(attackerFile);
         Util.initializeArmyCollection(attacker, attackerInput);
+        rounds = attackerInput.getRounds();
 
         UserInputParameters defenderInput = parser.parseUserInput(defenderFile);
         Util.initializeArmyCollection(defender, defenderInput);

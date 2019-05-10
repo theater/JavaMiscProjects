@@ -21,23 +21,32 @@ public class Battle implements IBattle {
 
     private static final Configuration CONFIGURATION = ConfigManager.getInstance().getConfiguration();
 
-    private final static int ROUNDS_COUNTER = 30;
+    private int rounds = 85;
 
     protected List<Army> attacker;
     protected List<Army> defender;
 
-    private int attackerTotalLosses;
-    private int defenderTotalLosses;
+    protected int attackerTotalLosses;
+    protected int defenderTotalLosses;
     protected BattleType type;
 
-    public Battle(List<Army> attacker, List<Army> defender) {
-        sortAttacker(attacker);
-        this.attacker = attacker;
+    public Battle(List<Army> attacker, List<Army> defender, int rounds) {
+        List<Army> clonedAttacker = Util.cloneArmy(attacker);
+        sortAttacker(clonedAttacker);
+        this.attacker = clonedAttacker;
 
-        sortDefender(defender);
-        this.defender = defender;
+        List<Army> clonedDefender = Util.cloneArmy(defender);
+        sortDefender(clonedDefender);
+        this.defender = clonedDefender;
 
         this.type = BattleType.NORMAL;
+        this.rounds = rounds;
+
+        logger.debug("Battle created: {}", this);
+    }
+
+    public Battle(List<Army> attacker, List<Army> defender) {
+        this(attacker, defender, 85);
     }
 
     private void sortDefender(List<Army> defender) {
@@ -65,18 +74,18 @@ public class Battle implements IBattle {
         long startTime = System.currentTimeMillis();
 
         // TODO this will be calculated. Currently is constant
-        int counter = ROUNDS_COUNTER;
+        int counter = rounds;
         for (int i = 0; i < counter; i++) {
-            logger.info("#######################################");
-            logger.info("##### Round = " + (i + 1));
-            logger.info("#######################################");
+            logger.trace("#######################################");
+            logger.trace("##### Round = " + (i + 1));
+            logger.trace("#######################################");
             doRound();
         }
         attackerTotalLosses = attacker.stream().mapToInt(army -> army.getTotalLosses()).sum();
         defenderTotalLosses = defender.stream().mapToInt(army -> army.getTotalLosses()).sum();
 
         logger.debug("##########################################################################");
-        logger.debug("Fight calculation took " + (System.currentTimeMillis() - startTime) + "ms");
+        logger.debug("Thread={}, Fight calculation took {} ms", Thread.currentThread().getName(), (System.currentTimeMillis() - startTime));
         logger.debug("##########################################################################");
     }
 
@@ -85,7 +94,7 @@ public class Battle implements IBattle {
             Army attackingArmyOfAttacker = attacker.get(i);
             Army defenderDefendingArmy = getOpponentArmy(attackingArmyOfAttacker, defender);
             if (attackingArmyOfAttacker.getNumber() > 0 && defenderDefendingArmy.getNumber() > 0) {
-                logger.debug("### Attacker attacks...");
+                logger.trace("### Attacker attacks...");
                 int currentDefenderArmyLosses = calculateDefenderLosses(attackingArmyOfAttacker, defenderDefendingArmy);
                 defenderDefendingArmy.addLosses(currentDefenderArmyLosses);
             }
@@ -94,7 +103,7 @@ public class Battle implements IBattle {
             Army attackingArmyOfDefender = defender.get(i);
             Army attackerDefendingArmy = getOpponentArmy(attackingArmyOfDefender, attacker);
             if (attackingArmyOfDefender.getNumber() > 0 && attackerDefendingArmy.getNumber() > 0) {
-                logger.debug("*** Defender attacks...");
+                logger.trace("*** Defender attacks...");
                 int currentAttackerArmyLosses = calculateDefenderLosses(attackingArmyOfDefender, attackerDefendingArmy);
                 attackerDefendingArmy.addLosses(currentAttackerArmyLosses);
             }
@@ -157,7 +166,7 @@ public class Battle implements IBattle {
     }
 
     private int calculateDefenderLosses(Army attackingArmy, Army defendingArmy) {
-        logger.debug("Attacking army: " + attackingArmy + "\tDefendingArmy: " + defendingArmy);
+        logger.trace("Attacking army: " + attackingArmy + "\tDefendingArmy: " + defendingArmy);
         ArmyStats attackerStats = attackingArmy.getArmyStats();
         ArmyStats defenderStats = defendingArmy.getArmyStats();
 
@@ -168,17 +177,17 @@ public class Battle implements IBattle {
         // Must be >= 0
         double damageModifiers = Math.max(0,
             Math.min(1 + ((attackerStats.getDamage() - defenderStats.getDamageReduction()) / 100), 3));
-        logger.debug("Damage modifier = " + damageModifiers);
+        logger.trace("Damage modifier = " + damageModifiers);
 
         // Must be >= 0
         double efficiencyFactor = Math.max(0, calculateEfficiencyFactor(attackingArmy, defendingArmy));
-        logger.debug("Calculated efficiency = " + efficiencyFactor);
+        logger.trace("Calculated efficiency = " + efficiencyFactor);
 
         double calculatedDamage = baseDamage * damageModifiers * efficiencyFactor;
-        logger.debug("Calculated damage = " + calculatedDamage);
+        logger.trace("Calculated damage = " + calculatedDamage);
 
         double losses = (calculatedDamage * Math.sqrt(attackingArmy.getNumber())) / defenderStats.getHealth();
-        logger.debug("Losses = " + losses);
+        logger.trace("Losses = " + losses);
 
         return losses <= defendingArmy.getNumber() ? (int) Math.floor(losses) : defendingArmy.getNumber();
     }
@@ -189,7 +198,7 @@ public class Battle implements IBattle {
 
     private double calculateEfficiencyFactor(Army attackingArmy, Army defendingArmy) {
         double staticEfficiency = retrieveStaticEfficiency(attackingArmy.getSubType(), defendingArmy.getSubType());
-        logger.debug("Static efficiency:\t\t" + staticEfficiency);
+        logger.trace("Static efficiency:\t\t" + staticEfficiency);
 
         double dynamicEfficiency = calculateDynamicEfficiency(attackingArmy, defendingArmy);
         return staticEfficiency + dynamicEfficiency;
@@ -217,7 +226,7 @@ public class Battle implements IBattle {
             return 1;
         }
         Double efficiency = staticEfficiency.get(defenderSubType);
-        logger.debug("Efficiency: " + efficiency);
+        logger.trace("Efficiency: " + efficiency);
         return efficiency == null || efficiency == 0 ? 1 : efficiency;
     }
 
@@ -255,4 +264,15 @@ public class Battle implements IBattle {
     public BattleType getType() {
         return type;
     }
+
+    @Override
+    public void setRounds(int rounds) {
+        this.rounds = rounds;
+    }
+
+    @Override
+    public String toString() {
+        return "Battle [rounds=" + rounds + ", attacker=" + attacker + ", defender=" + defender + ", type=" + type + "]";
+    }
+
 }

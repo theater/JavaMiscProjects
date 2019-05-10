@@ -2,7 +2,9 @@ package main.java.web.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +48,6 @@ public class RestServices {
             BindingResult bindingResult, ModelMap model) throws IOException {
         logger.info(battleInput.toString());
 
-
         UserInputParameters attackerInput = battleInput.getAttacker();
         UserInputParameters defenderInput = battleInput.getDefender();
 
@@ -54,6 +55,8 @@ public class RestServices {
     }
 
     private List<BattleResultDto> doBattles(UserInputParameters attackerInput, UserInputParameters defenderInput) {
+        final long START_TIME_MILLIS = System.currentTimeMillis();
+
         List<BattleResultDto> result = new ArrayList<>();
 
         ArrayList<Army> attacker = new ArrayList<Army>();
@@ -63,18 +66,23 @@ public class RestServices {
 
         BattleFactory factory = new BattleFactory();
         BattleType[] values = BattleType.values();
+        Map<BattleType, Long> battleTimes = new HashMap<>();
         for (BattleType type : values) {
-            logger.info("Starting battle type: " + type);
+            final long BATTLE_START_TIME_MILLIS = System.currentTimeMillis();
+            logger.debug("Starting battle type: " + type);
 
-            List<Army> clonedAttacker = Util.cloneArmy(attacker);
-            List<Army> clonedDefender = Util.cloneArmy(defender);
-            IBattle battle = factory.getBattle(type, clonedAttacker, clonedDefender);
+            IBattle battle = factory.getBattle(type, attacker, defender, attackerInput.getRounds());
             battle.fight();
+            logger.info("Attacker losses={}, \tDefender losses={}, \tBattle type={}", battle.getAttackerTotalLosses(), battle.getDefenderTotalLosses(), battle.getType());
 
             BattleResultDto dto = new BattleResultDto(battle.getAttackerTotalLosses(), battle.getDefenderTotalLosses(), battle.getType().name());
             result.add(dto);
+            battleTimes.put(type, System.currentTimeMillis() - BATTLE_START_TIME_MILLIS);
         }
 
+        battleTimes.entrySet().stream().forEach(entry -> logger.info("Simulation for battleType {} finished for {} ms", entry.getKey(), entry.getValue()));
+
+        logger.info("Total simulation time = {} ms", System.currentTimeMillis() - START_TIME_MILLIS);
         return result;
     }
 
