@@ -33,7 +33,7 @@ public class WolfArmy implements Comparable<WolfArmy> {
     }
 
     private double calculateAttackEfficiency() {
-        double baseEfficiency = subType == ArmySubType.GRENADIERS ? 1.2 : subType == ArmySubType.LIGHT_CAVALRY ? 0.8 : 1;
+        double baseEfficiency = subType == ArmySubType.RIFLEMEN ? 0.8 : subType == ArmySubType.HEAVY_CAVALRY ? 1.2 : 1;
         double efficiencyModifier = type == ArmyType.CAVALRY ? helper.CAVALRY_VS_INFANTRY_DAMAGE / 100 : type == ArmyType.DISTANCE ? helper.DISTANCE_VS_INFANTRY_DAMAGE / 100 : 0;
         double reduction = 0;
 		return Math.min(MAX_EFFICIENCY_FACTOR, baseEfficiency + efficiencyModifier - reduction );
@@ -46,7 +46,7 @@ public class WolfArmy implements Comparable<WolfArmy> {
         double modifiedAttack = baseAttack * (1 + (helper.ATTACK_MODIFIERS.get(getType())) / 100);
         logger.trace(this + " modified attack:\t" + modifiedAttack);
 
-        double defense = 7615;
+        double defense = 11000;
 
         double baseDamage = modifiedAttack * Math.min(0.75, Math.max(modifiedAttack / (modifiedAttack + defense), 0.3));
         logger.trace(this + " base damage:\t\t" + baseDamage);
