@@ -25,6 +25,7 @@ import main.java.web.dto.UserInputParameters;
 import main.java.web.dto.WolfArmyResultDto;
 import main.java.web.util.DataTransformUtil;
 import main.java.wolf.DamageCalculator;
+import main.java.wolf.PvPArmyCalculator;
 import main.java.wolf.WolfDamageCalculator;
 
 @RestController
@@ -45,7 +46,7 @@ public class RestServices {
     public WolfArmyResultDto pvpCalculate(@RequestBody UserInputParameters inputData,
     		BindingResult result, ModelMap model) throws IOException {
     	logger.info(inputData.toString());
-    	DamageCalculator calculator = new WolfDamageCalculator(inputData);
+    	DamageCalculator calculator = new PvPArmyCalculator(inputData);
     	calculator.calculate();
     	return DataTransformUtil.convertWolfDistributionToDTO(calculator.getArmyDistribution());
     }
