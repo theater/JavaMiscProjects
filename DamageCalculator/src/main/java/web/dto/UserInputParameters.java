@@ -12,8 +12,10 @@ public class UserInputParameters {
     private int troopsAmount = 200000;
     private boolean useMarchCapacityBoost = true;
     private boolean useMarchCapacitySpell = true;
+    private boolean useArtillery = true;
 
     private int maxTier = 10;
+    private int infantryPercentage = 30;
 
     private double troopAttack;
     private double troopDefense;
@@ -410,5 +412,21 @@ public class UserInputParameters {
     public void setRounds(int rounds) {
         this.rounds = rounds;
     }
+
+	public boolean isUseArtillery() {
+		return useArtillery;
+	}
+
+	public void setUseArtillery(boolean useArtillery) {
+		this.useArtillery = useArtillery;
+	}
+
+	public int getInfantryPercentage() {
+		return infantryPercentage;
+	}
+
+	public void setInfantryPercentage(int infantryPercentage) {
+		this.infantryPercentage = infantryPercentage;
+	}
 
 }

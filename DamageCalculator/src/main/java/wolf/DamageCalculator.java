@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import main.java.config.ArmyType;
 import main.java.config.CalculationsHelper;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
@@ -23,8 +24,10 @@ public abstract class DamageCalculator {
     private static final double MARCH_CAPACITY_BOOST = 0.25;
     private static final int STEP_UNITS = 1;
 
-    private int calculatedMarchCapacity;
+	protected boolean useArtillery = true;
 
+
+	protected int calculatedMarchCapacity;
     protected double totalArmyDamage;
     protected List<Army> armyDistribution = new ArrayList<>();
     protected UserInputParameters inputParameters;
@@ -35,6 +38,7 @@ public abstract class DamageCalculator {
         inputParameters = parameters;
         helper = new CalculationsHelper(inputParameters);
         calculatedMarchCapacity = calculateCapacity();
+        useArtillery = inputParameters.isUseArtillery();
     }
 
     private int calculateCapacity() {
@@ -82,7 +86,7 @@ public abstract class DamageCalculator {
         totalArmyDamage = totalDamage;
     }
 
-    private void validateResult() {
+    protected void validateResult() {
         int troopsCount = 0;
         for (Army army : armyDistribution) {
             troopsCount += army.getTroopsNumber();
@@ -115,6 +119,10 @@ public abstract class DamageCalculator {
         double maxDelta = 0;
         for (Army army : armyDistribution) {
             double calculatedDelta = calculateDamageDelta(army);
+            if (!useArtillery && army.getType() == ArmyType.ARTILLERY) {
+            	continue;
+            }
+
             if (maxDelta < calculatedDelta) {
                 maxDelta = calculatedDelta;
                 bestArmy = army;
@@ -134,9 +142,5 @@ public abstract class DamageCalculator {
 
     public UserInputParameters getInputParameters() {
         return inputParameters;
-    }
-
-    public int getCalculatedMarchCapacity() {
-        return calculatedMarchCapacity;
     }
 }
