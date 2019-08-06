@@ -35,7 +35,6 @@ public abstract class DamageCalculator {
         inputParameters = parameters;
         helper = new CalculationsHelper(inputParameters);
         calculatedMarchCapacity = calculateCapacity();
-        initializeDistribution();
     }
 
     private int calculateCapacity() {
@@ -54,6 +53,7 @@ public abstract class DamageCalculator {
 
 
     public void calculate() {
+        initializeDistribution();
         calculateDistribution();
         calculateTotalDamage();
     }
