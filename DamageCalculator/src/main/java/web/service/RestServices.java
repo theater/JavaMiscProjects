@@ -41,6 +41,15 @@ public class RestServices {
         return DataTransformUtil.convertWolfDistributionToDTO(calculator.getArmyDistribution());
     }
 
+    @RequestMapping(value = "/rest/pvp/calculate", method = RequestMethod.POST, produces = "application/json")
+    public WolfArmyResultDto pvpCalculate(@RequestBody UserInputParameters inputData,
+    		BindingResult result, ModelMap model) throws IOException {
+    	logger.info(inputData.toString());
+    	DamageCalculator calculator = new WolfDamageCalculator(inputData);
+    	calculator.calculate();
+    	return DataTransformUtil.convertWolfDistributionToDTO(calculator.getArmyDistribution());
+    }
+
     @RequestMapping(value = "/rest/battle/calculate", method = RequestMethod.POST, produces = "application/json")
     public List<BattleResultDto> battleCalculate(@RequestBody BattleInputParameters battleInput,
             BindingResult bindingResult, ModelMap model) throws IOException {

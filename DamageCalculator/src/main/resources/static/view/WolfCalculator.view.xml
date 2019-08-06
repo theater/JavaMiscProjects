@@ -14,7 +14,8 @@
 					<OverflowToolbar>
 					    <Title text="Input data" level="H2"/>
 					    <ToolbarSpacer/>
-						<Button text="Calculate" press=".onCalculatePress" type="Transparent" class="sapUiSmallMargin" />
+						<Button text="Calculate Wolf" press=".onCalculateWolfPress" type="Transparent" class="sapUiSmallMargin" />
+						<Button text="Calculate PvP" press=".onCalculatePvPPress" type="Transparent" class="sapUiSmallMargin" />
 					</OverflowToolbar>
 				</headerToolbar>
 				<items>
