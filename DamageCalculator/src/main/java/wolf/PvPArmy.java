@@ -13,7 +13,7 @@ public class PvPArmy extends Army {
 
 	public PvPArmy(ArmyType type, int tier, CalculationsHelper helper) {
 		super(type, tier, helper);
-		defense = 13000;
+		defense = 26000;
 	}
 
 	@Override
