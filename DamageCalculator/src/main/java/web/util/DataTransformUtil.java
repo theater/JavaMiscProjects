@@ -5,16 +5,16 @@ import java.util.List;
 
 import main.java.web.dto.WolfArmyDto;
 import main.java.web.dto.WolfArmyResultDto;
-import main.java.wolf.WolfArmy;
+import main.java.wolf.Army;
 
 public final class DataTransformUtil {
 
     private DataTransformUtil() {
     }
 
-    public static WolfArmyResultDto convertWolfDistributionToDTO(List<WolfArmy> distribution) {
+    public static WolfArmyResultDto convertWolfDistributionToDTO(List<Army> list) {
         List<WolfArmyDto> resultDistribution = new ArrayList<>();
-        for (WolfArmy army : distribution) {
+        for (Army army : list) {
             WolfArmyDto dto = new WolfArmyDto();
             dto.setType(army.getType().name());
             dto.setSubType(army.getSubType().name());
