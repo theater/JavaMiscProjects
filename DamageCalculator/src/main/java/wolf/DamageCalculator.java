@@ -3,19 +3,17 @@ package main.java.wolf;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.config.ArmyType;
 import main.java.config.CalculationsHelper;
 import main.java.config.ConfigManager;
 import main.java.config.Configuration;
 import main.java.web.dto.UserInputParameters;
 
-public class DamageCalculator {
+public abstract class DamageCalculator {
 
     private static Logger logger = LoggerFactory.getLogger(DamageCalculator.class);
 
@@ -25,11 +23,13 @@ public class DamageCalculator {
     private static final double MARCH_CAPACITY_BOOST = 0.25;
     private static final int STEP_UNITS = 1;
 
-    protected double totalArmyDamage;
     private int calculatedMarchCapacity;
-    private List<WolfArmy> armyDistribution = new ArrayList<>();
-    private UserInputParameters inputParameters;
-    private CalculationsHelper helper;
+
+    protected double totalArmyDamage;
+    protected List<WolfArmy> armyDistribution = new ArrayList<>();
+    protected UserInputParameters inputParameters;
+    protected CalculationsHelper helper;
+    protected abstract void initializeDistribution();
 
     public DamageCalculator(UserInputParameters parameters) throws IOException {
         inputParameters = parameters;
@@ -52,15 +52,6 @@ public class DamageCalculator {
         return (int) (capacityModifier * baseCapacity + inputParameters.getTroopsAmount());
     }
 
-    private void initializeDistribution() {
-        ArmyType[] armyTypes = ArmyType.values();
-        for (ArmyType armyType : armyTypes) {
-            for (int i = 0; i < inputParameters.getMaxTier(); i++) {
-                armyDistribution.add(new WolfArmy(armyType, i, helper));
-            }
-        }
-        Collections.sort(armyDistribution);
-    }
 
     public void calculate() {
         calculateDistribution();

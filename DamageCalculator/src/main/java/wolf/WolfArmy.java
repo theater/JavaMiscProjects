@@ -22,6 +22,8 @@ public class WolfArmy implements Comparable<WolfArmy> {
     private int troopsNumber = 0;
     private CalculationsHelper helper;
 
+	protected double defense;
+
     public WolfArmy(ArmyType type, int tier, CalculationsHelper helper) {
         this.type = type;
         this.tier = tier;
@@ -45,8 +47,6 @@ public class WolfArmy implements Comparable<WolfArmy> {
 
         double modifiedAttack = baseAttack * (1 + (helper.ATTACK_MODIFIERS.get(getType())) / 100);
         logger.trace(this + " modified attack:\t" + modifiedAttack);
-
-        double defense = 0;
 
         double baseDamage = modifiedAttack * Math.min(0.75, modifiedAttack / (modifiedAttack + defense));
         logger.trace(this + " base damage:\t\t" + baseDamage);

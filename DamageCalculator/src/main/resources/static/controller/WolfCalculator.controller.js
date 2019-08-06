@@ -5,12 +5,20 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel", "Da
 	return Controller.extend("DamageCalculator.controller.WolfCalculator", {
 		onInit : function() {
 			let oModel = new JSONModel();
-			let oData = RestUtil.getData("/rest/wolf/defaultValues") 
+			let oData = RestUtil.getData("/rest/wolf/defaultValues")
 			oModel.setProperty("/input", oData);
 			this.getView().setModel(oModel, "wolf");
 		},
 
-		onCalculatePress : function() {
+		onCalculateWolfPress : function() {
+			this.onCalculatePress("/rest/wolf/calculate");
+		},
+
+		onCalculatePvPPress : function() {
+			this.onCalculatePress("/rest/pvp/calculate");
+		},
+
+		onCalculatePress : function(targetUrl) {
 			let model = this.getView().getModel("wolf");
 			let postBody = model.getProperty("/input");
 			let that = this;
@@ -18,7 +26,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel", "Da
 				type: "POST",
 				data: JSON.stringify(postBody),
 				contentType: "application/json",
-				url: "/rest/wolf/calculate",
+				url: targetUrl,
 				dataType: "json",
 				async: false,
 				success: function(data, textStatus, jqXHR) {
@@ -37,7 +45,7 @@ sap.ui.define([ "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel", "Da
 			let oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("home");
 		},
-		
+
 		formatInputAsJSON : function(data) {
 			return JSON.stringify(data, undefined, 2);
 		},
