@@ -16,7 +16,7 @@ public abstract class Army implements Comparable<Army> {
 	protected ArmySubType subType;
 	protected double attackEfficiency;
 	protected CalculationsHelper helper;
-	protected double defense;
+	protected double enemyDefense;
 
 	public Army(ArmyType type, int tier, CalculationsHelper helper) {
 		this.type = type;

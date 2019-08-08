@@ -31,7 +31,7 @@ public class WolfArmy extends Army {
         double modifiedAttack = baseAttack * (1 + (helper.ATTACK_MODIFIERS.get(getType())) / 100);
         logger.trace(this + " modified attack:\t" + modifiedAttack);
 
-        double baseDamage = modifiedAttack * Math.min(0.75, modifiedAttack / (modifiedAttack + defense));
+        double baseDamage = modifiedAttack * Math.min(0.75, modifiedAttack / (modifiedAttack + enemyDefense));
         logger.trace(this + " base damage:\t\t" + baseDamage);
 
         double efficiencyFactor = attackEfficiency;
