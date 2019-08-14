@@ -19,5 +19,11 @@
     "artilleryDamage": 40.5,
     "distanceVsInfantryDamage": 100.54,
     "cavalryVsInfantryDamage": 96.04,
-    "infantryPercentage" : 30
+    "infantryPercentage" : 30,
+    "maxTierPerArmy": {
+		"INFANTRY": 10,
+		"CAVALRY" : 11,
+		"DISTANCE" : 10,
+		"ARTILLERY" : 10
+    }
 }

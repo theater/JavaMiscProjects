@@ -60,6 +60,8 @@ public class UserInputParameters {
     private double infantryVsArtilleryDamageReduction;
     private Map<ArmyType, List<Integer>> army;
 
+    private Map<ArmyType, Integer> maxTierPerArmy;
+
     private String description = "HUI";
 
     public int getCastleLevel() {
@@ -427,6 +429,14 @@ public class UserInputParameters {
 
 	public void setInfantryPercentage(int infantryPercentage) {
 		this.infantryPercentage = infantryPercentage;
+	}
+
+	public Map<ArmyType, Integer> getMaxTierPerArmy() {
+		return maxTierPerArmy;
+	}
+
+	public void setMaxTierPerArmy(Map<ArmyType, Integer> maxTierPerArmy) {
+		this.maxTierPerArmy = maxTierPerArmy;
 	}
 
 }

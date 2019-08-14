@@ -3,6 +3,7 @@ package main.java.wolf;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +27,10 @@ public class WolfDamageCalculator extends DamageCalculator {
 
     protected void initializeDistribution() {
         ArmyType[] armyTypes = ArmyType.values();
+		Map<ArmyType, Integer> maxTierPerArmy = inputParameters.getMaxTierPerArmy();
         for (ArmyType armyType : armyTypes) {
-            for (int i = 0; i < inputParameters.getMaxTier(); i++) {
+			int maxTier = maxTierPerArmy != null ? maxTierPerArmy.get(armyType) : inputParameters.getMaxTier();
+			for (int i = 0; i < maxTier; i++) {
                 armyDistribution.add(new WolfArmy(armyType, i, helper));
             }
         }
