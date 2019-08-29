@@ -12,7 +12,11 @@ public class WolfArmy extends Army {
     private static Logger logger = LoggerFactory.getLogger(WolfArmy.class);
 
     public WolfArmy(ArmyType type, int tier, CalculationsHelper helper) {
-       super(type, tier, helper);
+        this(type, tier, helper, 0);
+    }
+
+    public WolfArmy(ArmyType type, int tier, CalculationsHelper helper, double defense) {
+        super(type, tier, helper, defense);
     }
 
     @Override
@@ -20,7 +24,7 @@ public class WolfArmy extends Army {
         double baseEfficiency = subType == ArmySubType.GRENADIERS ? 1.2 : subType == ArmySubType.LIGHT_CAVALRY ? 0.8 : 1;
         double efficiencyModifier = type == ArmyType.CAVALRY ? helper.CAVALRY_VS_INFANTRY_DAMAGE / 100 : type == ArmyType.DISTANCE ? helper.DISTANCE_VS_INFANTRY_DAMAGE / 100 : 0;
         double reduction = 0;
-		return Math.min(MAX_EFFICIENCY_FACTOR, baseEfficiency + efficiencyModifier - reduction );
+        return Math.min(MAX_EFFICIENCY_FACTOR, baseEfficiency + efficiencyModifier - reduction);
     }
 
     @Override

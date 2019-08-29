@@ -12,8 +12,7 @@ public class PvPArmy extends Army {
     private static Logger logger = LoggerFactory.getLogger(WolfArmy.class);
 
     public PvPArmy(ArmyType type, int tier, CalculationsHelper helper, double enemyDefense) {
-        super(type, tier, helper);
-        this.enemyDefense = enemyDefense;
+        super(type, tier, helper, enemyDefense);
     }
 
     @Override
