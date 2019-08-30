@@ -23,9 +23,7 @@ public class PvPArmy extends Army {
         double modifiedAttack = baseAttack * (1 + (helper.ATTACK_MODIFIERS.get(getType())) / 100);
         logger.trace(this + " modified attack:\t" + modifiedAttack);
 
-        double defense = 11000;
-
-        double baseDamage = modifiedAttack * Math.min(0.75, Math.max(modifiedAttack / (modifiedAttack + defense), 0.3));
+        double baseDamage = modifiedAttack * Math.min(0.75, Math.max(modifiedAttack / (modifiedAttack + enemyDefense), 0.3));
         logger.trace(this + " base damage:\t\t" + baseDamage);
 
         double efficiencyFactor = Math.min(Math.max(attackEfficiency - 1.0, 0.3), 3);
