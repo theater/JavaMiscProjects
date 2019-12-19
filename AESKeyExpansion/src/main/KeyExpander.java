@@ -10,31 +10,31 @@ public class KeyExpander {
         generateTables();
     }
 
-    public byte[] expandKey(String key) {
-        byte[] result = copyKeyBytesToArray(key);
+    public int[] expandKey(String key) {
+        int[] result = copyKeyBytesToArray(key);
 
         expandKey(result);
 
         return result;
     }
 
-    private byte[] copyKeyBytesToArray(String key) {
-        byte[] result = new byte[KEY_LENGTH];
+    private int[] copyKeyBytesToArray(String key) {
+        int[] result = new int[KEY_LENGTH];
         byte[] strKeyBytes = key.getBytes();
         for (int i = 0; i < strKeyBytes.length; i++) {
-            result[i] = strKeyBytes[i];
+            result[i] = strKeyBytes[i] & 0xFF;
         }
         return result;
     }
 
-    public void expandKey(byte[] in) {
-        byte[] t = new byte[4];
+    public void expandKey(int[] in) {
+        int[] t = new int[4];
         int c = 32;
-        byte i = 1;
+        int i = 1;
         while (c < 240) {
             /* Copy the temporary variable over */
             for (int a = 0; a < 4; a++) {
-                t[a] = in[a + c - 4];
+                t[a] = in[a + c - 4] & 0xFF;
             }
             /* Every eight sets, do a complex calculation */
             if (c % 32 == 0) {
@@ -51,70 +51,70 @@ public class KeyExpander {
                 }
             }
             for (int a = 0; a < 4; a++) {
-                in[c] = (byte) (in[c - 32] ^ t[a]);
+                in[c] = (in[c - 32] ^ t[a]) & 0xFF;
                 c++;
             }
         }
     }
 
-    private void scheduleCore(byte[] in, byte i) {
+    private void scheduleCore(int[] t, int i) {
         char a;
         /* Rotate the input 8 bits to the left */
-        rotate(in);
+        rotate(t);
         /* Apply Rijndael's s-box on all 4 bytes */
         for (a = 0; a < 4; a++) {
-            in[a] = sbox(in[a]);
+            t[a] = sbox(t[a]);
         }
         /* On just the first byte, add 2^i to the byte */
-        in[0] ^= rcon(i);
+        t[0] ^= rcon(i);
     }
 
-    private byte rcon(byte in) {
-        byte c = 1;
-        if (in == 0) {
+    private int rcon(int i) {
+        int c = 1;
+        if (i == 0) {
             return 0;
         }
 
-        byte counter = in;
+        int counter = i;
         while (counter != 1) {
-            c = gmul(c, (byte) 2);
+            c = gmul(c, 2);
             counter--;
         }
         return c;
     }
 
-    private void rotate(byte[] in) {
-        byte a, c;
-        a = in[0];
+    private void rotate(int[] t) {
+        int a, c;
+        a = t[0];
         for (c = 0; c < 3; c++) {
-            in[c] = in[c + 1];
+            t[c] = t[c + 1];
         }
-        in[3] = a;
+        t[3] = a;
         return;
 
     }
 
-    private byte sbox(byte in) {
-        byte c, s, x;
-        s = x = gmulInverse(in);
+    private int sbox(int t) {
+        int c, s, x;
+        s = x = gmulInverse(t);
         for (c = 0; c < 4; c++) {
             /* One bit circular rotate to the left */
-            s = (byte) ((s << 1) | (s >> 7));
+            s = ((s << 1) | (s >> 7)) & 0xFF;
             /* xor with x */
             x ^= s;
         }
         x ^= 99; /* 0x63 */
-        return x;
+        return x & 0xFF;
     }
 
-    private byte gmul(byte a, byte b) {
-        byte s;
-        byte q;
-        byte z = 0;
-        s = (byte) (lTable[a] + lTable[b]);
+    private int gmul(int c, int b) {
+        int s;
+        int q;
+        int z = 0;
+        s = (lTable[c] + lTable[b]) & 0xFF;
         s %= 255;
         /* Get the antilog */
-        s = (byte) aTable[s & 0xFF];
+        s = aTable[s & 0xFF];
         /*
          * Now, we have some fancy code that returns 0 if either
          * a or b are zero; we write the code this way so that the
@@ -122,7 +122,7 @@ public class KeyExpander {
          * minimize the risk of timing attacks
          */
         q = s;
-        if (a == 0) {
+        if (c == 0) {
             s = z;
         } else {
             s = q;
@@ -132,34 +132,37 @@ public class KeyExpander {
         } else {
             q = z;
         }
-        return s;
+        return s & 0xFF;
     }
 
-    private byte gmulInverse(int in) {
+    private int gmulInverse(int in) {
         /* 0 is self inverting */
         if (in == 0) {
             return 0;
         } else {
-            return (byte) aTable[(255 - lTable[in])];
+        	int index = lTable[in];
+            return aTable[(255 - index)];
         }
     }
 
     private void generateTables() {
-        byte a = 1;
-        byte d;
+        int a = 1;
+        int d;
         for (int index = 0; index < 255; index++) {
 //        	System.out.println(index);
             aTable[index] = a & 0xFF;
             /* Multiply by three */
-            d = (byte) (a & 0x80);
+            d = (a & 0x80) & 0xFF;
             a <<= 1;
             if (d == 0x80) {
                 a ^= 0x1b;
+                a &= 0xFF;
             }
             a ^= aTable[index];
+            a &= 0xFF;
             /* Set the log table value */
             try {
-            	lTable[aTable[index]] = (byte) index;
+            	lTable[aTable[index]] = index & 0xFF;
             } catch (Exception e) {
                 System.out.println(e);
             }
