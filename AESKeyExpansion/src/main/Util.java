@@ -19,6 +19,24 @@ public class Util {
         System.out.println(description + ":\n" + byteArrayToString(array));
     }
 
+    public static void printIntArray(int[] array, String description) {
+    	System.out.println(description + ":\n" + intArrayToString(array));
+    }
+
+    public static String intArrayToString(int[] array) {
+    	 StringBuilder sb = new StringBuilder();
+         int counter = 0;
+         for (int b : array) {
+             sb.append(String.format("%02X", b)).append(" ");
+             if (counter++ == 15) {
+                 sb.append("\n");
+                 counter = 0;
+             }
+
+         }
+         return sb.toString();
+    }
+
     public static void printByteArray(byte[] array) {
         System.out.println(byteArrayToString(array));
     }
